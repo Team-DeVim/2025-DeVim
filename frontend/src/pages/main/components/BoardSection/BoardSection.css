@@ -1,0 +1,59 @@
+.board {
+    min-height: 400px;
+    /* 원본 height */
+    padding: 0 20px 60px;
+    /* 원본 패딩 */
+    border-radius: 15px;
+    border: 1px dotted black;
+}
+
+.board__title {
+    margin: 0 0 12px 0;
+}
+
+.board__list {
+    display: grid;
+    gap: 12px;
+}
+
+/* 원본 post-card 레이아웃 */
+.post-card {
+    display: flex;
+    flex-direction: column;
+    padding: 13px;
+}
+
+.post-card-all {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.post-card-title {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.writer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.writer-set {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* .writer-time {
+    색 제거
+} */
+
+.mini-profile-img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+}

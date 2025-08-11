@@ -1,0 +1,45 @@
+/* 페이지 전체 컨테이너: 중앙 고정, 상하 패딩 */
+.main {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 30px 20px 30px;
+    display: grid;
+    row-gap: 24px;
+}
+
+/* 캐러셀 섹션 */
+/* .hero {} */
+
+/* 메인 영역 3:1 배치 */
+.dashboard {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 50px;
+    /* 원본 gap 유지 */
+    padding: 50px 0;
+    /* 원본 상하 패딩 유지 */
+
+}
+
+/* 좌측 보드 리스트 수직 스택 */
+.dashboard__main {
+    display: grid;
+    gap: 30px;
+    /* 보드 간 간격 */
+
+}
+
+/* 우측 사이드 컬럼 수직 스택 */
+.dashboard__side {
+    display: grid;
+    gap: 30px;
+    /* 카드 간 간격 */
+
+}
+
+/* 반응형 최소 예시 */
+@media (max-width: 1024px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+}
