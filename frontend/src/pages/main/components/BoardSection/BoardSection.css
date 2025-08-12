@@ -29,8 +29,14 @@
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+  will-change: transform;
 }
-
+.board__item:hover,
+.board__item:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.22);
+}
 .board__item-link {
   display: flex;
   align-items: baseline;
@@ -84,12 +90,4 @@
   background: rgba(255, 255, 255, 0.04);
   border: 1px dashed rgba(255, 255, 255, 0.12);
   font-size: 0.9rem;
-}
-
-.board__item-link {
-  transition: transform 140ms ease;
-}
-.board__item:hover .board__item-link,
-.board__item:focus-within .board__item-link {
-  transform: translateY(-2px);
 }
