@@ -14,7 +14,6 @@ export default function Register() {
   const [birth, setBirth] = useState("");
   const [birthFormatted, setBirthFormatted] = useState(""); // "YYYY년 MM월 DD일"
   const [gender, setGender] = useState("");
-  const [foreigner, setForeigner] = useState("");
   const [phone, setPhone] = useState("");
   //Error 메세지 [id, password, name, birth, gender, foreigner, phone]
   const [idError, setIdError] = useState("");
@@ -115,12 +114,9 @@ export default function Register() {
     setBirthFormatted(formatBirthDate(value.replace(/-/g, ""))); // YYYY년 MM월 DD일 포맷 저장
   };
 
-  // 성별, 국적 선택
+  // 성별 선택
   const handleGenderSelect = (selected) => {
     setGender(selected);
-  };
-  const handleforeignerSelect = (selected) => {
-    setForeigner(selected);
   };
 
   // 핸드폰 체크
@@ -165,7 +161,6 @@ export default function Register() {
       !name.trim() ||
       !birth.trim() ||
       !gender ||
-      !foreigner ||
       !phone.trim()
     ) {
       setSubmitError("나머지 정보를 입력해주세요");
@@ -196,6 +191,7 @@ export default function Register() {
           </button>
           <span className="logoHoverText">메인으로</span>
         </div>
+					회원가입
         <div className="userInfo">
           <div className="divSlotId">
             <i class="fa-solid fa-envelope"></i>
@@ -249,7 +245,7 @@ export default function Register() {
           {birthError && <p className="error">{birthError}</p>}
 
           <div className="formSection">
-            <div className="div_GenderForeigner">
+            <div className="genderForm">
               <div className="gender">
                 <button
                   className={gender == "남자" ? "selected" : ""}
@@ -263,20 +259,6 @@ export default function Register() {
                   onClick={() => handleGenderSelect("여자")}
                 >
                   여자
-                </button>
-              </div>
-              <div className="foreigner">
-                <button
-                  className={foreigner === "내국인" ? "selected" : ""}
-                  onClick={() => handleforeignerSelect("내국인")}
-                >
-                  내국인
-                </button>
-                <button
-                  className={foreigner === "외국인" ? "selected" : ""}
-                  onClick={() => handleforeignerSelect("외국인")}
-                >
-                  외국인
                 </button>
               </div>
             </div>
@@ -301,7 +283,7 @@ export default function Register() {
               type="submit"
               onClick={handleCheckRequest}
             >
-              인증요청
+              회원가입
             </button>
             {submitError && (
               <p className="error" style={{ marginTop: "8px" }}>

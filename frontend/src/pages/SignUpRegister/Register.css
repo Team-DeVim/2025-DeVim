@@ -105,41 +105,36 @@
 }
 /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
-/* 성별, 국적유형 */
-.div_GenderForeigner {
-		display: flex;
-    align-items: center;
-		margin-left: 20%;
-		gap: 30px;
-    position: relative;
-    box-sizing: border-box;
-    max-width: 100%;
-    min-height: 50px;
-}
+/* 성별 */
 .formSection {
   display: flex;
   flex-direction: column;
 }
-.gender, .foreigner {
-  display: flex;
-	gap: 5px;
-  flex-direction: row;
-}
-/* 성별 선택 */
-.selected {
-  background-color: #ffa550;
-  color: white;
-  border: 1px solid #0e0e0e;
-}
-/* 국적유형선택 */
-.div_GenderForeigner button {
-  font-size: 15px;
+/* 성별 폼 */
+.genderForm {
+	display: flex;
+	flex-direction: row;
+	align-self: center;
 	flex: 1;
-  padding: 8px 16px;
   color: #000000;
   border-radius: 5px;
   cursor: pointer;
+	margin-top: 10px;
 }
+.gender button{
+	width: 200px;
+	height: 30px;
+  flex-direction: column;
+	align-items: center;
+	border: 1px solid rgb(196, 196, 196);
+	border-radius: 5px;
+}
+/* 성별 선택됬을때 */
+.selected {
+  background-color: #ffa550;
+  color: white;
+}
+
 /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 /* 버튼 스타일 */
 .div_GenderForeigner button{
