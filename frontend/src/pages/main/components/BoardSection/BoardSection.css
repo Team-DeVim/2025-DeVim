@@ -1,59 +1,95 @@
 .board {
-    min-height: 400px;
-    /* 원본 height */
-    padding: 0 20px 60px;
-    /* 원본 패딩 */
-    border-radius: 15px;
-    border: 1px dotted black;
+  padding: 16px 0;
+  border: 1px solid black;
+  border-radius: 20px;
+}
+
+.board__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 10px 12px;
+  gap: 12px;
 }
 
 .board__title {
-    margin: 0 0 12px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
 }
 
 .board__list {
-    display: grid;
-    gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* 원본 post-card 레이아웃 */
-.post-card {
-    display: flex;
-    flex-direction: column;
-    padding: 13px;
+.board__item {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.post-card-all {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.board__item-link {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
 }
 
-.post-card-title {
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.board__item-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.98rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.writer {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.board__item-meta {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  opacity: 0.9;
 }
 
-.writer-set {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.board__item-sep {
+  opacity: 0.6;
 }
 
-/* .writer-time {
-    색 제거
-} */
+.board__item-stats {
+  margin-top: 6px;
+  display: flex;
+  gap: 12px;
+  font-size: 0.82rem;
+  opacity: 0.85;
+}
 
-.mini-profile-img {
-    width: 30px;
-    height: 30px;
-    object-fit: cover;
+.board__item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.board__item:focus-within {
+  outline: 2px solid rgba(255, 255, 255, 0.18);
+}
+
+/* 상태 */
+.board__empty {
+  padding: 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  font-size: 0.9rem;
+}
+
+.board__item-link {
+  transition: transform 140ms ease;
+}
+.board__item:hover .board__item-link,
+.board__item:focus-within .board__item-link {
+  transform: translateY(-2px);
 }
