@@ -1,18 +1,15 @@
-package com.Devim.backend.domain.board;
+package com.Devim.backend.dto.board;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-public class Board {
+public class BoardDto {
 	private long boardNo;
 	private int boardTypeNo;
 	private String title;
 	private String boardContent;
-	private int writer;
+	private String writerName;
 	private String createdDt;
 	private boolean deleteFlag;
+	private int likeCount;
 }

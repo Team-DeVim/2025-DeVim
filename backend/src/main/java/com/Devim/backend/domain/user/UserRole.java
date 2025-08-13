@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class UserRole {
-	private int userNo;
+	private long userNo;
 	private String role;
 }

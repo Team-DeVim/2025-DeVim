@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class Likes {
-	private int likeNo;
+	private long likeNo;
 	private int userNo;
 	private int targetId;
 	private String targetType;
