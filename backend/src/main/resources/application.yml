@@ -1,0 +1,18 @@
+spring:
+    datasource:
+        driver-class-name: oracle.jdbc.OracleDriver
+        url: jdbc:oracle:thin:@localhost:1521:XE
+        username: DEVIMADMIN
+        password: Pa$$w0rd
+        hikari:
+            maximum-pool-size: 10
+            minimum-idle: 2
+mybatis:
+    mapper-locations: classpath*:mapper/**/*.xml
+    type-aliases-package: com.Devim.backend
+    configuration:
+        map-underscore-to-camel-case: true
+        cache-enabled: false
+logging:
+    level:
+        com.Devim: debug
