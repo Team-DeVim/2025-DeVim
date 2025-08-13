@@ -1,0 +1,24 @@
+package com.Devim.backend.domain.user;
+
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+public class User {
+	private int userNo;
+	private String id;
+	private String password;
+	private String name;
+	private boolean social;
+	private String profileImagePath;
+	private boolean isDark;
+	private String createdDt;
+	private boolean deleteFlag;
+	
+	private List<UserRole> roleList;
+}
