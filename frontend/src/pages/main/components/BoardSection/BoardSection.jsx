@@ -119,16 +119,23 @@ const MOCK_PAYLOAD = {
   ],
 };
 
-function formatDateYYYYMMDD(iso, tz = 'Asia/Seoul') {
-  if (!iso) return '';
+function formatDate(iso, tz = "Asia/Seoul") {
+  if (!iso) return "";
   const d = new Date(iso);
-  const y = new Intl.DateTimeFormat('ko-KR', { timeZone: tz, year: 'numeric' }).format(d);
-  const m = new Intl.DateTimeFormat('ko-KR', { timeZone: tz, month: '2-digit' }).format(d);
-  const day = new Intl.DateTimeFormat('ko-KR', { timeZone: tz, day: '2-digit' }).format(d);
+  const y = new Intl.DateTimeFormat("ko-KR", {
+    timeZone: tz,
+    year: "numeric",
+  }).format(d);
+  const m = new Intl.DateTimeFormat("ko-KR", {
+    timeZone: tz,
+    month: "2-digit",
+  }).format(d);
+  const day = new Intl.DateTimeFormat("ko-KR", {
+    timeZone: tz,
+    day: "2-digit",
+  }).format(d);
   return `${y}-${m}-${day}`;
 }
-
-
 
 export default function BoardSection({
   title = "게시판",
@@ -136,42 +143,51 @@ export default function BoardSection({
   pageSize = 4,
   mockMode = false,
 }) {
-  // 백 연동할때 여기에 fetch
-  const items = mockMode ? (MOCK_PAYLOAD[mode] ?? []) : [];
+  //연동 fetch로 대체
+  const items = mockMode ? MOCK_PAYLOAD[mode] ?? [] : [];
   const visibleItems = useMemo(
     () => items.slice(0, pageSize),
     [items, pageSize]
   );
 
   return (
-    <section className="board">
-      <div className="board__header">
-        <h2 className="board__title">{title}</h2>
+    <section className="BoardSection" aria-label={title}>
+      <div className="BoardSection__header">
+        <h2 className="BoardSection__title">{title}</h2>
       </div>
 
       {visibleItems.length === 0 ? (
-        <div className="board__empty">게시글이 없습니다.</div>
+        <div className="BoardSection__empty">게시글이 없습니다.</div>
       ) : (
-        <ul className="board__list">
+        <ul className="BoardSection__list">
           {visibleItems.map((item) => (
-            <li key={item.boardNo} className="board__item">
-              <Link to={`/board/${item.boardNo}`} className="board__item-link">
-                <span className="board__item-title" title={item.title}>
+            <li key={item.boardNo} className="BoardSection__item">
+              <Link
+                to={`/board/${item.boardNo}`}
+                className="BoardSection__item-link"
+              >
+                <span className="BoardSection__item-title" title={item.title}>
                   {item.title}
                 </span>
-                <span className="board__item-meta">
-                  <span className="board__item-author">
+
+                <span className="BoardSection__item-meta">
+                  <span className="BoardSection__item-author">
                     {item.writer?.name ?? "알 수 없음"}
                   </span>
-                  <span className="board__item-sep">·</span>
-                  <time className="board__item-date">
-                    {formatDateYYYYMMDD(item.createdAt)}
+                  <span className="BoardSection__item-sep">·</span>
+                  <time className="BoardSection__item-date">
+                    {formatDate(item.createdAt)}
                   </time>
                 </span>
               </Link>
-              <div className="board__item-stats">
-                <span className="stat">추천 {item.likeCount ?? 0}</span>
-                <span className="stat">댓글 {item.commentCount ?? 0}</span>
+
+              <div className="BoardSection__item-stats">
+                <span className="BoardSection__item-stat BoardSection__item-stat--likes">
+                  추천 {item.likeCount ?? 0}
+                </span>
+                <span className="BoardSection__item-stat BoardSection__item-stat--comments">
+                  댓글 {item.commentCount ?? 0}
+                </span>
               </div>
             </li>
           ))}

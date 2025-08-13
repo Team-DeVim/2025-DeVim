@@ -1,10 +1,10 @@
-.board {
+.BoardSection {
   padding: 16px 0;
   border: 1px solid black;
   border-radius: 20px;
 }
 
-.board__header {
+.BoardSection__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -12,19 +12,19 @@
   gap: 12px;
 }
 
-.board__title {
+.BoardSection__title {
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: -0.2px;
 }
 
-.board__list {
+.BoardSection__list {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.board__item {
+.BoardSection__item {
   padding: 12px 14px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.03);
@@ -32,12 +32,13 @@
   transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
   will-change: transform;
 }
-.board__item:hover,
-.board__item:focus-within {
+.BoardSection__item:hover,
+.BoardSection__item:focus-within {
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(0,0,0,0.22);
 }
-.board__item-link {
+
+.BoardSection__item-link {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -46,7 +47,7 @@
   color: inherit;
 }
 
-.board__item-title {
+.BoardSection__item-title {
   flex: 1 1 auto;
   min-width: 0;
   font-size: 0.98rem;
@@ -55,7 +56,7 @@
   text-overflow: ellipsis;
 }
 
-.board__item-meta {
+.BoardSection__item-meta {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
@@ -64,11 +65,11 @@
   opacity: 0.9;
 }
 
-.board__item-sep {
+.BoardSection__item-sep {
   opacity: 0.6;
 }
 
-.board__item-stats {
+.BoardSection__item-stats {
   margin-top: 6px;
   display: flex;
   gap: 12px;
@@ -76,15 +77,15 @@
   opacity: 0.85;
 }
 
-.board__item:hover {
+.BoardSection__item:hover {
   background: rgba(255, 255, 255, 0.05);
 }
-.board__item:focus-within {
+.BoardSection__item:focus-within {
   outline: 2px solid rgba(255, 255, 255, 0.18);
 }
 
 /* 상태 */
-.board__empty {
+.BoardSection__empty {
   padding: 14px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.04);
