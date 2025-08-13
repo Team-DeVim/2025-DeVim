@@ -13,20 +13,16 @@ const rankingData = {
   posts: [
     { userId: 101, nickname: "제로콜라", count: 128 },
     { userId: 102, nickname: "초코칩", count: 113 },
-    { userId: 103, nickname: "개발왕", count: 98 },
-    { userId: 104, nickname: "프론달", count: 76 },
+    { userId: 103, nickname: "독일의", count: 98 },
+    { userId: 104, nickname: "세계최강", count: 76 },
+    { userId: 105, nickname: "기술력", count: 70 }
   ],
   comments: [
     { userId: 201, nickname: "환수", count: 251 },
     { userId: 202, nickname: "우강", count: 230 },
     { userId: 203, nickname: "호강", count: 221 },
     { userId: 204, nickname: "진우", count: 205 },
-  ],
-  likes: [
-    { userId: 301, nickname: "박호", count: 412 },
-    { userId: 302, nickname: "전환", count: 380 },
-    { userId: 303, nickname: "최우", count: 365 },
-    { userId: 304, nickname: "조진", count: 342 },
+    { userId: 204, nickname: "현세", count: 202 },
   ],
 };
 
@@ -127,7 +123,6 @@ function Sidebar({
 
         <RankSection title="게시물왕" unit="개" items={rankingData.posts} />
         <RankSection title="댓글왕" unit="개" items={rankingData.comments} />
-        <RankSection title="좋아요왕" unit="개" items={rankingData.likes} />
       </section>
 
       {/* 배너 (이미지) */}
@@ -139,7 +134,7 @@ function Sidebar({
           aria-label="사이드 배너"
         >
           <img
-            src="/assets/sidebar_banner.jpg"
+            src=""
             alt="사이드 배너"
             loading="lazy"
             onError={(e) => {
@@ -158,7 +153,7 @@ function Sidebar({
 }
 
 function RankSection({ title, unit, items }) {
-  const top3 = (items ?? []).slice(0, 3);
+  const top3 = (items ?? []).slice(0, 5);
   return (
     <div className="sb-rank">
       <h3 className="sb-rank-title">{title}</h3>
