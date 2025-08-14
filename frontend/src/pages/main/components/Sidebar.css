@@ -1,59 +1,72 @@
-.sidebar {
+.Sidebar {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  border: 1.5px solid black;
+  border-radius: 10px;
 }
 
-.sb-card {
-  border: 1px solid rgba(255, 255, 255, 0.15);
+.Sidebar__card {
+  border: 1px solid rgba(255, 255, 255, 0.28); /* 경계 진하게 */
   border-radius: 12px;
   padding: 12px;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid black;
+}
+.Sidebar__card--profile {
+  position: relative;
+}
+.Sidebar__card--banner {
+  padding: 8px;
 }
 
-.sb-title {
-  font-size: 1.5rem;
+.Sidebar__card-title {
+  font-size: 1rem;
   font-weight: 700;
-  margin: 0 0 15px;
+  margin: 0 0 10px;
 }
 
-/* 프로필(로그인 상태 레이아웃) */
-.sb-card--profile {
-  position: relative;
+/* 카드 내부 구분선 */
+.Sidebar__divider {
+  height: 1px;
+  margin: 10px 0;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 1px;
 }
 
-.sb-profile-in {
-  position: relative;
+/* ===== 프로필 ===== */
+.Sidebar__profile {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-bottom: 36px;
 }
+.Sidebar__profile--in {
+  padding-bottom: 40px;
+} /* 로그아웃 공간 */
 
-.sb-profile-media {
+.Sidebar__media {
   display: grid;
   place-items: center;
-  border: 1px solid black;
-  margin: auto;
 }
 
-.sb-avatar-150 {
+.Sidebar__avatar {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+.Sidebar__avatar--square {
+  border-radius: 8px;
+}
+.Sidebar__avatar--lg {
   width: 150px;
   height: 150px;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.06);
 }
 
-.sb-avatar-150 img {
+.Sidebar__avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-
-.sb-avatar-150__fallback {
+.Sidebar__avatarFallback {
   width: 100%;
   height: 100%;
   display: grid;
@@ -63,68 +76,56 @@
   color: rgba(255, 255, 255, 0.92);
 }
 
-.sb-profile-info {
+.Sidebar__info {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
-
-.sb-user-name {
+.Sidebar__name {
   font-weight: 800;
   font-size: 1.02rem;
 }
-.sb-user-id {
+.Sidebar__id {
   font-size: 0.9rem;
   opacity: 0.85;
 }
 
-.sb-mycounts {
+.Sidebar__counts {
   margin-top: 6px;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-.sb-mycounts__row {
+.Sidebar__countRow {
   display: flex;
   gap: 6px;
   align-items: baseline;
 }
-.sb-mycounts__label {
+.Sidebar__countLabel {
   opacity: 0.9;
 }
-.sb-mycounts__value {
+.Sidebar__countValue {
   font-variant-numeric: tabular-nums;
   font-weight: 700;
 }
 
-/* 로그아웃 버튼: */
-.sb-logout-fab {
+/* 로그아웃 버튼: 오른쪽 아래 */
+.Sidebar__logout {
   position: absolute;
   right: 10px;
   bottom: 10px;
-  padding: 6px 10px;
-  border-radius: 8px;
 }
 
-/* 비로그인 상태 */
-.sb-profile-out .sb-welcome {
-  font-weight: 700;
-}
-.sb-profile-out .sb-desc {
-  margin: 4px 0 8px;
-  font-size: 0.92rem;
-  opacity: 0.9;
-}
-.sb-actions {
+/* ===== 버튼 ===== */
+.Sidebar__actions {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   margin-top: 8px;
 }
 
-/* 버튼 공통 */
-.sb-btn {
-  border: 1px solid rgba(255, 255, 255, 0.18);
+.Sidebar__button {
+  border: 1px solid rgba(255, 255, 255, 0.25);
   background: transparent;
   color: inherit;
   padding: 6px 10px;
@@ -132,86 +133,81 @@
   font-size: 0.9rem;
   cursor: pointer;
 }
-.sb-btn-primary {
+.Sidebar__button--primary {
   border-color: transparent;
   background: rgba(0, 128, 255, 0.92);
   color: #fff;
 }
-.sb-btn-danger {
+.Sidebar__button--danger {
   border-color: transparent;
   background: rgba(220, 50, 50, 0.92);
   color: #fff;
 }
 
-/* 랭킹 */
-.sb-rank + .sb-rank {
+/* ===== 랭킹 ===== */
+.Sidebar__rank + .Sidebar__rank {
   margin-top: 10px;
 }
-.sb-rank-title {
+.Sidebar__rankTitle {
   font-size: 0.95rem;
   margin: 0 0 6px;
 }
 
-.sb-rank-list {
+.Sidebar__rankList {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  border: 1px solid black;
-  border-radius: 10px;
 }
 
-.sb-rank-text {
+.Sidebar__rankRow {
   display: grid;
-  grid-template-columns: 18px 1fr auto;
+  grid-template-columns: 20px 1fr auto;
   align-items: center;
   gap: 8px;
   padding: 6px 8px;
   border-radius: 8px;
-  cursor: default;
-  transition: transform 0.2s ease, background-color 0.2s ease;
+  transition: transform 0.18s ease, background-color 0.18s ease;
 }
-
-.sb-rank-text:hover {
-  transform: translateY(-2px); 
+.Sidebar__rankRow:hover {
+  transform: translateY(-2px);
   background: rgba(255, 255, 255, 0.06);
 }
 
-.sb-rank-no {
+.Sidebar__rankNo {
   font-weight: 800;
   text-align: right;
 }
-
-.sb-rank-name {
+.Sidebar__rankName {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-.sb-rank-count {
+.Sidebar__rankCount {
   font-variant-numeric: tabular-nums;
   opacity: 0.9;
 }
 
-/* 배너 */
-.sb-banner {
+/* ===== 배너 ===== */
+.Sidebar__banner {
   display: block;
   border-radius: 8px;
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
-.sb-banner img {
+.Sidebar__banner img {
   display: block;
   width: 100%;
   height: auto;
 }
-.sb-banner-fallback {
+.Sidebar__bannerFallback {
   display: grid;
   place-items: center;
   height: 120px;
-  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border: 1px dashed rgba(255, 255, 255, 0.35);
   border-radius: 8px;
   font-size: 0.9rem;
-  opacity: 0.8;
+  opacity: 0.85;
 }

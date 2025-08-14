@@ -6,15 +6,6 @@ import Sidebar from "./components/Sidebar";
 import "./MainPage.css";
 
 function MainPage() {
-  // 로그인 상태 테스트
-  const mockProfile = {
-    id: "hong123",
-    name: "홍길동",
-    profile_image_path: "/images/profile.jpg",
-  };
-
-  // 비로그인 상태 테스트
-  const noProfile = null;
 
   return (
     <div className="main">
@@ -32,9 +23,6 @@ function MainPage() {
         </div>
         <aside className="dashboard__side">
           <Sidebar
-            profile={mockProfile}
-            myStats={{ posts: 12, comments: 34 }}
-            onLogoutClick={() => console.log("logout")}
           />
         </aside>
       </div>
