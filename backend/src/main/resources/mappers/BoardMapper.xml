@@ -23,7 +23,7 @@
             NVL(COUNT(l."like_no"), 0) AS likeCount
         FROM "board" b
         JOIN "user" u ON b."writer" = u."user_no"
-        LEFT JOIN "likes" l ON b."board_no" = l."target_id" AND l."target_type" = 'board'
+ 
         WHERE b."board_no" = #{boardNo} AND b."delete_flag" = 0
         GROUP BY b."board_no", b."board_type_no", b."title", b."board_content", u."name", b."created_dt", b."delete_flag"
     </select>
