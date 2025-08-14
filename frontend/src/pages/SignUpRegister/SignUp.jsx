@@ -56,65 +56,71 @@ export default function SignUp() {
     navigate("/Register");
   };
 
-  // 비밀번호 찾기
-  const passwordFind = () => {};
   return (
-    <div className="loginContainer">
-      <div className="logoWrapper">
-        <button className="logo_Devim" onClick={main}>
-          DeVim
-        </button>
-        <span className="logoHoverText">메인으로</span>
-      </div>
-      로그인
-      <div className="">
-        <div className="login_MenuType">
-          <button
-            onClick={() => setActiveTab("id")}
-            className={activeTab === "id" ? "active" : ""}
-          >
-            ID/이메일
+    <>
+      <div className="signup">
+        <div className="signup__logo-group">
+          <button className="signup__logo" onClick={main}>
+            DeVim
           </button>
-          <button
-            onClick={() => handleLoginTypeChange("kakao")}
-            className={activeTab === "kakao" ? "active" : ""}
-          >
-            카카오 로그인
-          </button>
+          <span className="signup__logo-hover-text">메인으로</span>
         </div>
-      </div>
-      <div className="loginBackGround">
-        <div className="loginForm">
-          <input
-            className="input_id"
-            type="text"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-            onFocus={() => setIsFocused({ ...isFocused, id: true })}
-            onBlur={() => setIsFocused({ ...isFocused, id: false })}
-            placeholder={activeTab == "kakao" ? "카카오아이디" : "아이디"}
-          />
-          <input
-            className="input_password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onFocus={() => setIsFocused({ ...isFocused, password: true })}
-            onBlur={() => setIsFocused({ ...isFocused, password: false })}
-            placeholder="비밀번호"
-          />
+        로그인
+        <div className="signup__menu">
+          <div className="signup__menu-type">
+            <button
+              onClick={() => setActiveTab("id")}
+              className={`signup__menu-button ${
+                activeTab === "id" ? "signup__menu-button--active" : ""
+              }`}
+            >
+              ID/이메일
+            </button>
+            <button
+              onClick={() => handleLoginTypeChange("kakao")}
+              className={`signup__menu-button ${
+                activeTab === "kakao" ? "signup__menu-button--active" : ""
+              }`}
+            >
+              카카오 로그인
+            </button>
+          </div>
         </div>
-        <button
-          className={`loginButton ${activeTab === "kakao" ? "kakao" : ""}`}
-        >
-          {activeTab === "kakao" ? "카카오 로그인" : "로그인"}
-        </button>
+        <div className="signup__background">
+          <div className="signup__form">
+            <input
+              className="signup__input signup__input--id"
+              type="text"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              onFocus={() => setIsFocused({ ...isFocused, id: true })}
+              onBlur={() => setIsFocused({ ...isFocused, id: false })}
+              placeholder={activeTab === "kakao" ? "카카오아이디" : "아이디"}
+            />
+            <input
+              className="signup__input signup__input--password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onFocus={() => setIsFocused({ ...isFocused, password: true })}
+              onBlur={() => setIsFocused({ ...isFocused, password: false })}
+              placeholder="비밀번호"
+            />
+          </div>
 
-        <div className="loginOptions">
-          <button onClick={passwordFind}>비밀번호 찾기</button>
-          <button onClick={register}>회원가입</button>
+          <button
+            className={`signup__login-button ${
+              activeTab === "kakao" ? "signup__login-button--kakao" : ""
+            }`}
+          >
+            {activeTab === "kakao" ? "카카오 로그인" : "로그인"}
+          </button>
+
+          <div className="signup__join">
+            <button onClick={register}>회원가입</button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

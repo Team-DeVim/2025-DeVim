@@ -182,80 +182,88 @@ export default function Register() {
 
   /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
   return (
-		
-    <div className="registerBack">
+    <div className="register">
       <div>
-        <div className="logoWrapper">
-          <button className="logo_Devim" onClick={main}>
+        <div className="register__logo-group">
+          <button className="register__logo" onClick={main}>
             DeVim
           </button>
-          <span className="logoHoverText">메인으로</span>
+          <span className="register__logo-hover-text">메인으로</span>
         </div>
-					회원가입
-        <div className="userInfo">
-          <div className="divSlotId">
-            <i class="fa-solid fa-envelope"></i>
+        회원가입
+        <div className="register__user-info">
+          <div className="register__group--id">
+            <i className="register__icon fa-solid fa-envelope"></i>
             <input
-              className="id"
+              className="register__input--id"
               type="text"
               placeholder="아이디"
               value={id}
               onChange={(e) => validateId(e.target.value)}
             />
-            <div> @naver.com</div>
-          </div>
-          <div>
-            <div className="divSlotpw">
-              <i class="fa-solid fa-lock"></i>
-              <input
-                className="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="비밀번호"
-                value={password}
-                onChange={(e) => validatePassword(e.target.value)}
-              />
-            </div>
+            <div className="register__suffix--email">@naver.com</div>
           </div>
 
-          {idError && <p className="error">{idError}</p>}
-          {passwordError && <p className="error">{passwordError}</p>}
+          <div className="register__group--password">
+            <i className="register__icon fa-solid fa-lock"></i>
+            <input
+              className="register__input--password"
+              type={showPassword ? "text" : "password"}
+              placeholder="비밀번호"
+              value={password}
+              onChange={(e) => validatePassword(e.target.value)}
+            />
+          </div>
 
-          <div className="divSlotName">
-            <i class="fa-solid fa-user"></i>
+          {idError && <p className="register__error-message">{idError}</p>}
+          {passwordError && (
+            <p className="register__error-message">{passwordError}</p>
+          )}
+
+          <div className="register__group--name">
+            <i className="register__icon fa-solid fa-user"></i>
             <input
               type="text"
-              className="name"
+              className="register__input--name"
               placeholder="이름"
               value={name}
               onChange={(e) => validateName(e.target.value)}
             />
           </div>
-          <div className="divSlotBirth">
-            <i class="fa-solid fa-calendar-days"></i>
+
+          <div className="register__group--birth">
+            <i className="register__icon fa-solid fa-calendar-days"></i>
             <input
               type="date"
-              className="birth"
-              placeholder="생년월일 (예 : 19990310)"
+              className="register__input--birth"
+              placeholder="생년월일(예 : 19990310)"
               value={birth}
               onChange={(e) => validateBirth(e.target.value)}
-              max={new Date().toISOString().split("T")[0]} // 오늘 날짜까지 선택 가능
+              max={new Date().toISOString().split("T")[0]}
             />
           </div>
-          {nameError && <p className="error">{nameError}</p>}
-          {birthError && <p className="error">{birthError}</p>}
 
-          <div className="formSection">
-            <div className="genderForm">
-              <div className="gender">
+          {nameError && <p className="register__error-message">{nameError}</p>}
+          {birthError && (
+            <p className="register__error-message">{birthError}</p>
+          )}
+
+          <div className="register__form-section">
+            <div className="register__group--gender">
+              <div className="register__gender-options">
                 <button
-                  className={gender == "남자" ? "selected" : ""}
+                  className={`register__gender-button ${
+                    gender === "남자" ? "register__gender-button--selected" : ""
+                  }`}
                   onClick={() => handleGenderSelect("남자")}
                 >
                   남자
                 </button>
 
                 <button
-                  className={gender === "여자" ? "selected" : ""}
+                  className={`register__gender-button ${
+                    gender === "여자" ? "register__gender-button--selected" : ""
+                  }`}
                   onClick={() => handleGenderSelect("여자")}
                 >
                   여자
@@ -264,11 +272,12 @@ export default function Register() {
             </div>
 
             <br />
-            <div class="divSlotPhone">
-              <i class="fa-solid fa-square-phone"></i>
+
+            <div className="register__group--phone">
+              <i className="register__icon fa-solid fa-square-phone"></i>
               <input
                 type="text"
-                id="phone"
+                className="register__input--phone"
                 placeholder="핸드폰번호"
                 value={phone}
                 onChange={handlePhoneChange}
@@ -276,17 +285,23 @@ export default function Register() {
               />
             </div>
 
-            {phoneError && <p className="error">{phoneError}</p>}
+            {phoneError && (
+              <p className="register__error-message">{phoneError}</p>
+            )}
 
             <button
-              className="authenticationRequest"
+              className="register__submit-button"
               type="submit"
               onClick={handleCheckRequest}
             >
               회원가입
             </button>
+
             {submitError && (
-              <p className="error" style={{ marginTop: "8px" }}>
+              <p
+                className="register__error-message"
+                style={{ marginTop: "8px" }}
+              >
                 {submitError}
               </p>
             )}

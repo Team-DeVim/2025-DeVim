@@ -1,5 +1,4 @@
-
-.registerBack{
+.register{
 	margin: 50px auto;
 	width: 90%;
 	max-width: 500px;
@@ -7,17 +6,18 @@
 	box-sizing: border-box;
 }
 /* 회원가입창 로고 */
-.logo_Devim{
-	cursor: pointer;
-	font-size: 40px;
-	font-weight: 700;
-	background: none;
+.register__logo {
+  cursor: pointer;
+  font-size: 40px;
+  font-weight: 700;
+  background: none;
   border: none;
 }
+
 /* 로고에 숨겨진 텍스트 */
-.logoHoverText {
+.register__logo-hover-text {
   position: absolute;
-	top: -10px; /* 로고 위에 숨겨놓기 */
+  top: -10px;
   left: 50%;
   transform: translateX(-50%) translateY(25px);
   opacity: 0;
@@ -26,133 +26,135 @@
   transition: opacity 0.5s ease, transform 0.5s ease;
   pointer-events: none;
 }
-.logoWrapper {
+
+/* 로고 그룹 */
+.register__logo-group {
   position: relative;
   display: inline-block;
 }
 
 /* 호버 시 나타남 */
-.logoWrapper:hover .logoHoverText {
+.register__logo-group:hover .register__logo-hover-text {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
 
-/*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
-
-/*ㅡㅡ입력란ㅡㅡ*/
-.userInfo{
-	/* border: 2px dotted rgb(0, 0, 0); */
-	margin-top: 20px;
-	width: 100%;
-	height: auto;
+/* 입력란 전체 */
+.register__user-info {
+  margin-top: 20px;
+  width: 100%;
+  height: auto;
 }
 
-.userInfo input{
-	width: 100%;
-	height: 40px;
-	display: flex;
-	flex-direction: column;
-	box-sizing: border-box;
+/* 공통 input 스타일 */
+.register__user-info input {
+  padding-left: 10px;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border: 1px none #adb7c2;
+  border-radius: 15px;
+  background-color: #dbdbdb;
 }
-/*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
-/* 폰트어썸 */
-.fa-solid {
-	font-size: 25px;
+
+/* 아이콘 위치 고정 */
+.register__icon {
+  font-size: 25px;
   color: #000000;
   margin-right: 10px;
-	margin-left: 10px;
+  margin-left: 10px;
 }
 
-.divSlotId {
- display: flex;
- align-items: center;
- /* border: 1px solid #a87300; */
- gap: 3px;
- margin-bottom: 10px;
+.register__input--birth {
+	padding-right: 60%; /* 달력 아이콘 공간 확보 */
+	padding-top: 7px; /* 가운데 정렬 */
 }
-.divSlotpw {
- display: flex;
- align-items: center;
- /* border: 1px solid #a87300; */
- margin-bottom: 10px;
-}
-.divSlotName {
- display: flex;
- align-items: center;
- /* border: 1px solid #a87300; */
- margin-bottom: 10px;
-}
-.divSlotBirth {
- display: flex;
- align-items: center;
- /* border: 1px solid #a87300; */
- margin-bottom: 10px;
-}
-.divSlotPhone {
- display: flex;
- align-items: center;
- /* border: 1px solid #a87300; */
- margin-bottom: 10px;
-}
-/*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
-/*에러문구*/
-.error {
+/* 그룹별 입력란 */
+.register__group--id,
+.register__group--password,
+.register__group--name,
+.register__group--birth,
+.register__group--phone {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  position: relative;
+  margin-bottom: 12px;
+}
+
+
+/* 에러 메시지 */
+.register__error-message {
   color: red;
   font-size: 13px;
   margin-top: 4px;
+	margin-left: 50px;
 }
-/*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
-/* 성별 */
-.formSection {
+/* 폼 섹션 */
+.register__form-section {
   display: flex;
   flex-direction: column;
 }
-/* 성별 폼 */
-.genderForm {
-	display: flex;
-	flex-direction: row;
-	align-self: center;
-	flex: 1;
+
+/* 성별 선택 영역 */
+.register__group--gender {
+  display: flex;
+	justify-content: space-evenly;
+  flex-direction: row;
+  align-self: center;
+  flex: 1;
   color: #000000;
   border-radius: 5px;
   cursor: pointer;
-	margin-top: 10px;
+  margin-top: 10px;
 }
-.gender button{
-	width: 200px;
-	height: 30px;
+
+.register__gender-options {
+  display: flex;
+	justify-content: space-between;
+	margin-left: 30px;
+  gap: 10px;
+	
+}
+
+.register__gender-button {
+	flex: 1;
+  width: 200px;
+  height: 30px;
+	font-size: 16px;
   flex-direction: column;
-	align-items: center;
-	border: 1px solid rgb(196, 196, 196);
-	border-radius: 5px;
+  align-items: center;
+  border: 1px solid rgb(196, 196, 196);
+  border-radius: 5px;
 }
-/* 성별 선택됬을때 */
-.selected {
-  background-color: #ffa550;
+
+.register__gender-button--selected {
+  background-color: #5f9872;
   color: white;
 }
 
-/*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
-/* 버튼 스타일 */
-.div_GenderForeigner button{
-	border: 1px dotted black;
+/* 이메일 접미사 */
+.register__suffix--email {
+  font-size: 14px;
+  color: #333;
 }
-/*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
-/*인증요청 버튼*/
-.authenticationRequest{
-	font-size: 20px;
-	border: 1px solid black;
-	border-radius: 10px;
-	margin: 10px 0px;
-	padding: 10px;
+/* 가입 버튼 */
+.register__submit-button {
+  font-size: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+  margin: 10px 0px;
+  padding: 10px;
 }
-.authenticationRequest:hover{
-	color: #ffffff;
-	background-color: #007830;
-	transition: background-color 0.3s ease, transform 0.2s ease;
+
+.register__submit-button:hover {
+  color: #ffffff;
+  background-color: #007830;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
-/*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
