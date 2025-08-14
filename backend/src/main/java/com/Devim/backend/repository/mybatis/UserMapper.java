@@ -1,5 +1,6 @@
-package com.Devim.backend.mapper.user;
+package com.Devim.backend.repository.mybatis;
 
+import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.user.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,7 +14,9 @@ public interface UserMapper {
 
     Optional<User> findById(long userNo);
 
-    List<User> findAll();
+    List<User> findAll(PageRequestDto pageRequest);
+
+    long countAllUsers();
 
     void update(User user);
 

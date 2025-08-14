@@ -1,4 +1,4 @@
-package com.Devim.backend.dto.board;
+package com.Devim.backend.domain.board;
 
 import lombok.Data;
 

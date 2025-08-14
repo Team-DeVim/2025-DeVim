@@ -1,6 +1,9 @@
-package com.Devim.backend.mapper.board;
+package com.Devim.backend.repository.mybatis;
 
 import com.Devim.backend.domain.board.Board;
+import com.Devim.backend.domain.board.BoardDto;
+import com.Devim.backend.domain.common.PageRequestDto;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -11,9 +14,11 @@ public interface BoardMapper {
 
     void save(Board board);
 
-    Optional<Board> findById(long boardNo);
+    Optional<BoardDto> findById(long boardNo);
 
-    List<Board> findAll();
+    List<BoardDto> findAll(PageRequestDto pageRequest);
+
+    long countAllBoards();
 
     void update(Board board);
 
