@@ -3,6 +3,7 @@ package com.Devim.backend.repository.mybatis;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
+import com.Devim.backend.domain.user.UserRankDto;
 import com.Devim.backend.repository.UserRepository;
 
 import org.springframework.stereotype.Repository;
@@ -43,5 +44,15 @@ public class MyBatisUserRepository implements UserRepository {
     @Override
     public void deleteById(long userNo) {
         userMapper.deleteById(userNo);
+    }
+
+    @Override
+    public List<UserRankDto> findTop5ByBoardCount() {
+        return userMapper.findTop5ByBoardCount();
+    }
+
+    @Override
+    public List<UserRankDto> findTop5ByCommentCount() {
+        return userMapper.findTop5ByCommentCount();
     }
 }

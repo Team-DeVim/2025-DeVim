@@ -1,5 +1,7 @@
 package com.Devim.backend.domain.board;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
@@ -9,7 +11,7 @@ public class BoardDto {
 	private String title;
 	private String boardContent;
 	private String writerName;
-	private String createdDt;
+	private Date createdDt;
 	private boolean deleteFlag;
 	private int likeCount;
 }

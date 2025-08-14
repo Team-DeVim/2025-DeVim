@@ -28,7 +28,37 @@
         GROUP BY b."board_no", b."board_type_no", b."title", b."board_content", u."name", b."created_dt", b."delete_flag"
     </select>
 
-    <select id="findAll" parameterType="com.Devim.backend.domain.common.PageRequestDto" resultType="com.Devim.backend.domain.board.BoardDto">
+    <select id="findAll" parameterType="map" resultType="com.Devim.backend.domain.board.BoardDto">
+        SELECT
+            b."board_no" AS boardNo,
+            b."board_type_no" AS boardTypeNo,
+            b."title",
+            b."board_content" AS boardContent,
+            u."name" AS writerName,
+            b."created_dt" AS createdDt,
+            b."delete_flag" AS deleteFlag,
+            NVL(COUNT(l."like_no"), 0) AS likeCount
+        FROM "board" b
+        JOIN "user" u ON b."writer" = u."user_no"
+        LEFT JOIN "likes" l ON b."board_no" = l."target_id" AND l."target_type" = 'board'
+        WHERE b."delete_flag" = 0
+        <if test="title != null and title != ''">
+            AND b."title" LIKE '%' || #{title} || '%'
+        </if>
+        GROUP BY b."board_no", b."board_type_no", b."title", b."board_content", u."name", b."created_dt", b."delete_flag"
+        ORDER BY b."board_no" DESC
+        OFFSET (#{pageRequest.page} - 1) * #{pageRequest.size} ROWS FETCH NEXT #{pageRequest.size} ROWS ONLY
+    </select>
+
+    <select id="countAllBoards" parameterType="map" resultType="long">
+        SELECT COUNT(*) FROM "board"
+        WHERE "delete_flag" = 0
+        <if test="title != null and title != ''">
+            AND "title" LIKE '%' || #{title} || '%'
+        </if>
+    </select>
+
+    <select id="findPopularBoards" parameterType="int" resultType="com.Devim.backend.domain.board.BoardDto">
         SELECT
             b."board_no" AS boardNo,
             b."board_type_no" AS boardTypeNo,
@@ -43,12 +73,8 @@
         LEFT JOIN "likes" l ON b."board_no" = l."target_id" AND l."target_type" = 'board'
         WHERE b."delete_flag" = 0
         GROUP BY b."board_no", b."board_type_no", b."title", b."board_content", u."name", b."created_dt", b."delete_flag"
-        ORDER BY b."board_no" DESC
-        OFFSET (#{page} - 1) * #{size} ROWS FETCH NEXT #{size} ROWS ONLY
-    </select>
-
-    <select id="countAllBoards" resultType="long">
-        SELECT COUNT(*) FROM "board" WHERE "delete_flag" = 0
+        ORDER BY likeCount DESC, b."board_no" DESC
+        FETCH NEXT #{limit} ROWS ONLY
     </select>
 
     <update id="update" parameterType="com.Devim.backend.domain.board.Board">

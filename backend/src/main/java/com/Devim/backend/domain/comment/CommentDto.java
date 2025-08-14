@@ -1,5 +1,7 @@
 package com.Devim.backend.domain.comment;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
@@ -8,6 +10,6 @@ public class CommentDto {
     private int boardNo;
     private String commentContent;
     private String writerName; // From user table
-    private String createdDt;
+    private Date createdDt;
     private boolean deleteFlag;
 }
