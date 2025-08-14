@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class BoardType {
-	private int boardTypeNo;
+	private long boardTypeNo;
 	private String boardName;
 }

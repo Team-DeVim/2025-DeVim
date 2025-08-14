@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class Comment {
-	private int commentNo;
+	private long commentNo;
 	private int boardNo;
 	private String commentContent;
 	private int writer;
