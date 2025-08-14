@@ -4,7 +4,7 @@
     padding: 0 20px 60px;
     /* 원본 패딩 */
     border-radius: 15px;
-    border: 1px dotted black;
+    border: 1px solid var(--color-border);
 }
 
 .board__title {
