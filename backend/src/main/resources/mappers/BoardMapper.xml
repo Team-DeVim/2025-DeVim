@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.Devim.backend.mapper.board.BoardMapper">
+<mapper namespace="com.Devim.backend.repository.mybatis.BoardMapper">
 
     <insert id="save" parameterType="com.Devim.backend.domain.board.Board">
-        <selectKey keyProperty="boardNo" resultType="int" order="BEFORE">
+        <selectKey keyProperty="boardNo" resultType="long" order="BEFORE">
             SELECT "seq_board_no".NEXTVAL FROM DUAL
         </selectKey>
         INSERT INTO "board" ("board_no", "board_type_no", "title", "board_content", "writer", "created_dt", "delete_flag")
@@ -11,7 +11,7 @@
     </insert>
 
 	<!-- user 테이블과 join하여 name 출력 -->
-    <select id="findById" parameterType="int" resultType="com.Devim.backend.dto.BoardDto">
+    <select id="findById" parameterType="long" resultType="com.Devim.backend.domain.board.BoardDto">
         SELECT
             b."board_no" AS boardNo,
             b."board_type_no" AS boardTypeNo,
@@ -23,12 +23,12 @@
             NVL(COUNT(l."like_no"), 0) AS likeCount
         FROM "board" b
         JOIN "user" u ON b."writer" = u."user_no"
- 
+        LEFT JOIN "likes" l ON b."board_no" = l."target_id" AND l."target_type" = 'board'
         WHERE b."board_no" = #{boardNo} AND b."delete_flag" = 0
         GROUP BY b."board_no", b."board_type_no", b."title", b."board_content", u."name", b."created_dt", b."delete_flag"
     </select>
 
-    <select id="findAll" resultType="com.Devim.backend.dto.BoardDto">
+    <select id="findAll" parameterType="com.Devim.backend.domain.common.PageRequestDto" resultType="com.Devim.backend.domain.board.BoardDto">
         SELECT
             b."board_no" AS boardNo,
             b."board_type_no" AS boardTypeNo,
@@ -40,10 +40,15 @@
             NVL(COUNT(l."like_no"), 0) AS likeCount
         FROM "board" b
         JOIN "user" u ON b."writer" = u."user_no"
-        LEFT JOIN "likes" l ON b."board_no" = l."target_id" AND l."target_type" = 'BOARD'
+        LEFT JOIN "likes" l ON b."board_no" = l."target_id" AND l."target_type" = 'board'
         WHERE b."delete_flag" = 0
         GROUP BY b."board_no", b."board_type_no", b."title", b."board_content", u."name", b."created_dt", b."delete_flag"
         ORDER BY b."board_no" DESC
+        OFFSET (#{page} - 1) * #{size} ROWS FETCH NEXT #{size} ROWS ONLY
+    </select>
+
+    <select id="countAllBoards" resultType="long">
+        SELECT COUNT(*) FROM "board" WHERE "delete_flag" = 0
     </select>
 
     <update id="update" parameterType="com.Devim.backend.domain.board.Board">
@@ -56,7 +61,7 @@
         WHERE "board_no" = #{boardNo}
     </update>
 
-    <update id="deleteById" parameterType="int">
+    <update id="deleteById" parameterType="long">
         UPDATE "board" SET "delete_flag" = 1 WHERE "board_no" = #{boardNo}
     </update>
 

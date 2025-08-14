@@ -1,6 +1,8 @@
-package com.Devim.backend.mapper.comment;
+package com.Devim.backend.repository.mybatis;
 
 import com.Devim.backend.domain.comment.Comment;
+import com.Devim.backend.domain.comment.CommentDto;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -11,9 +13,9 @@ public interface CommentMapper {
 
     void save(Comment comment);
 
-    Optional<Comment> findById(long commentNo);
+    Optional<CommentDto> findById(long commentNo);
 
-    List<Comment> findByBoardId(long boardNo);
+    List<CommentDto> findByBoardId(long boardNo);
 
     void update(Comment comment);
 
