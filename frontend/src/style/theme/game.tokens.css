@@ -1,0 +1,94 @@
+/* =========================================================
+   game.tokens.css  (범위: body[data-theme="game"])
+   - 픽셀 하늘/잔디 + 따뜻한 베이지/블루 톤
+   - 레이아웃 값(마진/갭/폭/높이)은 포함하지 않음
+   ========================================================= */
+[data-theme="game"] {
+    /* ===== 폰트 ===== */
+    --font-sans: 'PyeojinGothic-Bold', system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
+
+    /* ===== 페이지 배경(앞→뒤: 하늘 / 잔디 / 텍스처) ===== */
+    /* 하늘(타일) */
+    --img-sky: url('../../assets/theme/game/background_Img.png');
+    /* 잔디 바닥 */
+    --img-ground: url('../../assets/theme/game/grass.png');
+    /* 종이 질감 */
+    --img-texture: url('../../assets/theme/game/bright-squares.png');
+
+    /* 하늘 타일 폭 */
+    --sky-tile-w: 420px;
+    /* 하늘 타일 높이 */
+    --sky-tile-h: 220px;
+    /* 잔디 바닥 높이 */
+    --ground-h: 320px;
+    /* (코드 테마용 슬롯—게임은 비활성) */
+    --bg-gradient: none;
+    /* 바탕색 */
+    --color-bg: #e8ffdf;
+
+    /* ===== 텍스트/표면/보더 ===== */
+    /* 본문 텍스트 */
+    --color-text: #0f2330;
+    /* 네이비 보더 */
+    --color-border: #001F54;
+    /* 연한 회색 표면(캐러셀 프리뷰 등) */
+    --surface-muted: #eeeeee;
+    /* 게시판 카드 */
+    --surface-1: #FDFAF6;
+    /* 프로필/랭킹/채용 카드 */
+    --surface-2: #fff5ed;
+
+    /* ===== 브랜드/링크/상태 ===== */
+    /* 포인트 블루 */
+    --brand: #4b94d3;
+    /* 포인트 대비 텍스트 */
+    --brand-contrast: #ffffff;
+    /* 보조 블루 */
+    --brand-alt: #68a7d8;
+    /* 보조 옐로우 */
+    --accent-yellow: #ffd66e;
+    --link: #58a6ff;
+    --link-hover: #79c0ff;
+    /* 링크 호버 배경(게임은 없음) */
+    --link-hover-bg: transparent;
+    --link-hover-fg: #0f2330;
+    --danger: #df1e1e;
+
+    /* ===== 헤더/푸터/로고 ===== */
+    --header-bg: #FAF1E6;
+    --footer-bg: #fae5d44f;
+    --logo-fg: #001F54;
+    --logo-highlight: #df1e1e;
+    --logo-shadow: none;
+
+    /* ===== 컴포넌트 장식 ===== */
+    /* 캐러셀 인디케이터 */
+    --carousel-chip: #ff840044;
+    /* 코드 테마만 실사용 */
+    --carousel-bg: transparent;
+    --profile-photo-border: #1e3a8a;
+
+    /* ===== 버튼/링크 보조 ===== */
+    --btn-login-border: var(--color-border);
+    --btn-register-grad: linear-gradient(90deg, #4b94d3 0%, #79c0ff 100%);
+
+    /* ===== 보더/라운드/그림자 ===== */
+    --border-w: 1px;
+    /* 기본 보더 두께 */
+    --border-w-strong: 3px;
+    /* 강한 보더(헤더 등) */
+    --radius-sm: 4px;
+    --radius-md: 15px;
+    --radius-lg: 16px;
+    --radius-pill: 30px;
+
+    /* ===== 네온/글로우(게임은 비활성) ===== */
+    --glow: none;
+    --glow-strong: none;
+    --glow-hover: none;
+    --glow-outline: none;
+
+    /* ===== 기타(스크롤탑 등) ===== */
+    --scrolltop-bg: linear-gradient(120deg, #4b94d3 80%, #79c0ff 100%);
+    --scrolltop-fg: #ffffff;
+}

@@ -6,33 +6,49 @@
     /* 형태만 유지 */
 }
 
-.nav {
+.header__nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin: 0 auto;
 }
 
-.logo {
+.header__logo {
     font-size: 2rem;
     font-weight: bold;
+		cursor: pointer;
 }
 
-.menu {
+.header__menu {
     display: flex;
     gap: 100px;
     /* 원본 간격 유지 */
     font-size: 20px;
 }
 
-.search {
+.header__search{
+  position: relative;
+  display: inline-block;
+}
+.header__search--input {
     width: 300px;
     height: 30px;
     padding: 5px 10px;
     border-radius: 30px;
 }
+.header__search .search-icon {
+  position: absolute;
+  right: 10px;
+	font-size: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  cursor: pointer;
+}
 
-.auth {
+
+
+.header__auth {
     display: flex;
     gap: 10px;
 }
@@ -40,6 +56,7 @@
 .btn {
     padding: 5px 10px;
     border-radius: 4px;
+    color: var(--color-text);
     cursor: pointer;
 }
 
