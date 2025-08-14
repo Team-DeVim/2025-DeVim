@@ -1,3 +1,4 @@
+import ThemeSwitch from '../../../../components/common/ThemeSwitch';
 import './Header.css';
 
 export default function Header() {
@@ -14,6 +15,7 @@ export default function Header() {
                 <input type="text" className="search" placeholder="검색어를 입력해주세요" />
 
                 <div className="auth">
+                    <ThemeSwitch className="btn" name={"Switch Theme"} />
                     <button className="btn btn--sign">로그인</button>
                     <button className="btn btn--register">회원가입</button>
                 </div>
