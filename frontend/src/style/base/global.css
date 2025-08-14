@@ -1,0 +1,113 @@
+/* global.css */
+@font-face {
+    font-family: "DungGeunMo";
+    src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PyeojinGothic-Bold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2504-1@1.0/PyeojinGothic-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* fonts / base */
+body {
+    font-family: var(--font-sans);
+    color: var(--color-text);
+
+    /* 레이어: [0] 그라디언트(코드만 값 있음)
+             [1] 하늘(게임만)
+             [2] 잔디(게임만)
+             [3] 텍스처(게임만) */
+    background-image: var(--bg-gradient, none), var(--img-sky), var(--img-ground), var(--img-texture);
+    background-repeat: no-repeat, repeat-x, repeat-x, repeat;
+    background-position: center top, top center, bottom center, 0 0;
+    background-size:
+        cover,
+        /* gradient */
+        var(--sky-tile-w) var(--sky-tile-h),
+        /* sky */
+        auto var(--ground-h),
+        /* grass */
+        auto;
+    /* texture */
+
+    background-color: var(--color-bg);
+    /* 폴백 */
+}
+
+/* 게임 테마에서만 픽셀 보간 유지 */
+[data-theme="game"] body {
+    image-rendering: pixelated;
+}
+
+/* header */
+.header {
+    background: var(--header-bg);
+    border: var(--border-w) solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--glow-strong, none);
+    /* 코드=강한 글로우, 게임=없음 */
+}
+
+/* logo */
+.logo {
+    color: var(--logo-fg);
+    text-shadow: var(--logo-shadow, none);
+}
+
+/* links & buttons */
+a {
+    color: var(--link);
+}
+
+a:hover {
+    background: var(--link-hover-bg, transparent);
+    color: var(--link-hover, var(--link));
+}
+
+/* .btn--login {
+    border: 1.5px solid var(--btn-login-border, var(--color-border));
+}
+
+.btn--register {
+    background: var(--btn-register-grad, var(--brand));
+    color: var(--brand-contrast);
+} */
+
+/* board & cards */
+.board-section {
+    background: var(--surface-1);
+    border: var(--border-w) solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--glow, none);
+}
+
+.post-card {
+    background: var(--surface-2, transparent);
+    color: var(--color-text);
+    box-shadow: var(--glow, none);
+}
+
+/* carousel bits */
+.carousel__image {
+    background: var(--surface-muted, var(--carousel-bg, transparent));
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glow-strong, none);
+}
+
+.carousel__indicators {
+    background: var(--carousel-chip, transparent);
+    border-radius: var(--radius-md);
+}
+
+/* footer */
+.footer {
+    background: var(--footer-bg);
+    border: var(--border-w) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glow, none);
+}

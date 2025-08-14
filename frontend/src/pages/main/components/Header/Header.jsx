@@ -1,23 +1,70 @@
-import './Header.css';
+
+import { useNavigate } from "react-router";
+import "./Header.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import ThemeSwitch from '../../../../components/common/ThemeSwitch';
+
 
 export default function Header() {
-    return (
-        <header className="header">
-            <div className="nav">
-                <div className="logo">DeVim</div>
+  const navigate = useNavigate();
 
-                <nav className="menu">
-                    <a href="#">Home</a>
-                    <a href="#">게시판</a>
-                </nav>
+  // 메인으로
+  const main = () => {
+    navigate("/main");
+  };
+  // 회원가입
+  const register = () => {
+    navigate("/Register");
+  };
+  // 로그인
+  const signUp = () => {
+    navigate("/SignUp");
+  };
 
-                <input type="text" className="search" placeholder="검색어를 입력해주세요" />
+	// 검색 기능
+	const handleSearch=()=>{
+		const query = document.getElementById("searchInput").ariaValueMax.trim();
+		if(query) {
+			navigate(`/search?qurty=${encodeURIComponent(query)}`);
+		} else {
+			alert("검색어 입력해주세요.");
+		}
+	}
 
-                <div className="auth">
-                    <button className="btn btn--sign">로그인</button>
-                    <button className="btn btn--register">회원가입</button>
-                </div>
-            </div>
-        </header>
-    );
+
+  return (
+    <header className="header">
+      <div className="header__nav">
+        <div className="header__logo" onClick={main}>
+          DeVim
+        </div>
+
+
+        <nav className="header__menu">
+          <a href="#">자유게시판</a>
+          <a href="#">Q&A 게시판</a>
+        </nav>
+        <div className="header__search">
+          <input
+            type="text"
+            className="header__search--input"
+            placeholder="검색어를 입력해주세요"
+          />
+          <i
+            class="fa-solid fa-magnifying-glass search-icon"
+            onClick={handleSearch}
+          ></i>
+        </div>
+        <div className="header__auth">
+          <ThemeSwitch className="btn" name={"Switch Theme"} />
+          <button className="btn btn--sign" onClick={signUp}>
+            로그인
+          </button>
+          <button className="btn btn--register" onClick={register}>
+            회원가입
+          </button>
+        </div>
+      </div>
+    </header>
+  );
 }

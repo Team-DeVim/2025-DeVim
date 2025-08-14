@@ -1,0 +1,143 @@
+.signup {
+  margin: 50px auto;
+  width: 90%;
+  max-width: 500px;
+  height: auto;
+  box-sizing: border-box;
+}
+
+/* 로고 */
+.signup__logo {
+  font-size: 40px;
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+/* 로고에 숨겨진 텍스트 */
+.signup__logo-hover-text {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) translateY(25px);
+  opacity: 0;
+  font-size: 13px;
+  color: #1d3ffe;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+}
+
+.signup__logo-group {
+  position: relative;
+  display: inline-block;
+}
+
+.signup__logo-group:hover .signup__logo-hover-text {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* 로그인 방식 선택 */
+.signup__menu {
+  margin-top: 20px;
+}
+.signup__menu-type {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.signup__menu-button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.signup__menu-button:hover {
+  background-color: #a9c3eb;
+  color: #000000;
+}
+
+.signup__menu-button--active {
+  background: #4fa3e4;
+  color: white;
+}
+
+
+.signup__background {
+  height: 100%;
+  width: 500px;
+}
+/* 로그인 폼 */
+.signup__form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.signup__input {
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+.signup__input--id {
+  padding-left: 10px;
+  height: 50px;
+  border: 1px solid;
+  border-radius: 8px 8px 0 0;
+}
+
+.signup__input--password {
+  padding-left: 10px;
+  height: 50px;
+  border-top: none;
+  border-left: 1px solid;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+  border-radius: 0px 0px 8px 8px;
+}
+
+/* 로그인 버튼 */
+.signup__login-button {
+  font-size: 20px;
+  width: 100%;
+  height: 50px;
+  background-color: #4fa3e4;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.signup__login-button:hover {
+  background-color: #1263a6;
+  transform: scale(1.02);
+}
+
+.signup__login-button--kakao {
+  background-color: #fee500;
+  color: #3c1e1e;
+}
+
+.signup__login-button--kakao:hover {
+  background-color: #f7d600;
+  transform: scale(1.02);
+}
+
+/* 회원가입 버튼 */
+.signup__join button {
+  margin-top: 15px;
+  font-size: 20px;
+  width: 100%;
+  height: 50px;
+  border-radius: 10px;
+  color: white;
+  background-color: #037e3d;
+}
+
+.signup__join button:hover {
+  background-color: #009c49;
+  transform: scale(1.02);
+}

@@ -1,3 +1,4 @@
+import SignUp from '../SignUpRegister/SignUp';
 import BoardSection from "./components/BoardSection/BoardSection";
 import Carousel from "./components/Carousel/Carousel";
 import Footer from "./components/Footer/Footer";
@@ -10,7 +11,6 @@ function MainPage() {
   return (
     <div className="main">
       <Header />
-
       <section className="hero">
         <Carousel />
       </section>
