@@ -1,62 +1,213 @@
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-
+.Sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1.5px solid black;
+  border-radius: 10px;
 }
 
-.profile-card,
-.ranking-card,
-.recruitment-card {
-    border-radius: 16px;
-    padding: 20px 30px;
-    min-height: 110px;
-    border: 1px dotted black;
+.Sidebar__card {
+  border: 1px solid rgba(255, 255, 255, 0.28); /* 경계 진하게 */
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.Sidebar__card--profile {
+  position: relative;
+}
+.Sidebar__card--banner {
+  padding: 8px;
 }
 
-.profile-card {
-    min-height: 280px;
+.Sidebar__card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 10px;
 }
 
-.profile-image {
-    height: 100px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* 카드 내부 구분선 */
+.Sidebar__divider {
+  height: 1px;
+  margin: 10px 0;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 1px;
 }
 
-.user-profile {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
+/* ===== 프로필 ===== */
+.Sidebar__profile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.Sidebar__profile--in {
+  padding-bottom: 40px;
+} /* 로그아웃 공간 */
+
+.Sidebar__media {
+  display: grid;
+  place-items: center;
 }
 
-.profile-img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
+.Sidebar__avatar {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+.Sidebar__avatar--square {
+  border-radius: 8px;
+}
+.Sidebar__avatar--lg {
+  width: 150px;
+  height: 150px;
 }
 
-.profile-nickname {
-    font-size: 20px;
+.Sidebar__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.Sidebar__avatarFallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: rgba(255, 255, 255, 0.92);
 }
 
-.profile-mypage {
-    margin-top: 10px;
+.Sidebar__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.Sidebar__name {
+  font-weight: 800;
+  font-size: 1.02rem;
+}
+.Sidebar__id {
+  font-size: 0.9rem;
+  opacity: 0.85;
 }
 
-.profile-info {
-    margin-top: 10px;
+.Sidebar__counts {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.Sidebar__countRow {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+}
+.Sidebar__countLabel {
+  opacity: 0.9;
+}
+.Sidebar__countValue {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
 }
 
-.ranking-card {
-    height: 250px;
-    overflow-y: auto;
+/* 로그아웃 버튼: 오른쪽 아래 */
+.Sidebar__logout {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }
 
-.recruitment-card {
-    height: 300px;
+/* ===== 버튼 ===== */
+.Sidebar__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.Sidebar__button {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: inherit;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.Sidebar__button--primary {
+  border-color: transparent;
+  background: rgba(0, 128, 255, 0.92);
+  color: #fff;
+}
+.Sidebar__button--danger {
+  border-color: transparent;
+  background: rgba(220, 50, 50, 0.92);
+  color: #fff;
+}
+
+/* ===== 랭킹 ===== */
+.Sidebar__rank + .Sidebar__rank {
+  margin-top: 10px;
+}
+.Sidebar__rankTitle {
+  font-size: 0.95rem;
+  margin: 0 0 6px;
+}
+
+.Sidebar__rankList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.Sidebar__rankRow {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: transform 0.18s ease, background-color 0.18s ease;
+}
+.Sidebar__rankRow:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.Sidebar__rankNo {
+  font-weight: 800;
+  text-align: right;
+}
+.Sidebar__rankName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.Sidebar__rankCount {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.9;
+}
+
+/* ===== 배너 ===== */
+.Sidebar__banner {
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.Sidebar__banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.Sidebar__bannerFallback {
+  display: grid;
+  place-items: center;
+  height: 120px;
+  border: 1px dashed rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  opacity: 0.85;
 }
