@@ -1,6 +1,8 @@
+
 import { useNavigate } from "react-router";
 import "./Header.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import ThemeSwitch from '../../../../components/common/ThemeSwitch';
 
 
 export default function Header() {
@@ -37,6 +39,7 @@ export default function Header() {
           DeVim
         </div>
 
+
         <nav className="header__menu">
           <a href="#">자유게시판</a>
           <a href="#">Q&A 게시판</a>
@@ -53,6 +56,7 @@ export default function Header() {
           ></i>
         </div>
         <div className="header__auth">
+          <ThemeSwitch className="btn" name={"Switch Theme"} />
           <button className="btn btn--sign" onClick={signUp}>
             로그인
           </button>

@@ -1,0 +1,81 @@
+/* =========================================================
+   code.tokens.css  (범위: body[data-theme="code"])
+   - Vim/코드 감성: 다크 + 네온 그린
+   - 레이아웃 값(마진/갭/폭/높이)은 포함하지 않음
+   ========================================================= */
+[data-theme="code"] {
+    /* ===== 폰트 ===== */
+    --font-sans: "DungGeunMo", ui-monospace, SFMono-Regular, Menlo, Consolas, "Noto Sans KR", monospace;
+
+    /* ===== 페이지 배경(이미지 레이어 비활성) ===== */
+    --img-sky: none;
+    --img-ground: none;
+    --img-texture: none;
+    --sky-tile-w: 0;
+    --sky-tile-h: 0;
+    --ground-h: 0;
+    --bg-gradient: linear-gradient(135deg, #181c1b 0%, #212c22 80%, #2e2e2e 100%);
+    --color-bg: #181c1b;
+    /* 그라디언트 폴백 */
+
+    /* ===== 텍스트/표면/보더 ===== */
+    --color-text: #e2ffe8;
+    /* 라이트 민트 */
+    --color-border: #aaf686;
+    /* 네온 그린 보더 */
+    --surface-muted: #232b2380;
+    /* 연한 다크 표면 */
+    --surface-1: rgba(24, 28, 27, 0.76);
+    --surface-2: #232b2380;
+
+    /* ===== 브랜드/링크/상태 ===== */
+    --brand: #aaf686;
+    /* 네온 그린 */
+    --brand-contrast: #191d19;
+    /* 네온 대비 텍스트 */
+    --brand-alt: #68c660;
+    /* 보조 그린 */
+    --accent-yellow: #d4fc79;
+    /* 보조 옐로우 */
+    --link: #e2ffe8;
+    --link-hover: #e2ffe8;
+    --link-hover-bg: #aaf68633;
+    /* 호버 배경 네온 */
+    --link-hover-fg: #222;
+    --danger: #fb4934;
+
+    /* ===== 헤더/푸터/로고 ===== */
+    --header-bg: rgba(22, 25, 23, 0.98);
+    --footer-bg: #181c1b;
+    --logo-fg: #aaf686;
+    --logo-highlight: #d4fc79;
+    --logo-shadow: 0 0 18px #aaf68666, 0 2px 18px #232c2340;
+
+    /* ===== 컴포넌트 장식 ===== */
+    --carousel-chip: transparent;
+    /* 게임만 사용 */
+    --carousel-bg: linear-gradient(120deg, #212c22 80%, #8ffab9 100%);
+    --profile-photo-border: #aaf686;
+
+    /* ===== 버튼/링크 보조 ===== */
+    --btn-login-border: #aaf686bb;
+    --btn-register-grad: linear-gradient(90deg, #aaf686 70%, #d4fc79 100%);
+
+    /* ===== 보더/라운드/그림자 ===== */
+    --border-w: 2px;
+    --border-w-strong: 2px;
+    --radius-sm: 10px;
+    --radius-md: 22px;
+    --radius-lg: 26px;
+    --radius-pill: 30px;
+
+    /* ===== 네온/글로우(코드 테마 핵심) ===== */
+    --glow: 0 6px 32px #aaf68622, 0 1.5px 10px #aaf68622;
+    --glow-strong: 0 10px 48px #222d, 0 8px 32px 0 #aaf68622;
+    --glow-hover: 0 0 12px #aaf68690, 0 0 18px #aaf68677;
+    --glow-outline: 0 0 0 1px #aaf686;
+
+    /* ===== 기타(스크롤탑 등) ===== */
+    --scrolltop-bg: linear-gradient(120deg, #aaf686 80%, #68c660 100%);
+    --scrolltop-fg: #191d19;
+}
