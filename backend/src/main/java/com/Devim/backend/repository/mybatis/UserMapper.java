@@ -2,6 +2,8 @@ package com.Devim.backend.repository.mybatis;
 
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.user.User;
+import com.Devim.backend.domain.user.UserRankDto;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -21,5 +23,9 @@ public interface UserMapper {
     void update(User user);
 
     void deleteById(long userNo);
+
+    List<UserRankDto> findTop5ByBoardCount();
+
+    List<UserRankDto> findTop5ByCommentCount();
 }
 

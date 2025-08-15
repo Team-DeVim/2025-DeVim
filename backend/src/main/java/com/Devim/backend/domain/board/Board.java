@@ -1,5 +1,7 @@
 package com.Devim.backend.domain.board;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,6 @@ public class Board {
 	private String title;
 	private String boardContent;
 	private int writer;
-	private String createdDt;
+	private Date createdDt;
 	private boolean deleteFlag;
 }

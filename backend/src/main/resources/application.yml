@@ -10,7 +10,7 @@ spring:
 
 mybatis:
   mapper-locations: classpath*:mapper/**/*.xml
-  type-aliases-package: com.Devim.backend
+  type-aliases-package: com.Devim.backend.domain
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
