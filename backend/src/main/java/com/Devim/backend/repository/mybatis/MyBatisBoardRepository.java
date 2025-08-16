@@ -33,7 +33,7 @@ public class MyBatisBoardRepository implements BoardRepository {
     public PageResponseDto<BoardDto> findAll(PageRequestDto pageRequest) {
         List<BoardDto> dtoList = boardMapper.findAll(pageRequest);
         long totalCount = boardMapper.countAllBoards();
-        return new com.Devim.backend.domain.common.PageResponseDto<>(dtoList, pageRequest, totalCount);
+        return new PageResponseDto<>(dtoList, pageRequest, totalCount);
     }
 
     @Override
