@@ -30,9 +30,9 @@ public class MyBatisBoardRepository implements BoardRepository {
     }
 
     @Override
-    public PageResponseDto<BoardDto> findAll(PageRequestDto pageRequest) {
-        List<BoardDto> dtoList = boardMapper.findAll(pageRequest);
-        long totalCount = boardMapper.countAllBoards();
+    public PageResponseDto<BoardDto> findAll(PageRequestDto pageRequest, String title) {
+        List<BoardDto> dtoList = boardMapper.findAll(pageRequest, title);
+        long totalCount = boardMapper.countAllBoards(title);
         return new PageResponseDto<>(dtoList, pageRequest, totalCount);
     }
 
@@ -44,5 +44,10 @@ public class MyBatisBoardRepository implements BoardRepository {
     @Override
     public void deleteById(long boardNo) {
         boardMapper.deleteById(boardNo);
+    }
+
+    @Override
+    public List<BoardDto> findPopularBoards(int limit) {
+        return boardMapper.findPopularBoards(limit);
     }
 }
