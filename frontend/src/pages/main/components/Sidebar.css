@@ -1,35 +1,51 @@
 .Sidebar {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  border: 1.5px solid black;
-  border-radius: 10px;
+  gap: 12px; 
+  border-radius: var(--radius-md);
+  color: var(--color-text);
 }
 
+/* 카드 공통 */
 .Sidebar__card {
-  border: 1px solid rgba(255, 255, 255, 0.28); /* 경계 진하게 */
-  border-radius: 12px;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+  padding: 12px; 
+  background: var(--surface-2);
+  border: var(--border-w) solid var(--color-border);
+  box-shadow: var(--glow, none);
+  margin-bottom: 20px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    border-color 0.18s ease;
+}
+.Sidebar__card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--glow-hover, none);
+  border-color: var(--brand);
 }
 .Sidebar__card--profile {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px; 
+  align-items: center;
 }
 .Sidebar__card--banner {
-  padding: 8px;
+  padding: 8px; 
 }
 
 .Sidebar__card-title {
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 0 0 10px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 12px; 
+  color: var(--brand);
 }
 
 /* 카드 내부 구분선 */
 .Sidebar__divider {
-  height: 1px;
-  margin: 10px 0;
-  background: rgba(255, 255, 255, 0.25);
+  height: 5px;
+  margin: 12px 0; 
+  background: var(--color-border-muted);
   border-radius: 1px;
 }
 
@@ -37,11 +53,11 @@
 .Sidebar__profile {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px; 
 }
 .Sidebar__profile--in {
-  padding-bottom: 40px;
-} /* 로그아웃 공간 */
+  padding-bottom: 24px; 
+}
 
 .Sidebar__media {
   display: grid;
@@ -49,9 +65,12 @@
 }
 
 .Sidebar__avatar {
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.06);
+  border: var(--border-w) solid var(--brand);
+  background: var(--surface-1);
   overflow: hidden;
+  border-radius: var(--radius-full);
+  width: 120px;
+  height: 120px;
 }
 .Sidebar__avatar--square {
   border-radius: 8px;
@@ -73,129 +92,134 @@
   place-items: center;
   font-weight: 800;
   font-size: 1.4rem;
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--color-text);
+  background: var(--surface-1);
 }
 
+/* 이름/아이디 */
 .Sidebar__info {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  text-align: center;
+  gap: 4px; 
 }
 .Sidebar__name {
-  font-weight: 800;
-  font-size: 1.02rem;
+  font-weight: 700;
+  font-size: 1.05rem;
 }
 .Sidebar__id {
-  font-size: 0.9rem;
-  opacity: 0.85;
+  font-size: 0.88rem;
+  opacity: 0.7;
 }
 
+/* 카운트 */
 .Sidebar__counts {
-  margin-top: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px; 
+  margin-top: 8px; 
 }
 .Sidebar__countRow {
-  display: flex;
-  gap: 6px;
-  align-items: baseline;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
 }
 .Sidebar__countLabel {
-  opacity: 0.9;
+  font-size: 0.8rem;
+  opacity: 0.7;
 }
 .Sidebar__countValue {
-  font-variant-numeric: tabular-nums;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 /* 로그아웃 버튼: 오른쪽 아래 */
 .Sidebar__logout {
   position: absolute;
-  right: 10px;
-  bottom: 10px;
+  right: 8px; 
+  bottom: 8px; 
 }
 
 /* ===== 버튼 ===== */
 .Sidebar__actions {
   display: flex;
-  gap: 8px;
+  gap: 8px; 
   flex-wrap: wrap;
-  margin-top: 8px;
+  margin-top: 8px; 
 }
 
 .Sidebar__button {
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: var(--border-w) solid var(--btn-login-border);
   background: transparent;
-  color: inherit;
+  color: var(--color-text);
   padding: 6px 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 0.9rem;
   cursor: pointer;
+  transition: box-shadow 0.18s ease, transform 0.12s ease,
+    background-color 0.18s ease, border-color 0.18s ease;
+}
+.Sidebar__button:hover {
+  box-shadow: var(--glow, none);
+  transform: translateY(-1px);
+  background: var(--link-hover-bg, var(--surface-1));
+  border-color: var(--brand);
 }
 .Sidebar__button--primary {
   border-color: transparent;
-  background: rgba(0, 128, 255, 0.92);
-  color: #fff;
+  background: var(--btn-register-grad);
+  color: var(--brand-contrast);
 }
 .Sidebar__button--danger {
   border-color: transparent;
-  background: rgba(220, 50, 50, 0.92);
-  color: #fff;
+  background: var(--danger);
+  color: var(--danger-contrast, var(--brand-contrast));
 }
 
-/* ===== 랭킹 ===== */
-.Sidebar__rank + .Sidebar__rank {
-  margin-top: 10px;
+/* ===== 랭킹 카드 ===== */
+.Sidebar__rank {
+  margin-top: 12px; 
+  padding: 16px; 
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
 }
+
+/* 랭킹 제목 */
 .Sidebar__rankTitle {
-  font-size: 0.95rem;
-  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--brand);
 }
 
+/* 랭킹 리스트 */
 .Sidebar__rankList {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 12px;
 }
 
+/* ===== 랭킹 리스트 항목 ===== */
 .Sidebar__rankRow {
   display: grid;
-  grid-template-columns: 20px 1fr auto;
+  grid-template-columns: 24px 1fr auto;
   align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  border-radius: 8px;
-  transition: transform 0.18s ease, background-color 0.18s ease;
+  gap: 12px; 
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  transition: background-color 0.18s ease, transform 0.16s ease;
 }
 .Sidebar__rankRow:hover {
-  transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.Sidebar__rankNo {
-  font-weight: 800;
-  text-align: right;
-}
-.Sidebar__rankName {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.Sidebar__rankCount {
-  font-variant-numeric: tabular-nums;
-  opacity: 0.9;
+  background: var(--surface-2);
+  transform: translateY(-1px);
 }
 
 /* ===== 배너 ===== */
 .Sidebar__banner {
   display: block;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 .Sidebar__banner img {
   display: block;
@@ -205,9 +229,25 @@
 .Sidebar__bannerFallback {
   display: grid;
   place-items: center;
-  height: 120px;
-  border: 1px dashed rgba(255, 255, 255, 0.35);
-  border-radius: 8px;
-  font-size: 0.9rem;
-  opacity: 0.85;
+  height: 150px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  color: var(--color-text);
+  opacity: 0.9;
+}
+
+/* 접근성 포커스 */
+.Sidebar :is(a, button):focus-visible {
+  outline: none;
+  box-shadow: var(--glow-outline, none);
+  border-color: var(--brand);
+}
+
+/* 모션 최소화 */
+@media (prefers-reduced-motion: reduce) {
+  .Sidebar__card,
+  .Sidebar__button,
+  .Sidebar__rankRow {
+    transition: none;
+  }
 }
