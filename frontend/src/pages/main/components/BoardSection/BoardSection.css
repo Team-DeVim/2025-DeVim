@@ -1,9 +1,12 @@
+/* === BoardSection.css (Sidebar와 통일된 느낌) === */
 .BoardSection {
   padding: 16px 0;
-  border: 1px solid black;
+  border: var(--border-w) solid var(--color-border);
   border-radius: 20px;
+  background: var(--surface-1);
 }
 
+/* 헤더 */
 .BoardSection__header {
   display: flex;
   align-items: center;
@@ -11,84 +14,84 @@
   margin: 10px 10px 12px;
   gap: 12px;
 }
-
 .BoardSection__title {
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: -0.2px;
+  color: var(--brand);
 }
 
+/* 리스트 */
 .BoardSection__list {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+/* 아이템 */
 .BoardSection__item {
   padding: 12px 14px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
-  will-change: transform;
+  background: transparent; 
+  border: none; 
+  transition: background-color 0.18s ease, transform 0.16s ease;
 }
-.BoardSection__item:hover,
-.BoardSection__item:focus-within {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.22);
+.BoardSection__item-link:hover,
+.BoardSection__item-link:focus-visible {
+  background: var(--surface-2);
+  transform: translateY(-2px); /* 여기서 직접 */
 }
-
-.BoardSection__item-link {
+/* 한 줄 상단 영역 (제목 + 메타를 좌우 정렬) */
+.BoardSection__item-top {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  text-decoration: none;
-  color: inherit;
 }
 
+/* 링크 */
+.BoardSection__item-link {
+  display: block;            
+  text-decoration: none;
+  color: var(--color-text);
+}
 .BoardSection__item-title {
   flex: 1 1 auto;
-  min-width: 0;
   font-size: 0.98rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+/* 메타 정보 */
 .BoardSection__item-meta {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: 0.82rem;
-  opacity: 0.9;
+  color: var(--color-text-muted, var(--color-text));
 }
-
 .BoardSection__item-sep {
   opacity: 0.6;
 }
 
+/* 하단 통계 */
 .BoardSection__item-stats {
   margin-top: 6px;
   display: flex;
   gap: 12px;
   font-size: 0.82rem;
-  opacity: 0.85;
+  color: var(--color-text-muted, var(--color-text));
 }
 
-.BoardSection__item:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-.BoardSection__item:focus-within {
-  outline: 2px solid rgba(255, 255, 255, 0.18);
-}
-
-/* 상태 */
+/* 빈 상태 */
 .BoardSection__empty {
   padding: 14px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px dashed rgba(255, 255, 255, 0.12);
+  background: var(--surface-1);
+  border: 1px dashed var(--color-border-muted);
   font-size: 0.9rem;
+  color: var(--color-text-muted, var(--color-text));
+  text-align: center;
 }

@@ -122,18 +122,9 @@ const MOCK_PAYLOAD = {
 function formatDate(iso, tz = "Asia/Seoul") {
   if (!iso) return "";
   const d = new Date(iso);
-  const y = new Intl.DateTimeFormat("ko-KR", {
-    timeZone: tz,
-    year: "numeric",
-  }).format(d);
-  const m = new Intl.DateTimeFormat("ko-KR", {
-    timeZone: tz,
-    month: "2-digit",
-  }).format(d);
-  const day = new Intl.DateTimeFormat("ko-KR", {
-    timeZone: tz,
-    day: "2-digit",
-  }).format(d);
+  const y = new Intl.DateTimeFormat("ko-KR", { timeZone: tz, year: "numeric" }).format(d);
+  const m = new Intl.DateTimeFormat("ko-KR", { timeZone: tz, month: "2-digit" }).format(d);
+  const day = new Intl.DateTimeFormat("ko-KR", { timeZone: tz, day: "2-digit" }).format(d);
   return `${y}-${m}-${day}`;
 }
 
@@ -143,12 +134,8 @@ export default function BoardSection({
   pageSize = 4,
   mockMode = false,
 }) {
-  //연동 fetch로 대체
   const items = mockMode ? MOCK_PAYLOAD[mode] ?? [] : [];
-  const visibleItems = useMemo(
-    () => items.slice(0, pageSize),
-    [items, pageSize]
-  );
+  const visibleItems = useMemo(() => items.slice(0, pageSize), [items, pageSize]);
 
   return (
     <section className="BoardSection" aria-label={title}>
@@ -161,34 +148,36 @@ export default function BoardSection({
       ) : (
         <ul className="BoardSection__list">
           {visibleItems.map((item) => (
-            <li key={item.boardNo} className="BoardSection__item">
+            <li key={item.boardNo}>
               <Link
                 to={`/board/${item.boardNo}`}
-                className="BoardSection__item-link"
+                className="BoardSection__item BoardSection__item-link"
               >
-                <span className="BoardSection__item-title" title={item.title}>
-                  {item.title}
-                </span>
-
-                <span className="BoardSection__item-meta">
-                  <span className="BoardSection__item-author">
-                    {item.writer?.name ?? "알 수 없음"}
+                <div className="BoardSection__item-top">
+                  <span className="BoardSection__item-title" title={item.title}>
+                    {item.title}
                   </span>
-                  <span className="BoardSection__item-sep">·</span>
-                  <time className="BoardSection__item-date">
-                    {formatDate(item.createdAt)}
-                  </time>
-                </span>
-              </Link>
 
-              <div className="BoardSection__item-stats">
-                <span className="BoardSection__item-stat BoardSection__item-stat--likes">
-                  추천 {item.likeCount ?? 0}
-                </span>
-                <span className="BoardSection__item-stat BoardSection__item-stat--comments">
-                  댓글 {item.commentCount ?? 0}
-                </span>
-              </div>
+                  <span className="BoardSection__item-meta">
+                    <span className="BoardSection__item-author">
+                      {item.writer?.name ?? "알 수 없음"}
+                    </span>
+                    <span className="BoardSection__item-sep">·</span>
+                    <time className="BoardSection__item-date">
+                      {formatDate(item.createdAt)}
+                    </time>
+                  </span>
+                </div>
+
+                <div className="BoardSection__item-stats">
+                  <span className="BoardSection__item-stat BoardSection__item-stat--likes">
+                    추천 {item.likeCount ?? 0}
+                  </span>
+                  <span className="BoardSection__item-stat BoardSection__item-stat--comments">
+                    댓글 {item.commentCount ?? 0}
+                  </span>
+                </div>
+              </Link>
             </li>
           ))}
         </ul>
