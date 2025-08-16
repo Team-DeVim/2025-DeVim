@@ -130,9 +130,12 @@ function Sidebar() {
         <h2 id="sidebar-rank-title" className="Sidebar__card-title">
           랭킹
         </h2>
-
+         <div>
         <RankSection title="게시물왕" unit="개" items={rankingData.posts} />
-        <div className="Sidebar__divider" aria-hidden="true" />
+        </div>
+        <div
+        className="Sidebar__divider"
+        aria-hidden="true" />
         <RankSection title="댓글왕" unit="개" items={rankingData.comments} />
       </section>
 
