@@ -25,7 +25,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<Void> create(@Validated @RequestBody Comment comment) {
         Long id = commentService.create(comment);
-        return ResponseEntity.created(URI.create("/api/comments/" + id)).build();
+        return ResponseEntity.created(URI.create("/api/v1/comments/" + id)).build();
     }
 
     @GetMapping("/{commentNo}")
@@ -41,7 +41,7 @@ public class CommentController {
 
     @PatchMapping("/{commentNo}")
     public ResponseEntity<Void> update(@PathVariable Long commentNo,
-                                       @Validated Comment comment) {
+                                       @Validated @RequestBody Comment comment) {
         comment.setCommentNo(commentNo);
         commentService.update(comment);
         return ResponseEntity.noContent().build();

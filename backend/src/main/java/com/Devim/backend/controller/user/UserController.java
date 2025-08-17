@@ -23,7 +23,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Void> create(@Validated @RequestBody User user) {
         Long id = userService.create(user);
-        return ResponseEntity.created(URI.create("/api/users/")).build();
+        return ResponseEntity.created(URI.create("/api/v1/users/")).build();
     }
 
     @GetMapping("/{userNo}")
