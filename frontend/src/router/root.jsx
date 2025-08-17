@@ -6,6 +6,7 @@ import { lazy } from "react";
 const MainPage = lazy(() => import('../pages/main/MainPage'));
 const Register = lazy(() => import("../pages/SignUpRegister/Register"));
 const SignUp = lazy(() => import("../pages/SignUpRegister/SignUp"));
+const BoardPage = lazy(() => import("../pages/boardPage/BoardPage"));
 
 
 const root = createBrowserRouter([
@@ -34,6 +35,14 @@ const root = createBrowserRouter([
         element: (
           <Suspense>
             <SignUp />
+          </Suspense>
+        ),
+      },
+      {
+        path: "boardPage",
+        element: (
+          <Suspense>
+            <BoardPage />
           </Suspense>
         ),
       },

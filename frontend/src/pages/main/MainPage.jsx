@@ -18,7 +18,7 @@ function MainPage() {
         <div className="dashboard__main">
           <BoardSection title="인기글 게시판" mode="popular" mockMode pageSize={4} />
           <BoardSection title="자유게시판" mode="free" mockMode pageSize={4} />
-          <BoardSection title="QnA" mode="qna" mockMode pageSize={4}/>
+          <BoardSection title="QnA" mode="qna" mockMode pageSize={4} />
         </div>
         <aside className="dashboard__side">
           <Sidebar />
