@@ -69,8 +69,7 @@ public class BoardController {
             summary = "게시글 목록(페이지)",
             description = "제목 키워드로 검색하고 페이지네이션하여 게시글을 조회합니다.",
             parameters = {
-                    @io.swagger.v3.oas.annotations.Parameter(name = "title", description = "제목 검색 키워드", example = "공지", required = true)
-                    // PageRequestDto는 @ModelAttribute 기반으로 springdoc가 필드를 자동 노출합니다.
+                    @io.swagger.v3.oas.annotations.Parameter(name = "title", description = "제목 검색 키워드", example = "test", required = true)
             }
     )
     @ApiResponses({
