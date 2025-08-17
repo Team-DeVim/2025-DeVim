@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -29,8 +30,9 @@ public class BoardServieImpl implements BoardService {
     }
 
     @Override
-    public Optional<BoardDto> get(Long boardNo) {
-        return boardRepository.findById(boardNo);
+    public BoardDto get(Long boardNo) {
+        return boardRepository.findById(boardNo)
+                .orElseThrow(() -> new NoSuchElementException("Board Not Found" + boardNo));
     }
 
     @Override

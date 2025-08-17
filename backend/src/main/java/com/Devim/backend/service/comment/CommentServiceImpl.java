@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -27,8 +28,9 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public Optional<CommentDto> get(Long commentNo) {
-        return commentRepository.findById(commentNo);
+    public CommentDto get(Long commentNo) {
+        return commentRepository.findById(commentNo)
+                .orElseThrow(() -> new NoSuchElementException("Comment not Found" + commentNo));
     }
 
     @Override

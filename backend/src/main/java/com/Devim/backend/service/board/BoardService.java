@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface BoardService {
     Long create(Board board);
 
-    Optional<BoardDto> get(Long boardNo);
+    BoardDto get(Long boardNo);
 
     PageResponseDto<BoardDto> list(String title, PageRequestDto pageRequestDto);
 

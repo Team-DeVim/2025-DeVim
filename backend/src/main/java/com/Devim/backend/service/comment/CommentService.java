@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface CommentService {
     Long create(Comment comment);
 
-    Optional<CommentDto> get(Long commentNo);
+    CommentDto get(Long commentNo);
 
     PageResponseDto<CommentDto> listByBoard(Long boardNo, PageRequestDto pageRequestDto);
 
