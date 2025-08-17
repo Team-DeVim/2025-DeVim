@@ -1,0 +1,60 @@
+.switch {
+  position: relative;
+  width: 100px;
+  height: 34px;
+  border-radius: 34px;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  transition: background 0.5s ease;
+}
+
+/* 아이콘 */
+.switch__icon {
+  position: relative;
+  font-size: 13px;
+  z-index: 2;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+/*인디케이터 안 글자 (미사용)*/
+.switch__icon.game { color: #b00000; }
+.switch__icon.code { color: #0f0; }
+
+/* 인디케이터 */
+.switch__indicator {
+  position: absolute;
+  top: 2px;
+  left: 3.5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--logo-fg);
+  transition: transform 0.3s ease;
+  z-index: 1;
+	
+}
+
+/* === GAME 모드 === */
+:root[data-theme="game"] .switch {
+  background: var(--brand);
+}
+:root[data-theme="game"] .switch__indicator {
+  transform: translateX(0);
+}
+:root[data-theme="game"] .switch__icon.game { opacity: 1; }
+:root[data-theme="game"] .matrix-rain { display: none; }
+
+/* === CODE 모드 === */
+:root[data-theme="code"] .switch {
+  background: var( --link-hover-fg);
+}
+:root[data-theme="code"] .switch__indicator {
+  transform: translateX(65px);
+}
+:root[data-theme="code"] .switch__icon.code { opacity: 1; }
+:root[data-theme="code"] .matrix-rain { display: flex; }

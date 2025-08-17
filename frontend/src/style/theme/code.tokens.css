@@ -58,10 +58,22 @@
     --profile-photo-border: #aaf686;
 
     /* ===== 버튼/링크 보조 ===== */
-    --btn-login-border: #aaf686bb;
-    --btn-register-grad: linear-gradient(90deg, #aaf686 70%, #d4fc79 100%);
+    --btn-login-border: var(--color-border);
+		--btn-login-btn:#80b866;
+		--btn-login-hover:#90ce73;
+		--btn-kakaologin-btn:#f9c74b;
+		--btn-kakaologin-hover:#daad3d;
+		--btn-login-select: var(--color-border);
+    --btn-register-grad: linear-gradient(90deg, #4b94d3 0%, #79c0ff 100%);
+		--btn-register-btn: #80b866;
+		--btn-register-hover:#90ce73;
+		--btn-register-btnhover:#4cec51;
+		/* ===== 버튼 보조 텍스트 ===== */
+		--btn-login-text:#000000;
+		--btn-register-text:#000000;
+		--btn-register-texthover:#e2ffe8;
 
-    /* ===== 보더/라운드/그림자 ===== */
+    /* ===== 보더/라운드/그림자 ====	= */
     --border-w: 2px;
     --border-w-strong: 2px;
     --radius-sm: 10px;

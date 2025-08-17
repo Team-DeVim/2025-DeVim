@@ -70,8 +70,20 @@
 
     /* ===== 버튼/링크 보조 ===== */
     --btn-login-border: var(--color-border);
+		--btn-login-btn:#a3daff;
+		--btn-login-hover:#89cdfb;
+		--btn-kakaologin-btn:#ffd66e;
+		--btn-kakaologin-hover:#f9c74b;
+		--btn-login-select:#04c758;
     --btn-register-grad: linear-gradient(90deg, #4b94d3 0%, #79c0ff 100%);
-
+		--btn-register-btn: #46c54a;
+		--btn-register-hover:#05be0b;
+		--btn-register-btnhover:#4cec51;
+		/* ===== 버튼 보조 텍스트 ===== */
+		--btn-login-text:#000000;
+		--btn-register-text: #000000;
+		--btn-register-texthover:#000000;
+		
     /* ===== 보더/라운드/그림자 ===== */
     --border-w: 1px;
     /* 기본 보더 두께 */
