@@ -5,6 +5,7 @@ import com.Devim.backend.domain.board.BoardDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.service.board.BoardService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,9 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+@Tag(name="Board Controller", description = "게시판 도메인 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/boards")
+@RequestMapping("/api/v1/boards")
 public class BoardController {
 
     private final BoardService boardService;

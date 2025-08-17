@@ -6,6 +6,7 @@ import com.Devim.backend.domain.comment.CommentDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.service.comment.CommentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-
+@Tag(name="Comment Controller", description = "댓글 도메인 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/comments")
+@RequestMapping("/api/v1/comments")
 public class CommentController {
 
     private final CommentService commentService;

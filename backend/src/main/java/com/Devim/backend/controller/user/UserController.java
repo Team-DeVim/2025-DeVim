@@ -4,6 +4,7 @@ import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.service.user.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -11,9 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
+@Tag(name="User Controller", description = "유저 도메인 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     private final UserService userService;
