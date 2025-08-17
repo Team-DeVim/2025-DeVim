@@ -4,6 +4,7 @@ import com.Devim.backend.domain.board.Board;
 import com.Devim.backend.domain.board.BoardDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
+import com.Devim.backend.domain.common.PageResponseDtoOfBoardDto;
 import com.Devim.backend.service.board.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
