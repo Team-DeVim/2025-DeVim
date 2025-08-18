@@ -3,10 +3,12 @@ import Layout from "../layout/Layout";
 import { Suspense } from "react";
 import { lazy } from "react";
 
+
 const MainPage = lazy(() => import('../pages/main/MainPage'));
 const Register = lazy(() => import("../pages/SignUpRegister/Register"));
 const SignUp = lazy(() => import("../pages/SignUpRegister/SignUp"));
 const BoardPage = lazy(() => import("../pages/boardPage/BoardPage"));
+const ProfilePage = lazy(() => import("../pages/profilePage/ProfilePage"));
 
 
 const root = createBrowserRouter([
@@ -43,6 +45,14 @@ const root = createBrowserRouter([
         element: (
           <Suspense>
             <BoardPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "ProfilePage",
+        element: (
+          <Suspense>
+            <ProfilePage />
           </Suspense>
         ),
       },
