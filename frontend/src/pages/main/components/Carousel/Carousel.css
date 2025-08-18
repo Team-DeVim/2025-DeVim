@@ -1,34 +1,53 @@
 .carousel {
     position: relative;
-    border: 1px dotted black;
+    border: 1px none black;
+		overflow: hidden;
+		border-radius: 15px;
 }
-
+/* 회전목마 이미지 가로정렬 */
+.carousel__track {
+  display: flex; 
+  width: 100%;
+  transition: transform 0.5s ease-in-out;
+}
+/* 회전목마 이미지 */
 .carousel__image {
     display: flex;
+		flex: 0 0 100%;
     align-items: center;
     justify-content: center;
-    height: 350px;
+    height: 420px;
+		width: 100%;
+		object-fit: cover;
+		flex-shrink: 0;
     border-radius: 15px;
     font-size: 50px;
     overflow: hidden;
 }
 
+/* 회전목마 아이콘 */
 .carousel__indicators {
     position: absolute;
-    bottom: 55px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     justify-content: space-around;
     width: 300px;
     height: 50px;
-    border-radius: 15px;
-    border: 1px dotted black;
+    border-radius: 30px;
+		background-color: rgba(255, 255, 255, 0.3);
+}
+.carousel__indicator {
+	background-color: transparent;
+}
+.carousel__icon {
+  transition: 0.3s ease-in-out;
+  font-size: 15px;
+}
+/* 선택된 인디케이터 */
+.carousel__indicator.active .carousel__icon {
+  color: #ffffff;
+	font-size: 18px;
 }
 
-.carousel__indicator {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
