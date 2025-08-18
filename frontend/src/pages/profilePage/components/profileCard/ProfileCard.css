@@ -1,0 +1,5 @@
+.ProfileCard {
+    border: 3px dotted var(--color-border);
+    width: 840px;
+    height: 360px;
+}
