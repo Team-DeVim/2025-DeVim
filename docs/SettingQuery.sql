@@ -47,6 +47,12 @@ CREATE TABLE "likes" (
   "created_dt" date NOT NULL
 );
 
+CREATE TABLE "main_image" (
+  "image_id" number PRIMARY KEY,
+  "file_path" varchar2(255) NOT NULL,
+  "priority" number NOT NULL
+);
+
 ALTER TABLE "user_role" ADD CONSTRAINT "user_user_role" FOREIGN KEY ("user_no") REFERENCES "user" ("user_no");
 
 ALTER TABLE "board" ADD CONSTRAINT "user_board" FOREIGN KEY ("writer") REFERENCES "user" ("user_no");
