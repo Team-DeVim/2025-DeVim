@@ -2,6 +2,7 @@ package com.Devim.backend.repository.mybatis;
 
 import com.Devim.backend.domain.board.Board;
 import com.Devim.backend.domain.board.BoardDto;
+import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -30,5 +31,7 @@ public interface BoardMapper {
     void update(Board board);
 
     void deleteById(long boardNo);
+
+    List<MonthlyCountDto> countMonthlyPosts();
 }
 

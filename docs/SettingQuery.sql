@@ -5,7 +5,6 @@ CREATE TABLE "user" (
   "name" varchar2(50) NOT NULL,
   "social" number NOT NULL,
   "profile_image_path" varchar2(255),
-  "is_dark" number NOT NULL,
   "created_dt" date NOT NULL,
   "delete_flag" number NOT NULL
 );
@@ -47,6 +46,13 @@ CREATE TABLE "likes" (
   "created_dt" date NOT NULL
 );
 
+CREATE TABLE "main_image" (
+  "image_no" number PRIMARY KEY,
+  "file_path" varchar2(255) NOT NULL,
+  "priority" number NOT NULL,
+  "created_dt" date NOT NULL
+);
+
 ALTER TABLE "user_role" ADD CONSTRAINT "user_user_role" FOREIGN KEY ("user_no") REFERENCES "user" ("user_no");
 
 ALTER TABLE "board" ADD CONSTRAINT "user_board" FOREIGN KEY ("writer") REFERENCES "user" ("user_no");
@@ -65,3 +71,18 @@ create sequence "seq_board_no";
 create sequence "seq_board_type_no";
 create sequence "seq_comment_no";
 create sequence "seq_like_no";
+create sequence "seq_main_image_no";
+
+--INSERT INTO "board_type" (
+--    "board_type_no",
+--    "board_name"
+--) VALUES ( 1, '자유게시판' );
+--INSERT INTO "board_type" (
+--    "board_type_no",
+--    "board_name"
+--) VALUES ( 2, '질문게시판' );
+--INSERT INTO "board_type" (
+--    "board_type_no",
+--    "board_name"
+--) VALUES ( 3, '공지사항' );
+

@@ -2,6 +2,7 @@ package com.Devim.backend.repository.mybatis;
 
 import com.Devim.backend.domain.board.Board;
 import com.Devim.backend.domain.board.BoardDto;
+import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.repository.BoardRepository;
@@ -29,7 +30,7 @@ public class MyBatisBoardRepository implements BoardRepository {
         return boardMapper.findById(boardNo);
     }
 
-        @Override
+    @Override
     public PageResponseDto<BoardDto> findAll(PageRequestDto pageRequest) {
         List<BoardDto> dtoList = boardMapper.findAll(pageRequest);
         long totalCount = boardMapper.countAll();
@@ -56,5 +57,10 @@ public class MyBatisBoardRepository implements BoardRepository {
     @Override
     public List<BoardDto> findPopularBoards(int limit) {
         return boardMapper.findPopularBoards(limit);
+    }
+
+    @Override
+    public List<MonthlyCountDto> countMonthlyPosts() {
+        return boardMapper.countMonthlyPosts();
     }
 }

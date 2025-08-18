@@ -2,7 +2,7 @@ package com.Devim.backend.repository.mybatis;
 
 import com.Devim.backend.domain.comment.Comment;
 import com.Devim.backend.domain.comment.CommentDto;
-
+import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -25,3 +25,5 @@ public interface CommentMapper {
 
     void deleteById(long commentNo);
 
+    List<MonthlyCountDto> countMonthlyComments();
+}
