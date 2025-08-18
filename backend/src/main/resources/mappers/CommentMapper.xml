@@ -16,11 +16,18 @@
 		WHERE c."comment_no" = #{commentNo} AND c."delete_flag" = 0
     </select>
 
-    <select id="findByBoardId" parameterType="long" resultType="com.Devim.backend.domain.comment.CommentDto">
+    <select id="findByBoardId" parameterType="map" resultType="com.Devim.backend.domain.comment.CommentDto">
         SELECT "comment_no" AS commentNo, "board_no" AS boardNo, "comment_content" AS commentContent, u."name" AS writerName, c."created_dt" AS createdDt, c."delete_flag" AS deleteFlag
         FROM "comment" c JOIN "user" u ON c."writer" = u."user_no"
         WHERE c."board_no" = #{boardNo} AND c."delete_flag" = 0
         ORDER BY c."comment_no" ASC
+        OFFSET (#{pageRequest.page} - 1) * #{pageRequest.size} ROWS FETCH NEXT #{pageRequest.size} ROWS ONLY
+    </select>
+
+    <select id="countByBoardId" parameterType="long" resultType="long">
+        SELECT COUNT(*)
+        FROM "comment"
+        WHERE "board_no" = #{boardNo} AND "delete_flag" = 0
     </select>
 
     <update id="update" parameterType="com.Devim.backend.domain.comment.Comment">

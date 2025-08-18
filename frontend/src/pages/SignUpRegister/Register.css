@@ -1,13 +1,13 @@
 .register{
-	margin: 50px auto;
+	margin: 170px auto;
 	width: 90%;
 	max-width: 500px;
-	height: auto;
+	height: 500px;
 	box-sizing: border-box;
 }
 /* 회원가입창 로고 */
 .register__logo {
-  cursor: pointer;
+	color: var(--logo-fg);
   font-size: 40px;
   font-weight: 700;
   background: none;
@@ -17,12 +17,13 @@
 /* 로고에 숨겨진 텍스트 */
 .register__logo-hover-text {
   position: absolute;
+	width: 100px;
   top: -10px;
   left: 50%;
-  transform: translateX(-50%) translateY(25px);
+  transform: translateX(-50%) translateY(10px);
   opacity: 0;
-  font-size: 13px;
-  color: #1d3ffe;
+  font-size: 19px;
+  color: var(--logo-fg);
   transition: opacity 0.5s ease, transform 0.5s ease;
   pointer-events: none;
 }
@@ -49,6 +50,7 @@
 
 /* 공통 input 스타일 */
 .register__user-info input {
+	flex: 1; 
   padding-left: 10px;
   width: 100%;
   height: 40px;
@@ -57,19 +59,20 @@
   box-sizing: border-box;
   border: 1px none #adb7c2;
   border-radius: 15px;
-  background-color: #dbdbdb;
+  background-color: #ffffff;
 }
 
 /* 아이콘 위치 고정 */
 .register__icon {
   font-size: 25px;
-  color: #000000;
+  color: var(--logo-fg);
   margin-right: 10px;
   margin-left: 10px;
 }
-
+/* 달력 */
 .register__input--birth {
 	padding-right: 60%; /* 달력 아이콘 공간 확보 */
+	color: var(--btn-login-text);
 	padding-top: 7px; /* 가운데 정렬 */
 }
 
@@ -81,10 +84,16 @@
 .register__group--phone {
   display: flex;
   align-items: center;
+	justify-content: flex-start;
+	gap: 10px;
   height: 40px;
   position: relative;
   margin-bottom: 12px;
 }
+/* 그룹별 입력란 input */
+.register__input--id{
+}
+
 
 
 /* 에러 메시지 */
@@ -134,27 +143,29 @@
 }
 
 .register__gender-button--selected {
-  background-color: #5f9872;
-  color: white;
+  background-color: var(--btn-login-select);
+  color: var(--btn-login-text)
 }
 
 /* 이메일 접미사 */
 .register__suffix--email {
-  font-size: 14px;
-  color: #333;
+	margin-left: 10px;
+  font-size: 20px;
+  color: var(--color-text);
 }
 
 /* 가입 버튼 */
 .register__submit-button {
   font-size: 20px;
-  border: 1px solid black;
+  border: 1px none black;
   border-radius: 10px;
-  margin: 10px 0px;
   padding: 10px;
+	color: var(--btn-register-text);
+	background-color: var(--btn-register-btn);
 }
 
 .register__submit-button:hover {
-  color: #ffffff;
-  background-color: #007830;
+  color: var(--btn-register-texthover);
+  background-color: var(--btn-register-hover);
   transition: background-color 0.3s ease, transform 0.2s ease;
 }

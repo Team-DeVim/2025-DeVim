@@ -17,4 +17,10 @@ mybatis:
 
 logging:
   level:
-    com.Devim: debug
+    org:
+      springframework:
+        test:
+          context:
+            transaction: trace
+        jdbc:
+          core: debug
