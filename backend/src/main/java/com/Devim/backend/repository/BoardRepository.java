@@ -13,7 +13,9 @@ public interface BoardRepository {
 
 	Optional<BoardDto> findById(long boardNo);
 
-	PageResponseDto<BoardDto> findAll(PageRequestDto pageRequest, String title);
+	PageResponseDto<BoardDto> findAll(PageRequestDto pageRequest);
+
+	PageResponseDto<BoardDto> searchByTitle(PageRequestDto pageRequest, String title);
 
 	void update(Board board);
 
