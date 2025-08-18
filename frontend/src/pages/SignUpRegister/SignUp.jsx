@@ -11,7 +11,7 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [isFocused, setIsFocused] = useState({ id: false, password: false });
 
-	useEffect(() => {
+  useEffect(() => {
     if (window.Kakao && !window.Kakao.isInitialized()) {
       window.Kakao.init("YOUR_APP_KEY"); // 카카오 개발자 콘솔에서 발급받은 앱 키
     }
@@ -19,32 +19,32 @@ export default function SignUp() {
 
   /*카카오 로그인 버튼*/
   const handleLoginTypeChange = (type) => {
-		setActiveTab(type);
+    setActiveTab(type);
   };
-	
-	/*카카오 로그인  08.12 미구현*/
-	
-	// const kakaoLogin = () =>{
-	// 	window.Kakao.Auth.login({
-  //     success: function (authObj) {
-  //       console.log("카카오 로그인 성공", authObj);
-  //       window.Kakao.API.request({
-  //         url: "/v2/user/me",
-  //         success: function (res) {
-  //           console.log("사용자 정보", res);
-  //           // 여기서 서버에 사용자 정보 전달해서 회원가입 or 로그인 처리
-  //         },
-  //         fail: function (error) {
-  //           console.error("사용자 정보 요청 실패", error);
-  //         },
-  //       });
-  //     },
-  //     fail: function (err) {
-  //       console.error("카카오 로그인 실패", err);
-  //     },
-  //   });
-	// }
-/*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
+
+  /*카카오 로그인  08.12 미구현 / 8.15 */
+
+  const kakaoLogin = () =>{
+  	window.Kakao.Auth.login({
+      success: function (authObj) {
+        console.log("카카오 로그인 성공", authObj);
+        window.Kakao.API.request({
+          url: "/v2/user/me",
+          success: function (res) {
+            console.log("사용자 정보", res);
+            // 여기서 서버에 사용자 정보 전달해서 회원가입 or 로그인 처리
+          },
+          fail: function (error) {
+            console.error("사용자 정보 요청 실패", error);
+          },
+        });
+      },
+      fail: function (err) {
+        console.error("카카오 로그인 실패", err);
+      },
+    });
+  }
+  /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
   // 메인으로
   const main = () => {
@@ -70,19 +70,9 @@ export default function SignUp() {
           <div className="signup__menu-type">
             <button
               onClick={() => setActiveTab("id")}
-              className={`signup__menu-button ${
-                activeTab === "id" ? "signup__menu-button--active" : ""
-              }`}
+              className={"signup__menu-button"}
             >
               ID/이메일
-            </button>
-            <button
-              onClick={() => handleLoginTypeChange("kakao")}
-              className={`signup__menu-button ${
-                activeTab === "kakao" ? "signup__menu-button--active" : ""
-              }`}
-            >
-              카카오 로그인
             </button>
           </div>
         </div>
@@ -95,7 +85,7 @@ export default function SignUp() {
               onChange={(e) => setId(e.target.value)}
               onFocus={() => setIsFocused({ ...isFocused, id: true })}
               onBlur={() => setIsFocused({ ...isFocused, id: false })}
-              placeholder={activeTab === "kakao" ? "카카오아이디" : "아이디"}
+              placeholder="아이디"
             />
             <input
               className="signup__input signup__input--password"
@@ -108,12 +98,15 @@ export default function SignUp() {
             />
           </div>
 
+          <button className="signup__login-button" type="submit">
+            로그인
+          </button>
           <button
-            className={`signup__login-button ${
-              activeTab === "kakao" ? "signup__login-button--kakao" : ""
-            }`}
+            className="signup__kakaologin-button"
+            type="submit"
+            onClick={kakaoLogin}
           >
-            {activeTab === "kakao" ? "카카오 로그인" : "로그인"}
+            카카오 로그인
           </button>
 
           <div className="signup__join">
