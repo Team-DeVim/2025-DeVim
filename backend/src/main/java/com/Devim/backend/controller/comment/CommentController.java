@@ -1,8 +1,8 @@
 package com.Devim.backend.controller.comment;
 
-
 import com.Devim.backend.domain.comment.Comment;
 import com.Devim.backend.domain.comment.CommentDto;
+import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.common.PageResponseDtoOfCommentDto;
@@ -14,12 +14,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
+
 @Tag(name="Comment Controller", description = "댓글 도메인 API")
 @RestController
 @RequiredArgsConstructor
@@ -113,9 +114,15 @@ public class CommentController {
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "삭제됨"),
     })
-    @DeleteMapping("/{commentNo}")
+        @DeleteMapping("/{commentNo}")
     public ResponseEntity<Void> delete(@PathVariable Long commentNo) {
         commentService.delete(commentNo);
         return ResponseEntity.noContent().build();
+    }
+
+//    swagger 추가 필요
+    @GetMapping("/monthly-counts")
+    public ResponseEntity<List<MonthlyCountDto>> getMonthlyCommentCounts() {
+        return ResponseEntity.ok(commentService.countMonthlyComments());
     }
 }

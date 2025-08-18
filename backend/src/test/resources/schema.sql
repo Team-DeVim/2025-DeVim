@@ -4,12 +4,14 @@ DROP TABLE "board"      IF EXISTS;
 DROP TABLE "board_type" IF EXISTS;
 DROP TABLE "user_role"  IF EXISTS;
 DROP TABLE "user"       IF EXISTS;
+DROP TABLE "main_image" IF EXISTS;
 
 DROP SEQUENCE "seq_like_no"        IF EXISTS;
 DROP SEQUENCE "seq_comment_no"     IF EXISTS;
 DROP SEQUENCE "seq_board_no"       IF EXISTS;
 DROP SEQUENCE "seq_board_type_no"  IF EXISTS;
 DROP SEQUENCE "seq_user_no"        IF EXISTS;
+DROP SEQUENCE "seq_main_image_no"  IF EXISTS;
 
 
 CREATE TABLE "user" (
@@ -19,7 +21,6 @@ CREATE TABLE "user" (
                         "name"               VARCHAR2(50)  NOT NULL,
                         "social"             NUMBER        NOT NULL,
                         "profile_image_path" VARCHAR2(255),
-                        "is_dark"            NUMBER        NOT NULL,
                         "created_dt"         DATE          NOT NULL,
                         "delete_flag"        NUMBER        NOT NULL
 );
@@ -61,6 +62,13 @@ CREATE TABLE "likes" (
                          "created_dt" DATE         NOT NULL
 );
 
+CREATE TABLE "main_image" (
+						"image_no" number PRIMARY KEY,
+						"file_path" varchar2(255) NOT NULL,
+					 	"priority" number NOT NULL,
+						"created_dt" date NOT NULL
+);
+
 
 ALTER TABLE "user_role"
     ADD CONSTRAINT "user_user_role"
@@ -91,3 +99,4 @@ CREATE SEQUENCE "seq_board_no";
 CREATE SEQUENCE "seq_board_type_no";
 CREATE SEQUENCE "seq_comment_no";
 CREATE SEQUENCE "seq_like_no";
+CREATE SEQUENCE "seq_main_image_no";

@@ -2,6 +2,7 @@ package com.Devim.backend.repository;
 
 import com.Devim.backend.domain.comment.Comment;
 import com.Devim.backend.domain.comment.CommentDto;
+import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 
@@ -14,3 +15,6 @@ public interface CommentRepository {
     PageResponseDto<CommentDto> findByBoardId(long boardNo, PageRequestDto pageRequest);
     void update(Comment comment);
     void deleteById(long commentNo);
+
+    List<MonthlyCountDto> countMonthlyComments();
+}

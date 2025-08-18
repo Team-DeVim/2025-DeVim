@@ -6,19 +6,19 @@
         <selectKey keyProperty="userNo" resultType="long" order="BEFORE">
             SELECT "seq_user_no".NEXTVAL FROM DUAL
         </selectKey>
-        INSERT INTO "user" ("user_no", "id", "password", "name", "social", "profile_image_path", "is_dark", "created_dt", "delete_flag")
-        VALUES (#{userNo}, #{id}, #{password}, #{name}, #{social}, NULL, 0, SYSDATE, 0)
+        INSERT INTO "user" ("user_no", "id", "password", "name", "social", "profile_image_path", "created_dt", "delete_flag")
+        VALUES (#{userNo}, #{id}, #{password}, #{name}, #{social}, NULL, SYSDATE, 0)
     </insert>
     
     <!-- SELECT 시에는 deleteFlag가 0인 사람만 조회 -->
     <select id="findById" parameterType="long" resultType="com.Devim.backend.domain.user.User">
-        SELECT "user_no" AS userNo, "id", "password", "name", "social", "profile_image_path" AS profileImagePath, "is_dark" AS isDark, "created_dt" AS createdDt, "delete_flag" AS deleteFlag
+        SELECT "user_no" AS userNo, "id", "password", "name", "social", "profile_image_path" AS profileImagePath, "created_dt" AS createdDt, "delete_flag" AS deleteFlag
         FROM "user"
         WHERE "user_no" = #{userNo} AND "delete_flag" = 0
     </select>
 
     <select id="findAll" parameterType="com.Devim.backend.domain.common.PageRequestDto" resultType="com.Devim.backend.domain.user.User">
-        SELECT "user_no" AS userNo, "id", "password", "name", "social", "profile_image_path" AS profileImagePath, "is_dark" AS isDark, "created_dt" AS createdDt, "delete_flag" AS deleteFlag
+        SELECT "user_no" AS userNo, "id", "password", "name", "social", "profile_image_path" AS profileImagePath, "created_dt" AS createdDt, "delete_flag" AS deleteFlag
         FROM "user"
         WHERE "delete_flag" = 0
         ORDER BY "user_no" DESC
@@ -35,7 +35,6 @@
             <if test="password != null and password != ''">"password" = #{password},</if>
             <if test="name != null and name != ''">"name" = #{name},</if>
             <if test="profileImagePath != null and profileImagePath != ''">"profile_image_path" = #{profileImagePath},</if>
-            <if test="isDark != null">"is_dark" = #{isDark},</if>
         </set>
         WHERE "user_no" = #{userNo}
     </update>

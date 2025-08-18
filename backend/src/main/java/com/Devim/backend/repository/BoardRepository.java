@@ -4,6 +4,7 @@ import com.Devim.backend.domain.board.Board;
 import com.Devim.backend.domain.board.BoardDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
+import com.Devim.backend.domain.common.MonthlyCountDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +23,6 @@ public interface BoardRepository {
 	void deleteById(long boardNo);
 
     List<BoardDto> findPopularBoards(int limit);
+
+    List<MonthlyCountDto> countMonthlyPosts();
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Devim.backend.repository.mybatis.MainImageMapper">
+
+    <insert id="save" parameterType="com.Devim.backend.domain.mainimage.MainImage">
+        <selectKey keyProperty="imageNo" resultType="long" order="BEFORE">
+            SELECT seq_main_image_no.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO main_image (image_no, file_path, priority, created_dt)
+        VALUES (#{imageNo}, #{filePath}, #{priority}, SYSDATE)
+    </insert>
+
+    <select id="findAll" resultType="com.Devim.backend.domain.mainimage.MainImage">
+        SELECT image_no AS imageNo, file_path AS filePath, priority, created_dt AS createdDt
+        FROM main_image
+        ORDER BY priority ASC
+    </select>
+
+    <update id="updatePriority">
+        UPDATE main_image
+        SET priority = #{priority}
+        WHERE image_no = #{imageNo}
+    </update>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM main_image WHERE image_no = #{imageNo}
+    </delete>
+
+</mapper>

@@ -2,6 +2,7 @@ package com.Devim.backend.service.comment;
 
 import com.Devim.backend.domain.comment.Comment;
 import com.Devim.backend.domain.comment.CommentDto;
+import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.repository.CommentRepository;
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,16 +33,9 @@ public class CommentServiceImpl implements CommentService{
                 .orElseThrow(() -> new NoSuchElementException("Comment not Found" + commentNo));
     }
 
-    @Override
+        @Override
     public PageResponseDto<CommentDto> listByBoard(Long boardNo, PageRequestDto pageRequestDto) {
-        List<CommentDto> commentList = commentRepository.findByBoardId(boardNo);
-        int totalCount = commentList.size();
-
-        return PageResponseDto.<CommentDto>withAll()
-                .dtoList(commentList)
-                .pageRequestDTO(pageRequestDto)
-                .totalCount(totalCount)
-                .build();
+        return commentRepository.findByBoardId(boardNo, pageRequestDto);
     }
 
     @Override
@@ -56,5 +49,10 @@ public class CommentServiceImpl implements CommentService{
     public void delete(Long commentNo) {
         commentRepository.deleteById(commentNo);
 
+    }
+
+    @Override
+    public List<MonthlyCountDto> countMonthlyComments() {
+        return commentRepository.countMonthlyComments();
     }
 }

@@ -17,7 +17,6 @@ public class User {
 	private String name;
 	private boolean social;
 	private String profileImagePath;
-	private boolean isDark;
 	private Date createdDt;
 	private boolean deleteFlag;
 	

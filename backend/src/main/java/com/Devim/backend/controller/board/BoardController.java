@@ -2,6 +2,7 @@ package com.Devim.backend.controller.board;
 
 import com.Devim.backend.domain.board.Board;
 import com.Devim.backend.domain.board.BoardDto;
+import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.common.PageResponseDtoOfBoardDto;
@@ -29,7 +30,6 @@ public class BoardController {
 
     private final BoardService boardService;
 
-
     @Operation(
             summary = "게시글 생성",
             description = "새 게시글을 생성합니다.",
@@ -48,6 +48,7 @@ public class BoardController {
         return ResponseEntity.created(URI.create("/api/v1/boards/" + id)).build();
     }
 
+    
     @Operation(
             summary = "게시글 단건 조회",
             description = "boardNo로 게시글을 조회합니다.",
@@ -66,22 +67,25 @@ public class BoardController {
 
 
     @Operation(
-            summary = "게시글 목록(페이지)",
-            description = "제목 키워드로 검색하고 페이지네이션하여 게시글을 조회합니다.",
-            parameters = {
-                    @io.swagger.v3.oas.annotations.Parameter(name = "title", description = "제목 검색 키워드", example = "test", required = true)
-            }
+	        summary = "게시글 목록(페이지)",
+	        description = "게시글을 페이지네이션하여 조회합니다. 제목 키워드가 있으면 검색합니다.",
+	        parameters = {
+	                @io.swagger.v3.oas.annotations.Parameter(name = "title", description = "제목 검색 키워드 (선택 사항)", example = "test")
+	        }
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(schema = @Schema(implementation = PageResponseDtoOfBoardDto.class)))
     })
     @GetMapping
-    public ResponseEntity<PageResponseDto<BoardDto>> list(@RequestParam String title,
+    public ResponseEntity<PageResponseDto<BoardDto>> list(@RequestParam(required = false) String title,
                                                           @ModelAttribute PageRequestDto pageRequestDto) {
-        return ResponseEntity.ok(boardService.list(title, pageRequestDto));
+        if (title != null && !title.isEmpty()) {
+            return ResponseEntity.ok(boardService.search(title, pageRequestDto));
+        } else {
+            return ResponseEntity.ok(boardService.list(pageRequestDto));
+        }
     }
-
 
 
     @Operation(
@@ -100,11 +104,7 @@ public class BoardController {
         return ResponseEntity.ok(boardService.listPopular(limit));
     }
 
-
-
-
-
-
+    
     @Operation(
             summary = "게시글 부분 수정",
             description = "게시글 일부 필드를 수정합니다(PATCH).",
@@ -128,6 +128,7 @@ public class BoardController {
         return ResponseEntity.noContent().build();
     }
 
+    
     @Operation(
             summary = "게시글 삭제",
             description = "게시글을 삭제합니다.",
@@ -142,5 +143,11 @@ public class BoardController {
     public ResponseEntity<Void> delete(@PathVariable Long boardNo) {
         boardService.delete(boardNo);
         return ResponseEntity.noContent().build();
+    }
+
+//    swagger 추가 필요
+    @GetMapping("/monthly-counts")
+    public ResponseEntity<List<MonthlyCountDto>> getMonthlyBoardCounts() {
+        return ResponseEntity.ok(boardService.countMonthlyPosts());
     }
 }

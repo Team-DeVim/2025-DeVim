@@ -114,4 +114,15 @@
         UPDATE "board" SET "delete_flag" = 1 WHERE "board_no" = #{boardNo}
     </update>
 
+    <select id="countMonthlyPosts" resultType="MonthlyCountDto">
+        SELECT
+            EXTRACT(YEAR FROM created_dt) AS year,
+            EXTRACT(MONTH FROM created_dt) AS month,
+            COUNT(*) AS count
+        FROM "board"
+        WHERE delete_flag = 0
+        GROUP BY EXTRACT(YEAR FROM created_dt), EXTRACT(MONTH FROM created_dt)
+        ORDER BY year ASC, month ASC
+    </select>
+
 </mapper>

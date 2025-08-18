@@ -15,8 +15,13 @@ mybatis:
     map-underscore-to-camel-case: true
     cache-enabled: false
 
+# File upload path
+upload:
+  path: D:\gitCode\DeVim\Kangho\backend\upload
+
 logging:
   level:
+    com.Devim: debug
     org:
       springframework:
         test:

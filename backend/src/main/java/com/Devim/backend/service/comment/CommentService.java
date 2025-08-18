@@ -2,10 +2,11 @@ package com.Devim.backend.service.comment;
 
 import com.Devim.backend.domain.comment.Comment;
 import com.Devim.backend.domain.comment.CommentDto;
+import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface CommentService {
     Long create(Comment comment);
@@ -17,4 +18,6 @@ public interface CommentService {
     void update(Comment comment);
 
     void delete(Long commentNo);
+
+    List<MonthlyCountDto> countMonthlyComments();
 }

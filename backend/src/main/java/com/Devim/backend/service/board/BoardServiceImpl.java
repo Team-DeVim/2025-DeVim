@@ -2,6 +2,7 @@ package com.Devim.backend.service.board;
 
 import com.Devim.backend.domain.board.Board;
 import com.Devim.backend.domain.board.BoardDto;
+import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.repository.BoardRepository;
@@ -9,24 +10,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class BoardServieImpl implements BoardService {
+public class BoardServiceImpl implements BoardService {
 
     private final BoardRepository boardRepository;
-
 
     @Override
     @Transactional
     public Long create(Board board) {
         boardRepository.save(board);
-        return 0L;
+        return board.getBoardNo();
     }
 
     @Override
@@ -36,8 +34,13 @@ public class BoardServieImpl implements BoardService {
     }
 
     @Override
-    public PageResponseDto<BoardDto> list(String title, PageRequestDto pageRequestDto) {
-        return boardRepository.findAll(pageRequestDto, title);
+    public PageResponseDto<BoardDto> list(PageRequestDto pageRequestDto) {
+        return boardRepository.findAll(pageRequestDto);
+    }
+
+    @Override
+    public PageResponseDto<BoardDto> search(String title, PageRequestDto pageRequestDto) {
+        return boardRepository.searchByTitle(pageRequestDto, title);
     }
 
     @Override
@@ -55,5 +58,10 @@ public class BoardServieImpl implements BoardService {
     @Transactional
     public void delete(Long boardNo) {
         boardRepository.deleteById(boardNo);
+    }
+
+    @Override
+    public List<MonthlyCountDto> countMonthlyPosts() {
+        return boardRepository.countMonthlyPosts();
     }
 }

@@ -2,6 +2,7 @@ package com.Devim.backend.repository.mybatis;
 
 import com.Devim.backend.domain.comment.Comment;
 import com.Devim.backend.domain.comment.CommentDto;
+import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.repository.CommentRepository;
@@ -44,5 +45,10 @@ public class MyBatisCommentRepository implements CommentRepository {
     @Override
     public void deleteById(long commentNo) {
         commentMapper.deleteById(commentNo);
+    }
+
+    @Override
+    public List<MonthlyCountDto> countMonthlyComments() {
+        return commentMapper.countMonthlyComments();
     }
 }
