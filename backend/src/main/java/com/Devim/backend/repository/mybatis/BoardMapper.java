@@ -17,9 +17,13 @@ public interface BoardMapper {
 
     Optional<BoardDto> findById(long boardNo);
 
-    List<BoardDto> findAll(PageRequestDto pageRequest, @Param("title") String title);
+    List<BoardDto> findAll(PageRequestDto pageRequest);
 
-    long countAllBoards(@Param("title") String title);
+    long countAll();
+
+    List<BoardDto> searchByTitle(PageRequestDto pageRequest, @Param("title") String title);
+
+    long countByTitle(@Param("title") String title);
 
     List<BoardDto> findPopularBoards(@Param("limit") int limit);
 

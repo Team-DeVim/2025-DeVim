@@ -29,10 +29,17 @@ public class MyBatisBoardRepository implements BoardRepository {
         return boardMapper.findById(boardNo);
     }
 
+        @Override
+    public PageResponseDto<BoardDto> findAll(PageRequestDto pageRequest) {
+        List<BoardDto> dtoList = boardMapper.findAll(pageRequest);
+        long totalCount = boardMapper.countAll();
+        return new PageResponseDto<>(dtoList, pageRequest, totalCount);
+    }
+
     @Override
-    public PageResponseDto<BoardDto> findAll(PageRequestDto pageRequest, String title) {
-        List<BoardDto> dtoList = boardMapper.findAll(pageRequest, title);
-        long totalCount = boardMapper.countAllBoards(title);
+    public PageResponseDto<BoardDto> searchByTitle(PageRequestDto pageRequest, String title) {
+        List<BoardDto> dtoList = boardMapper.searchByTitle(pageRequest, title);
+        long totalCount = boardMapper.countByTitle(title);
         return new PageResponseDto<>(dtoList, pageRequest, totalCount);
     }
 
