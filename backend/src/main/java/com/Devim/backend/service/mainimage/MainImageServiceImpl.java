@@ -3,12 +3,12 @@ package com.Devim.backend.service.mainimage;
 import com.Devim.backend.domain.mainimage.MainImage;
 import com.Devim.backend.repository.MainImageRepository;
 import lombok.RequiredArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,17 +40,29 @@ public class MainImageServiceImpl implements MainImageService {
         }
 
         String originalFileName = file.getOriginalFilename();
-        String storedFileName = UUID.randomUUID().toString() + "_" + originalFileName;
-        Path destination = Paths.get(uploadPath, storedFileName);
+        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+        String storedFileName = UUID.randomUUID().toString() + fileExtension;
+        String storedThumbnailName = UUID.randomUUID().toString() + "_thumb" + fileExtension;
 
-        if (!Files.exists(destination.getParent())) {
-            Files.createDirectories(destination.getParent());
+        Path originalDestination = Paths.get(uploadPath, storedFileName);
+        Path thumbnailDestination = Paths.get(uploadPath, storedThumbnailName);
+
+        // 경로가 존재하지 않는 경우, 상위 디렉터리를 생성
+        if (!Files.exists(originalDestination.getParent())) {
+            Files.createDirectories(originalDestination.getParent());
         }
 
-        Files.copy(file.getInputStream(), destination);
+        // Save original image
+        Files.copy(file.getInputStream(), originalDestination);
+
+        // Thumbnailator를 사용하여 썸네일 가공 및 저장
+        Thumbnails.of(originalDestination.toFile())
+                .size(200, 150)
+                .toFile(thumbnailDestination.toFile());
 
         MainImage mainImage = new MainImage();
         mainImage.setFilePath("/upload/" + storedFileName);
+        mainImage.setThumbnailPath("/upload/" + storedThumbnailName);
         mainImage.setPriority(priority);
 
         mainImageRepository.save(mainImage);
@@ -64,9 +76,15 @@ public class MainImageServiceImpl implements MainImageService {
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("Image not found: " + imageNo));
 
-        Path filePath = Paths.get(uploadPath, mainImage.getFilePath().replace("/upload/", ""));
-        Files.deleteIfExists(filePath);
+        // Delete original file from server
+        Path originalFilePath = Paths.get(uploadPath, mainImage.getFilePath().replace("/upload/", ""));
+        Files.deleteIfExists(originalFilePath);
 
+        // Delete thumbnail file from server
+        Path thumbnailFilePath = Paths.get(uploadPath, mainImage.getThumbnailPath().replace("/upload/", ""));
+        Files.deleteIfExists(thumbnailFilePath);
+
+        // Delete from database
         mainImageRepository.deleteById(imageNo);
     }
 

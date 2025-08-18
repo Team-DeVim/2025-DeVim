@@ -49,6 +49,7 @@ CREATE TABLE "likes" (
 CREATE TABLE "main_image" (
   "image_no" number PRIMARY KEY,
   "file_path" varchar2(255) NOT NULL,
+  "thumbnail_path" varchar2(255) NOT NULL,
   "priority" number NOT NULL,
   "created_dt" date NOT NULL
 );

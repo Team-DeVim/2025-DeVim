@@ -43,6 +43,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+	
+	// --- thumbnailator(썸네일 생성) ---
+	implementation 'net.coobird:thumbnailator:0.4.20'
 
 	// --- 테스트 ---
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class MainImage {
 	private long imageNo;
 	private String filePath;
+	private String thumbnailPath;
 	private int priority;
 	private String createdDt;
 }

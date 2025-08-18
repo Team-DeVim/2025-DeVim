@@ -1,6 +1,8 @@
 spring:
   config:
-    import: classpath:db-credentials.yml  # username, password만 불러옴
+    import:
+      - classpath:db-credentials.yml   # username, password만 불러옴
+      - classpath:file-path.yml
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
     url: jdbc:oracle:thin:@localhost:1521:XE
@@ -9,15 +11,11 @@ spring:
       minimum-idle: 2
 
 mybatis:
-  mapper-locations: classpath*:mapper/**/*.xml
+  mapper-locations: classpath*:mappers/**/*.xml
   type-aliases-package: com.Devim.backend.domain
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
-
-# File upload path
-upload:
-  path: D:\gitCode\DeVim\Kangho\backend\upload
 
 logging:
   level:

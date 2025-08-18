@@ -330,5 +330,9 @@ gradle-app.setting
 
 # config files
 db-credentials.yml
+file-path.yml
+
+# upload files
+upload/
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,git,java,gradle,maven,eclipse,intellij+all,netbeans,visualstudiocode

@@ -6,12 +6,12 @@
         <selectKey keyProperty="imageNo" resultType="long" order="BEFORE">
             SELECT seq_main_image_no.NEXTVAL FROM DUAL
         </selectKey>
-        INSERT INTO main_image (image_no, file_path, priority, created_dt)
-        VALUES (#{imageNo}, #{filePath}, #{priority}, SYSDATE)
+        INSERT INTO main_image (image_no, file_path, thumbnail_path, priority, created_dt)
+        VALUES (#{imageNo}, #{filePath}, #{thumbnailPath}, #{priority}, SYSDATE)
     </insert>
 
     <select id="findAll" resultType="com.Devim.backend.domain.mainimage.MainImage">
-        SELECT image_no AS imageNo, file_path AS filePath, priority, created_dt AS createdDt
+        SELECT image_no AS imageNo, file_path AS filePath, thumbnail_path AS thumbnailPath, priority, created_dt AS createdDt
         FROM main_image
         ORDER BY priority ASC
     </select>
