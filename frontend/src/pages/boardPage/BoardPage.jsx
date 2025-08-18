@@ -4,7 +4,7 @@ import Sidebar from "../main/components/Sidebar";
 import "./BoardPage.css";
 import BoardTheme from "./components/BoardTheme/BoardTheme";
 import ContentSection from "./components/ContentSection/ContentSection";
-import NotionSection from "./components/NotionSection/NotionSection";
+import NotionSection from "./components/NoticeSection/NoticeSection";
 
 function BoardPage() {
     return (
