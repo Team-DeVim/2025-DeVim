@@ -1,3 +1,25 @@
-.BoardTheme {
-    border: 3px dotted var(--color-border);
+.boardTheme {
+  display: block;
+  background: var(--surface-1, #f5f6f7);
+  border: var(--border-w, 1px) solid var(--color-border, #e5e7eb);
+  border-radius: var(--radius-md, 10px);
+  padding: 16px;
+}
+
+.boardTheme__titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.boardTheme__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+.boardTheme__subtitle {
+  margin: 4px 0 0;
+  font-size: 12px;
+  opacity: 0.8;
 }
