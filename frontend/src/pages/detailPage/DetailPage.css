@@ -1,0 +1,23 @@
+.detailPage {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: grid;
+    row-gap: 24px;
+}
+
+.detailPage--main--layout {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 50px;
+    padding: 50px 0;
+}
+
+.detailPage--main--left {
+    display: grid;
+    gap: 30px;
+}
+
+.detailPage--main--side {
+    display: grid;
+    gap: 30px;
+}

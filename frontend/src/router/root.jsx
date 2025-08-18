@@ -4,11 +4,13 @@ import { Suspense } from "react";
 import { lazy } from "react";
 
 
+
 const MainPage = lazy(() => import('../pages/main/MainPage'));
 const Register = lazy(() => import("../pages/SignUpRegister/Register"));
 const SignUp = lazy(() => import("../pages/SignUpRegister/SignUp"));
 const BoardPage = lazy(() => import("../pages/boardPage/BoardPage"));
 const ProfilePage = lazy(() => import("../pages/profilePage/ProfilePage"));
+const DetailPage = lazy(() => import("../pages/detailPage/DetailPage"));
 
 
 const root = createBrowserRouter([
@@ -53,6 +55,14 @@ const root = createBrowserRouter([
         element: (
           <Suspense>
             <ProfilePage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "detailPage",
+        element: (
+          <Suspense>
+            <DetailPage />
           </Suspense>
         ),
       },
