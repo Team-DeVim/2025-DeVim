@@ -57,9 +57,10 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  border: 1px none #adb7c2;
+  border: 2px outset;
   border-radius: 15px;
-  background-color: #ffffff;
+	color: var(--color-text);
+  background-color: var(--surface-muted);
 }
 
 /* 아이콘 위치 고정 */
@@ -73,8 +74,16 @@
 .register__input--birth {
 	padding-right: 60%; /* 달력 아이콘 공간 확보 */
 	color: var(--btn-login-text);
-	padding-top: 7px; /* 가운데 정렬 */
+	padding-top: 8px; /* 가운데 정렬 */
 }
+.register__input--birth::-webkit-calendar-picker-indicator {
+  filter: hue-rotate(330deg);
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+
 
 /* 그룹별 입력란 */
 .register__group--id,
@@ -98,10 +107,11 @@
 
 /* 에러 메시지 */
 .register__error-message {
-  color: red;
+  color: var(--danger);
   font-size: 13px;
   margin-top: 4px;
-	margin-left: 50px;
+	margin-bottom: 10px;
+	margin-left: 70px;
 }
 
 /* 폼 섹션 */

@@ -60,10 +60,12 @@ export default function Register() {
   // 이름 체크
   const validateName = (value) => {
     const gapValue = value.trim();
-    const nameRegex = /^[a-zA-Z가-힣]{2,5}$/;
+    const koreanRegex = /^[가-힣]{2,3}$/;
+    const englishRegex = /^[a-zA-Z]{3,8}$/;
+
     if (!gapValue) {
       setNameError("이름: 필수 입력입니다.");
-    } else if (!nameRegex.test(value)) {
+    } else if (!(koreanRegex.test(gapValue) || englishRegex.test(gapValue))) {
       setNameError(
         "이름: 한글, 영문 대/소문자를 사용해 주세요. (특수기호, 공백 사용 불가)"
       );
@@ -152,8 +154,37 @@ export default function Register() {
     setPhone(formatted);
     validatePhone(formatted);
   };
+
+  // 백엔드 API 호출 함수
+  // const sendRegisterRequest = async (userData) => {
+  //   try {
+  //     const response = await fetch("/api/users/register", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Accept: "application/json",
+  //       },
+  //       body: JSON.stringify(userData),
+  //     });
+
+  //     const result = await response.json();
+
+  //     if (response.ok) {
+  //       // 회원가입 성공
+  //       alert(`회원가입이 완료되었습니다!\n환영합니다, ${result.name}님!`);
+  //       navigate("/login"); // 로그인 페이지로 이동
+  //     } else {
+  //       // 회원가입 실패
+  //       throw new Error(result.message || "회원가입에 실패했습니다.");
+  //     }
+  //   } catch (error) {
+  //     console.error("회원가입 오류:", error);
+  //     throw error;
+  //   }
+  // };
+
   //인증요청
-  const handleCheckRequest = () => {
+  const handleCheckRequest = async () => {
     // 입력값이 없거나, 공백이 있을때
     if (
       !id.trim() ||
@@ -177,10 +208,35 @@ export default function Register() {
     setSubmitError("");
 
     // 실제 전송 로직 (예: API 호출)
-    //sendCheckRequest();
+  //    try {
+  //      // 백엔드로 보낼 데이터 구성
+  //      const userData = {
+  //        id: id.trim(),
+  //        password: password,
+  //        name: name.trim(),
+  //        birthDate: new Date(birth).toISOString(),
+  //        gender: gender,
+  //        phoneNumber: phone.replace(/-/g, ""),
+  //      };
+
+  //      await sendRegisterRequest(userData);
+  //    } catch (error) {
+  //      // 에러 처리
+  //      let errorMessage = "회원가입 중 오류가 발생했습니다.";
+
+  //      if (error.message.includes("아이디")) {
+  //        errorMessage = "이미 존재하는 아이디입니다.";
+  //      } else if (error.message) {
+  //        errorMessage = error.message;
+  //      }
+
+  //      setSubmitError(errorMessage);
+  //    }
+     
   };
 
   /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
+
   return (
     <div className="register">
       <div>
@@ -190,7 +246,7 @@ export default function Register() {
           </button>
           <span className="register__logo-hover-text">메인으로</span>
         </div>
-        회원가입
+        &#32;회원가입
         <div className="register__user-info">
           <div className="register__group--id">
             <i className="register__icon fa-solid fa-envelope"></i>

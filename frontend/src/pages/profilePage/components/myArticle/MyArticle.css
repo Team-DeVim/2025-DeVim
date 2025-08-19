@@ -1,5 +1,48 @@
-.MyArticle {
-    border: 3px dotted var(--color-border);
+.myArticle {
+    /* border: 1px none var(--color-border); */
     width: 840px;
-    height: 360px;
+    height: auto;
+}
+
+.myArticle__group{
+	padding: 20px;
+	background-color: var(--header-bg);
+	border: 1px solid var(--color-border);;
+	height: 280px;
+	border-radius: 15px;
+	display: flex;
+	flex-direction: column;
+}
+/* 내가 ~~ */
+.myArticle__title{
+margin-bottom: 10px;
+}
+/* 글 */
+.myArticle__my-write{
+	margin-top: 15px;
+	display: flex;
+	justify-content: space-between;
+	cursor: pointer;
+}
+.myArticle__my-stats{
+	display: flex;
+	gap: 5px;
+}
+
+/* 페이징 */
+.myArticle__pagination{
+	margin-top: auto;
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	gap: 20px;
+}
+.myArticle__pagination button{
+	font-size: 13px;
+}
+.active{
+	width: 25px;
+	height: 25px;
+	background-color: var(--btn-login-btn);
+	border-radius: 70px;
 }
