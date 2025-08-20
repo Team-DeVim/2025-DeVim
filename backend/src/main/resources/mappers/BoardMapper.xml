@@ -28,7 +28,7 @@
         GROUP BY b."board_no", b."board_type_no", b."title", b."board_content", u."name", b."created_dt", b."delete_flag"
     </select>
 
-    <select id="findAll" parameterType="com.Devim.backend.domain.common.PageRequestDto" resultType="com.Devim.backend.domain.board.BoardDto">
+    <select id="findAll" parameterType="map" resultType="com.Devim.backend.domain.board.BoardDto">
         SELECT
             b."board_no" AS boardNo,
             b."board_type_no" AS boardTypeNo,
@@ -42,13 +42,20 @@
         JOIN "user" u ON b."writer" = u."user_no"
         LEFT JOIN "likes" l ON b."board_no" = l."target_id" AND l."target_type" = 'board'
         WHERE b."delete_flag" = 0
+        <if test="boardTypeNo != null">
+            AND b."board_type_no" = #{boardTypeNo}
+        </if>
         GROUP BY b."board_no", b."board_type_no", b."title", b."board_content", u."name", b."created_dt", b."delete_flag"
         ORDER BY b."board_no" DESC
-        OFFSET (#{page} - 1) * #{size} ROWS FETCH NEXT #{size} ROWS ONLY
+        OFFSET (#{pageRequest.page} - 1) * #{pageRequest.size} ROWS FETCH NEXT #{pageRequest.size} ROWS ONLY
     </select>
 
-    <select id="countAll" resultType="long">
-        SELECT COUNT(*) FROM "board" WHERE "delete_flag" = 0
+    <select id="countAll" parameterType="map" resultType="long">
+        SELECT COUNT(*) FROM "board"
+        WHERE "delete_flag" = 0
+        <if test="boardTypeNo != null">
+            AND "board_type_no" = #{boardTypeNo}
+        </if>
     </select>
 
     <select id="searchByTitle" parameterType="map" resultType="com.Devim.backend.domain.board.BoardDto">
@@ -113,6 +120,22 @@
     <update id="deleteById" parameterType="long">
         UPDATE "board" SET "delete_flag" = 1 WHERE "board_no" = #{boardNo}
     </update>
+
+    <select id="findRecent" parameterType="map" resultType="com.Devim.backend.domain.board.BoardDto">
+        SELECT
+            b."board_no" AS boardNo,
+            b."board_type_no" AS boardTypeNo,
+            b."title",
+            u."name" AS writerName,
+            b."created_dt" AS createdDt,
+            (SELECT COUNT(*) FROM "likes" l WHERE l."target_id" = b."board_no" AND l."target_type" = 'board') AS likeCount
+        FROM "board" b
+                 JOIN "user" u ON b."writer" = u."user_no"
+        WHERE b."delete_flag" = 0
+          AND b."board_type_no" = #{boardTypeNo}
+        ORDER BY b."board_no" DESC
+            FETCH FIRST #{limit} ROWS ONLY
+    </select>
 
     <select id="countMonthlyPosts" resultType="MonthlyCountDto">
         SELECT

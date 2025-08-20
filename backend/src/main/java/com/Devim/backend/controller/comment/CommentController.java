@@ -59,7 +59,7 @@ public class CommentController {
                     content = @Content(schema = @Schema(implementation = CommentDto.class))),
     })
     @GetMapping("/{commentNo}")
-    public ResponseEntity<CommentDto> get(@PathVariable Long commentNo) {
+    public ResponseEntity<CommentDto> get(@PathVariable("commentNo") Long commentNo) {
         return ResponseEntity.ok(commentService.get(commentNo));
     }
 
@@ -68,7 +68,6 @@ public class CommentController {
             description = "boardNo에 해당하는 댓글을 페이지네이션하여 조회합니다.",
             parameters = {
                     @io.swagger.v3.oas.annotations.Parameter(name = "boardNo", description = "게시글 번호", example = "101", required = true)
-                    // PageRequestDto는 @ModelAttribute로 자동 노출
             }
     )
     @ApiResponses({
@@ -76,7 +75,7 @@ public class CommentController {
                     content = @Content(schema = @Schema(implementation = PageResponseDtoOfCommentDto.class)))
     })
     @GetMapping
-    public ResponseEntity<PageResponseDto<CommentDto>> listByBoard(@RequestParam Long boardNo,
+    public ResponseEntity<PageResponseDto<CommentDto>> listByBoard(@RequestParam("boardNo") Long boardNo,
                                                                    @ModelAttribute PageRequestDto pageRequestDto) {
         return ResponseEntity.ok(commentService.listByBoard(boardNo, pageRequestDto));
     }
@@ -97,7 +96,7 @@ public class CommentController {
             @ApiResponse(responseCode = "204", description = "수정됨"),
     })
     @PatchMapping("/{commentNo}")
-    public ResponseEntity<Void> update(@PathVariable Long commentNo,
+    public ResponseEntity<Void> update(@PathVariable("commentNo") Long commentNo,
                                        @Validated @RequestBody Comment comment) {
         comment.setCommentNo(commentNo);
         commentService.update(comment);
@@ -115,7 +114,7 @@ public class CommentController {
             @ApiResponse(responseCode = "204", description = "삭제됨"),
     })
         @DeleteMapping("/{commentNo}")
-    public ResponseEntity<Void> delete(@PathVariable Long commentNo) {
+    public ResponseEntity<Void> delete(@PathVariable("commentNo") Long commentNo) {
         commentService.delete(commentNo);
         return ResponseEntity.noContent().build();
     }
