@@ -7,7 +7,6 @@ import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 
 import java.util.List;
-import java.util.Map;
 
 public interface BoardService {
     Long create(Board board);
@@ -25,7 +24,7 @@ public interface BoardService {
 
     void delete(Long boardNo);
 
-    Map<String, List<BoardDto>> getRecentSummary();
+    List<BoardDto> getRecent(Integer boardTypeNo, int limit);
 
     List<MonthlyCountDto> countMonthlyPosts();
 }

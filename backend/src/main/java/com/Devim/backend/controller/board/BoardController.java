@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 @Tag(name="Board Controller", description = "게시판 도메인 API")
 @RestController
@@ -130,15 +129,22 @@ public class BoardController {
     }
 
     @Operation(
-            summary = "최신 게시글 요약",
-            description = "게시판별 최신 게시글을 정해진 개수만큼 조회합니다."
+            summary = "최신 게시글 조회 (타입별)",
+            description = "게시판 타입(boardTypeNo)과 개수(limit)를 지정하여 최신 게시글을 조회합니다.",
+            parameters = {
+                    @io.swagger.v3.oas.annotations.Parameter(name = "boardTypeNo", description = "게시글 타입 번호", required = true, example = "1"),
+                    @io.swagger.v3.oas.annotations.Parameter(name = "limit", description = "가져올 개수", example = "4")
+            }
     )
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "성공")
+            @ApiResponse(responseCode = "200", description = "성공",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = BoardDto.class))))
     })
-    @GetMapping("/recent-summary")
-    public ResponseEntity<Map<String, List<BoardDto>>> getRecentSummary() {
-        return ResponseEntity.ok(boardService.getRecentSummary());
+    @GetMapping("/recent")
+    public ResponseEntity<List<BoardDto>> getRecent(
+            @RequestParam("boardTypeNo") Integer boardTypeNo,
+            @RequestParam(value = "limit", defaultValue = "4") int limit) {
+        return ResponseEntity.ok(boardService.getRecent(boardTypeNo, limit));
     }
 
     
