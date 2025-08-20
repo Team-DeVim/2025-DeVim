@@ -74,6 +74,8 @@
 		--btn-login-hover:#89cdfb;
 		--btn-kakaologin-btn:#ffd66e;
 		--btn-kakaologin-hover:#f9c74b;
+		--btn-cancle-btn:#c8c1c1;
+		--btn-cancle-hover: var(--header-bg);
 		--btn-login-select:#04c758;
     --btn-register-grad: linear-gradient(90deg, #4b94d3 0%, #79c0ff 100%);
 		--btn-register-btn: #46c54a;
