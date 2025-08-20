@@ -75,11 +75,13 @@
 	color: var(--color-text);
   background-color: var(--surface-muted);
 }
-.profileCard__user-name,
-.profileCard__user-id,
-.profileCard__user-date{
-	/* margin-right: 20px; */
+/* 자물쇠 크기 */
+.profileCard__user-name i,
+.profileCard__user-id i,
+.profileCard__user-date i{
+font-size: 20px;
 }
+
 
 .profileCard__sc{
 	display: flex;

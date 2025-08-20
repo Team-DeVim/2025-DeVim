@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import "./ProfileCard.css";
 import { useNavigate } from "react-router";
 import androidProfile from "./profileImage/androidProfile.png"; 
@@ -65,7 +65,9 @@ const handleCancle = ()=>{
         />
         <div className="profileCard__user-info">
           <div className="profileCard__user-name">
-            <p>이름</p>
+            <p>
+              이름 <i class="fa-solid fa-lock-open"></i>
+            </p>
             <input
               type="text"
               value={name}
@@ -73,11 +75,16 @@ const handleCancle = ()=>{
             />
           </div>
           <div className="profileCard__user-id">
-            <p>ID</p>
-            <input type="text" value="android"/>
+            <p>
+              ID <i class="fa-solid fa-lock"></i>
+            </p>
+
+            <input type="text" value="android" readOnly />
           </div>
           <div className="profileCard__user-date">
-            <p>계정 생성일</p>
+            <p>
+              계정 생성일 <i class="fa-solid fa-lock"></i>
+            </p>
             <input type="text" value="계정생성일 DATE" readOnly />
           </div>
           <div className="profileCard__sc">

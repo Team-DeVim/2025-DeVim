@@ -10,6 +10,7 @@ const commentData = [
   { id: 5, title: "정말 유익하네요." },
   { id: 6, title: "다음 글도 기대할게요!" },
   { id: 7, title: "잘 읽었습니다." },
+  
 ];
 
 const MyComment = () => {
