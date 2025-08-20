@@ -18,9 +18,10 @@ public interface BoardMapper {
 
     Optional<BoardDto> findById(long boardNo);
 
-    List<BoardDto> findAll(PageRequestDto pageRequest);
+    // boardTypeNo는 필수가 아닌 선택값인데 int는 원시타입으로 null을 가질 수 없기 때문에 Integer 사용
+    List<BoardDto> findAll(@Param("pageRequest") PageRequestDto pageRequest, @Param("boardTypeNo") Integer boardTypeNo);
 
-    long countAll();
+    long countAll(@Param("boardTypeNo") Integer boardTypeNo);
 
     List<BoardDto> searchByTitle(PageRequestDto pageRequest, @Param("title") String title);
 
@@ -31,6 +32,8 @@ public interface BoardMapper {
     void update(Board board);
 
     void deleteById(long boardNo);
+
+    List<BoardDto> findRecent(@Param("boardTypeNo") Integer boardTypeNo, @Param("limit") int limit);
 
     List<MonthlyCountDto> countMonthlyPosts();
 }

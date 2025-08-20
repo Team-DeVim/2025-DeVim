@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Service
@@ -34,8 +36,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public PageResponseDto<BoardDto> list(PageRequestDto pageRequestDto) {
-        return boardRepository.findAll(pageRequestDto);
+    public PageResponseDto<BoardDto> list(PageRequestDto pageRequestDto, Integer boardTypeNo) {
+        return boardRepository.findAll(pageRequestDto, boardTypeNo);
     }
 
     @Override
@@ -58,6 +60,15 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public void delete(Long boardNo) {
         boardRepository.deleteById(boardNo);
+    }
+
+    @Override
+    public Map<String, List<BoardDto>> getRecentSummary() {
+        Map<String, List<BoardDto>> summary = new HashMap<>();
+        summary.put("free", boardRepository.findRecent(1, 4));
+        summary.put("qna", boardRepository.findRecent(2, 4));
+        summary.put("notice", boardRepository.findRecent(3, 3));
+        return summary;
     }
 
     @Override
