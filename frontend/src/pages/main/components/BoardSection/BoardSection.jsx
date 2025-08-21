@@ -130,12 +130,11 @@ function formatDate(iso, tz = "Asia/Seoul") {
 
 export default function BoardSection({
   title = "게시판",
-  mode = "free",
+  data = [],
   pageSize = 4,
-  mockMode = false,
 }) {
-  const items = mockMode ? MOCK_PAYLOAD[mode] ?? [] : [];
-  const visibleItems = useMemo(() => items.slice(0, pageSize), [items, pageSize]);
+
+  const visibleItems = Array.isArray(data) ? data.slice(0, pageSize) : [];
 
   return (
     <section className="BoardSection" aria-label={title}>
@@ -160,11 +159,11 @@ export default function BoardSection({
 
                   <span className="BoardSection__item-meta">
                     <span className="BoardSection__item-author">
-                      {item.writer?.name ?? "알 수 없음"}
+                      {item.writerName ?? "알수없음"}
                     </span>
                     <span className="BoardSection__item-sep">·</span>
                     <time className="BoardSection__item-date">
-                      {formatDate(item.createdAt)}
+                      {formatDate(item.createdDt)}
                     </time>
                   </span>
                 </div>

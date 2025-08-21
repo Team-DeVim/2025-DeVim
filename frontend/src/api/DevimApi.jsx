@@ -35,26 +35,42 @@ export const postUserRegister = async (registerObj) => {
 
 //mainPage--인기글,자유게시판,Q&A게시판 글 4개
 // 인기글 ( 상위 4개 )
-export const popularPostList = async () => {
-    const res = await axios.get(`${BOARD_PREFIX}/popular`);
+export const popularPostList = async (signal) => {
+    const res = await axios.get(`${BOARD_PREFIX}/popular`, { signal });
     return res.data;
 };
 
-// 자유게시판글 ( 상위 4개 )
-export const commenPostList = async () => {
-    const res = await axios.get(`${BOARD_PREFIX}/commen`);
+// 자유게시판글 (상위 4개)
+export const commonPostList = async (boardTypeNo = 1, limit = 4, signal) => {
+    const params = {
+        boardTypeNo: Number(boardTypeNo),
+        limit: Number(limit),
+    };
+    const res = await axios.get(`${BOARD_PREFIX}/recent`, {
+        params,
+        signal,
+    });
     return res.data;
 };
 
-// 자유게시판글 ( 상위 4개 )
-export const qeustionPostList = async () => {
-    const res = await axios.get(`${BOARD_PREFIX}/qeustion`);
+// Q&A 게시판 글 ( 상위 4개 )
+export const questionPostList = async (boardTypeNo = 2, limit = 4, signal) => {
+    const params = {
+        boardTypeNo: Number(boardTypeNo),
+        limit: Number(limit),
+    };
+    const res = await axios.get(`${BOARD_PREFIX}/recent`, {
+        params,
+        signal,
+    });
     return res.data;
 };
 
 //boardPage--공지사항글 3개
-export const noticePostList = async () => {
-    const res = await axios.get(`${BOARD_PREFIX}/notice`);
+export const noticePostList = async (boardTypeNo, limit) => {
+    const res = await axios.get(`${BOARD_PREFIX}`,
+        { params: { boardTypeNo, limit } }
+    );
     return res.data;
 };
 
