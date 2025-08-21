@@ -11,7 +11,7 @@ const SignUp = lazy(() => import("../pages/SignUpRegister/SignUp"));
 const BoardPage = lazy(() => import("../pages/boardPage/BoardPage"));
 const ProfilePage = lazy(() => import("../pages/profilePage/ProfilePage"));
 const DetailPage = lazy(() => import("../pages/detailPage/DetailPage"));
-
+const EditorPage = lazy(() => import("../pages/editorPage/EditorPage"));
 
 const root = createBrowserRouter([
   {
@@ -63,6 +63,14 @@ const root = createBrowserRouter([
         element: (
           <Suspense>
             <DetailPage />
+          </Suspense>
+        ),
+      },
+       {
+        path: "editorPage",
+        element: (
+          <Suspense>
+            <EditorPage />
           </Suspense>
         ),
       },
