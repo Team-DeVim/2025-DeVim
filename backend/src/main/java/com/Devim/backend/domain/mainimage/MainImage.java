@@ -1,5 +1,7 @@
 package com.Devim.backend.domain.mainimage;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +14,5 @@ public class MainImage {
 	private String filePath;
 	private String thumbnailPath;
 	private int priority;
-	private String createdDt;
+	private LocalDateTime createdDt;
 }

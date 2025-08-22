@@ -1,6 +1,6 @@
 package com.Devim.backend.domain.board;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +15,6 @@ public class Board {
 	private String title;
 	private String boardContent;
 	private int writer;
-	private Date createdDt;
+	private LocalDateTime createdDt;
 	private boolean deleteFlag;
 }

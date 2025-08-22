@@ -24,6 +24,8 @@ public interface UserMapper {
 
     void deleteById(long userNo);
 
+    void hardDeleteById(long userNo);
+
     List<UserRankDto> findTop5ByBoardCount();
 
     List<UserRankDto> findTop5ByCommentCount();

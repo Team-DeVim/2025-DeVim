@@ -47,6 +47,11 @@ public class MyBatisUserRepository implements UserRepository {
     }
 
     @Override
+    public void hardDeleteById(long userNo) {
+        userMapper.hardDeleteById(userNo);
+    }
+
+    @Override
     public List<UserRankDto> findTop5ByBoardCount() {
         return userMapper.findTop5ByBoardCount();
     }
