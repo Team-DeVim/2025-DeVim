@@ -1,16 +1,17 @@
-import { createBrowserRouter } from "react-router-dom"
+import { createBrowserRouter } from "react-router-dom";
 import Layout from "../layout/Layout";
 import { Suspense } from "react";
 import { lazy } from "react";
+import AdminPage from "../pages/adminPage/AdminPage";
 
-
-
-const MainPage = lazy(() => import('../pages/main/MainPage'));
+const MainPage = lazy(() => import("../pages/main/MainPage"));
 const Register = lazy(() => import("../pages/SignUpRegister/Register"));
 const SignUp = lazy(() => import("../pages/SignUpRegister/SignUp"));
 const BoardPage = lazy(() => import("../pages/boardPage/BoardPage"));
 const ProfilePage = lazy(() => import("../pages/profilePage/ProfilePage"));
 const DetailPage = lazy(() => import("../pages/detailPage/DetailPage"));
+const UsersPage = lazy(() => import("../pages/adminPage/routes/UsersPage"));
+const UserDetailPage = lazy(() => import("../pages/adminPage/routes/UserDetailPage"));
 const EditorPage = lazy(() => import("../pages/editorPage/EditorPage"));
 const UsersSmokeTest = lazy(() => import("../pages/apiTestPage/UsersSmokeTest"));
 
@@ -66,6 +67,14 @@ const root = createBrowserRouter([
             <DetailPage />
           </Suspense>
         ),
+      },
+      {
+        path: "adminPage",
+        element: <AdminPage />,
+        children: [
+          { path: "users", element: <UsersPage /> },
+          { path: "users/:userNo", element: <UserDetailPage /> },
+        ],
       },
       {
         path: "editorPage",

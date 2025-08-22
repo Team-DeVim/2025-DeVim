@@ -1,0 +1,38 @@
+.admin-header {
+  display: grid;
+  gap: 20px;
+  align-items: center;
+  padding: 12px 0;         
+  border-bottom: 1px solid #dcdcdc;
+  box-sizing: border-box;
+}
+
+.admin-header__left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-header__brand {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.admin-header__right {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-header__title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.admin-header__subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
