@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { createSearchParams, Link, useSearchParams } from "react-router-dom";
 import "./ContentSection.css";
 
 export default function ContentSection({ data }) {
@@ -47,7 +47,12 @@ export default function ContentSection({ data }) {
           <li key={post.boardNo} className="contentSection__row">
             <Link
               className="contentSection__rowLink"
-              to={`/detailPage/${post.boardNo}`}
+              to={{
+                pathname: `/detailPage/${post.boardNo}`,
+                search: `?${createSearchParams({
+                  boardTypeNo: params.get("boardTypeNo") ?? "1",
+                })}`,
+              }}
             >
               {/* 상단: 프로필/시간 + 우측 좋아요/댓글 */}
               <div className="contentSection__headerLine">
