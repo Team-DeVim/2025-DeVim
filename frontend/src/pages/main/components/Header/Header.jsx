@@ -1,14 +1,15 @@
 
-import { useNavigate } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import "./Header.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import ThemeSwitch from '../../../../components/common/ThemeSwitch';
 import { useState } from "react";
+import { createSearchParams } from "react-router-dom";
 
 
 export default function Header() {
   const navigate = useNavigate();
-	const [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState("");
 
   // 메인으로
   const main = () => {
@@ -18,23 +19,41 @@ export default function Header() {
   const register = () => {
     navigate("/Register");
   };
-	// 게시판 검색기능
-	 const handleSearch = () => {
-     if (keyword.trim()) {
-       navigate(`/boardPage?search=${encodeURIComponent(keyword)}`);
-     }
-   };
-	 const handleKeyPress = (e) => {
-     if (e.key === "Enter") {
-       handleSearch();
-     }
-   };
+  // 게시판 검색기능
+  const handleSearch = () => {
+    if (keyword.trim()) {
+      navigate(`/boardPage?search=${encodeURIComponent(keyword)}`);
+    }
+  };
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   // 로그인
   const signUp = () => {
     navigate("/SignUp");
   };
 
+  // 게시판 이동
+  const toFree = {
+    pathname: "/boardPage",
+    search: `?${createSearchParams({
+      page: "1",
+      size: "7",
+      boardTypeNo: "1",
+    })}`,
+  };
+
+  const toQna = {
+    pathname: "/boardPage",
+    search: `?${createSearchParams({
+      page: "1",
+      size: "7",
+      boardTypeNo: "2",
+    })}`,
+  };
 
 
   return (
@@ -46,17 +65,17 @@ export default function Header() {
 
 
         <nav className="header__menu">
-          <a href="#">자유게시판</a>
-          <a href="#">Q&A 게시판</a>
+          <Link to={toFree}>자유게시판</Link>
+          <Link to={toQna}>Q&A 게시판</Link>
         </nav>
         <div className="header__search">
           <input
             type="text"
             className="header__search--input"
             placeholder="검색어를 입력해주세요"
-						value={keyword}
-						onChange={(e)=>setKeyword(e.target.value)}
-						onKeyPress={handleKeyPress}
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
           <i
             class="fa-solid fa-magnifying-glass search-icon"

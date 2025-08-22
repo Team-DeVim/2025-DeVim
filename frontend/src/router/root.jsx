@@ -60,7 +60,7 @@ const root = createBrowserRouter([
         ),
       },
       {
-        path: "detailPage",
+        path: "detailPage/:boardNo",
         element: (
           <Suspense>
             <DetailPage />

@@ -67,17 +67,28 @@ export const questionPostList = async (boardTypeNo = 2, limit = 4, signal) => {
 };
 
 //boardPage--공지사항글 3개
-export const noticePostList = async (boardTypeNo, limit) => {
-    const res = await axios.get(`${BOARD_PREFIX}`,
-        { params: { boardTypeNo, limit } }
-    );
+export const noticePostList = async (boardTypeNo = 3, limit = 3, signal) => {
+    const params = {
+        boardTypeNo: Number(boardTypeNo),
+        limit: Number(limit),
+    };
+    const res = await axios.get(`${BOARD_PREFIX}/recent`, {
+        params,
+        signal,
+    });
     return res.data;
 };
 
 //boardPage--글 데이터 7개 ( 페이징 기법 적용 )
-export const mainPostList = async (page = 1, size = 7, boardTypeNo) => {
+export const pagingPostList = async (page = 1, size = 7, boardTypeNo, signal) => {
+    const params = {
+        page: Number(page),
+        size: Number(size),
+        boardTypeNo: Number(boardTypeNo)
+    };
     const res = await axios.get(`${BOARD_PREFIX}`, {
-        params: { page, size, boardTypeNo }
+        params,
+        signal
     });
     return res.data;
 };
