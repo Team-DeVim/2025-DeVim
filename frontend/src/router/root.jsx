@@ -11,9 +11,9 @@ const BoardPage = lazy(() => import("../pages/boardPage/BoardPage"));
 const ProfilePage = lazy(() => import("../pages/profilePage/ProfilePage"));
 const DetailPage = lazy(() => import("../pages/detailPage/DetailPage"));
 const UsersPage = lazy(() => import("../pages/adminPage/routes/UsersPage"));
-const UserDetailPage = lazy(() =>
-  import("../pages/adminPage/routes/UserDetailPage")
-);
+const UserDetailPage = lazy(() => import("../pages/adminPage/routes/UserDetailPage"));
+const EditorPage = lazy(() => import("../pages/editorPage/EditorPage"));
+const UsersSmokeTest = lazy(() => import("../pages/apiTestPage/UsersSmokeTest"));
 
 const root = createBrowserRouter([
   {
@@ -75,6 +75,22 @@ const root = createBrowserRouter([
           { path: "users", element: <UsersPage /> },
           { path: "users/:userNo", element: <UserDetailPage /> },
         ],
+      },
+      {
+        path: "editorPage",
+        element: (
+          <Suspense>
+            <EditorPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "usersSmokeTest",
+        element: (
+          <Suspense>
+            <UsersSmokeTest />
+          </Suspense>
+        ),
       },
     ],
   },

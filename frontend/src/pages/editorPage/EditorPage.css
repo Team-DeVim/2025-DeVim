@@ -1,0 +1,28 @@
+.editor-page {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px; 
+}
+
+.editor-page__container {
+  padding: 32px 16px 80px; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.editor-page__container > * {
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+}
+
+/* 에디터 */
+.editor-page__body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; 
+}
+
