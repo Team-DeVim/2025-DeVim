@@ -1,0 +1,82 @@
+.editor {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+/* 에디터 본문 래퍼 */
+.editor__inner {
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+}
+
+/* Quill 스킨(테마 토큰 활용) */
+.editor__quill .ql-toolbar {
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+  background: var(--color-bg-card);
+  border: var(--border-w, 1px) solid var(--color-border);
+}
+/* 툴바 안의 버튼 색상 */
+.editor__quill .ql-toolbar button {
+  color: var(--color-accent); 
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.editor__quill .ql-toolbar button:hover {
+  background: var(--color-bg-muted);     
+  border-radius: var(--radius-sm);      
+}
+.editor__quill .ql-container {
+  min-height: 320px;
+  font-size: 16px;
+  background: var(--color-bg-card);
+  border: var(--border-w, 1px) solid var(--color-border);
+  border-top: none;
+  border-bottom-left-radius: var(--radius-md);
+  border-bottom-right-radius: var(--radius-md);
+}
+
+.editor__quill .ql-editor {
+  padding-bottom: 24px;
+}
+
+.editor__actions-bar {
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-top: 0;
+}
+
+/* 버튼 공통 */
+.editor__btn {
+  min-width: 140px;
+  height: 44px;
+  padding: 0 24px;
+  border-radius: var(--radius-md);
+  border: var(--border-w, 1px) solid var(--color-border);
+  background: var(--color-bg-muted);
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, opacity 0.2s ease;
+}
+
+.editor__btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.editor__btn:disabled {
+  opacity: 0.5;
+}
+
+/* 등록 버튼 강조 */
+.editor__btn--primary {
+  background: var(--color-accent, var(--brand));
+}
