@@ -46,5 +46,5 @@
 
   /* 스크롤은 본문만 */
   min-height: 0;
-  overflow: auto;
+  overflow: hidden;
 }
