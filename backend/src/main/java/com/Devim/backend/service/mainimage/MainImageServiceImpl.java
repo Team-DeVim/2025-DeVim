@@ -44,15 +44,16 @@ public class MainImageServiceImpl implements MainImageService {
         String storedFileName = UUID.randomUUID().toString() + fileExtension;
         String storedThumbnailName = UUID.randomUUID().toString() + "_thumb" + fileExtension;
 
-        Path originalDestination = Paths.get(uploadPath, storedFileName);
-        Path thumbnailDestination = Paths.get(uploadPath, storedThumbnailName);
-
-        // 경로가 존재하지 않는 경우, 상위 디렉터리를 생성
-        if (!Files.exists(originalDestination.getParent())) {
-            Files.createDirectories(originalDestination.getParent());
+        // upload 할 경로를 생성 (Paths.get() : OS에 따라 올바른 파일 구분자를 자동으로 처리)
+        Path mainImageUploadPath = Paths.get(uploadPath, "mainImage");
+        if (!Files.exists(mainImageUploadPath)) {
+            Files.createDirectories(mainImageUploadPath);
         }
 
-        // Save original image
+        Path originalDestination = mainImageUploadPath.resolve(storedFileName);
+        Path thumbnailDestination = mainImageUploadPath.resolve(storedThumbnailName);
+
+        // 원본 파일 저장
         Files.copy(file.getInputStream(), originalDestination);
 
         // Thumbnailator를 사용하여 썸네일 가공 및 저장
@@ -61,8 +62,8 @@ public class MainImageServiceImpl implements MainImageService {
                 .toFile(thumbnailDestination.toFile());
 
         MainImage mainImage = new MainImage();
-        mainImage.setFilePath("/upload/" + storedFileName);
-        mainImage.setThumbnailPath("/upload/" + storedThumbnailName);
+        mainImage.setFilePath("/upload/mainImage/" + storedFileName);
+        mainImage.setThumbnailPath("/upload/mainImage/" + storedThumbnailName);
         mainImage.setPriority(priority);
 
         mainImageRepository.save(mainImage);

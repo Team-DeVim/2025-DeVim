@@ -119,7 +119,10 @@ public class CommentController {
         return ResponseEntity.noContent().build();
     }
 
-//    swagger 추가 필요
+    @Operation(summary = "월별 댓글 수 조회", description = "월별 댓글 작성 수를 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공")
+    })
     @GetMapping("/monthly-counts")
     public ResponseEntity<List<MonthlyCountDto>> getMonthlyCommentCounts() {
         return ResponseEntity.ok(commentService.countMonthlyComments());
