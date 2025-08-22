@@ -1,6 +1,6 @@
 package com.Devim.backend.domain.comment;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.Data;
 
@@ -10,6 +10,6 @@ public class CommentDto {
     private int boardNo;
     private String commentContent;
     private String writerName; // From user table
-    private Date createdDt;
+    private LocalDateTime createdDt;
     private boolean deleteFlag;
 }

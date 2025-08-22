@@ -4,7 +4,6 @@ import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.repository.UserRepository;
-import com.Devim.backend.repository.mybatis.MyBatisUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,5 +44,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long userNo) {
         userRepository.deleteById(userNo);
+    }
+
+    @Override
+    public void hardDelete(Long userNo) {
+        userRepository.hardDeleteById(userNo);
     }
 }

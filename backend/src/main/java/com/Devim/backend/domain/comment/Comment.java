@@ -1,6 +1,6 @@
 package com.Devim.backend.domain.comment;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +14,6 @@ public class Comment {
 	private int boardNo;
 	private String commentContent;
 	private int writer;
-	private Date createdDt;
+	private LocalDateTime createdDt;
 	private boolean deleteFlag;
 }
