@@ -3,10 +3,12 @@ import { useNavigate } from "react-router";
 import "./Header.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import ThemeSwitch from '../../../../components/common/ThemeSwitch';
+import { useState } from "react";
 
 
 export default function Header() {
   const navigate = useNavigate();
+	const [keyword, setKeyword] = useState("");
 
   // 메인으로
   const main = () => {
@@ -16,20 +18,23 @@ export default function Header() {
   const register = () => {
     navigate("/Register");
   };
+	// 게시판 검색기능
+	 const handleSearch = () => {
+     if (keyword.trim()) {
+       navigate(`/boardPage?search=${encodeURIComponent(keyword)}`);
+     }
+   };
+	 const handleKeyPress = (e) => {
+     if (e.key === "Enter") {
+       handleSearch();
+     }
+   };
+
   // 로그인
   const signUp = () => {
     navigate("/SignUp");
   };
 
-	// 검색 기능
-	const handleSearch=()=>{
-		const query = document.getElementById("searchInput").ariaValueMax.trim();
-		if(query) {
-			navigate(`/search?qurty=${encodeURIComponent(query)}`);
-		} else {
-			alert("검색어 입력해주세요.");
-		}
-	}
 
 
   return (
@@ -49,6 +54,9 @@ export default function Header() {
             type="text"
             className="header__search--input"
             placeholder="검색어를 입력해주세요"
+						value={keyword}
+						onChange={(e)=>setKeyword(e.target.value)}
+						onKeyPress={handleKeyPress}
           />
           <i
             class="fa-solid fa-magnifying-glass search-icon"

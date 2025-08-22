@@ -1,5 +1,120 @@
-.ProfileCard {
-    border: 3px dotted var(--color-border);
+.profileCard {
+    border: 1px none var(--color-border);
     width: 840px;
-    height: 360px;
+    height: auto;
+}
+
+.profileCard__group{
+	background-color: var(--header-bg);
+	height: 360px;
+	border: 1px solid var(--color-border);;
+	border-radius: 15px;
+	display: flex;
+}
+/* 프로필사진영역 */
+.profileCard__photo{
+	margin: 20px;
+	height: 300px;
+	width: 350px;
+	border: 1px none var(--color-text);
+	border-radius: 50%;
+	color: var(--color-text);
+	cursor: pointer;
+	overflow: hidden;
+	align-items: center;
+  justify-content: center;
+}
+.profileCard__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 또는 contain */
+}
+@keyframes pulseWave {
+  0% {
+    box-shadow: 0 0 0 0 var(--brand);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(0, 255, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 255, 0, 0);
+  }
+}
+.profileCard__photo:hover {
+  animation: pulseWave 0.8s infinite;
+  border: 2px none var(--brand);
+  border-radius: 50%;
+}
+
+
+/*유저 정보창*/
+.profileCard__user-info{
+	width: 600px;
+	/* margin-top: 30px;
+	margin-right: 20px; */
+	padding: 30px;
+	display: flex;
+	flex-direction: column;
+}
+/*유저정보 텍스트*/
+.profileCard__user-info p {
+	color: var(--color-text);
+	/* margin-bottom: 5px; */
+}
+.profileCard__user-info input {
+	flex: 1; 
+  padding-left: 10px;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  border: 2px none outset;
+	margin-top: 10px;
+	margin-bottom: 20px;
+  border-radius: 5px;
+	color: var(--color-text);
+  background-color: var(--surface-muted);
+}
+/* 자물쇠 크기 */
+.profileCard__user-name i,
+.profileCard__user-id i,
+.profileCard__user-date i{
+font-size: 20px;
+}
+
+
+
+
+.profileCard__sc{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	gap: 100px;
+}
+
+/*저장하기 버튼*/
+.profileCard__save{
+	width: 120px;
+	height: 30px;
+	color: var(--color-text);
+	background-color: var(--btn-login-btn);
+	border-radius: 5px;
+}
+/*저장하기 호버*/
+.profileCard__save:hover{
+	transition: 0.3s;
+	color: var(--btn-cancle-hover);
+}
+/*취소하기*/
+.profileCard__cancle{
+	width: 120px;
+	height: 30px;
+	color: var(--color-text);
+	background-color: var(--btn-cancle-btn);
+	border-radius: 5px;
+}
+/*취소하기 호버*/
+.profileCard__cancle:hover{
+	transition: 0.3s;
+	color: var(--btn-cancle-hover);
 }

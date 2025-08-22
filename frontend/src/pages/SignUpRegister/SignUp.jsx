@@ -65,7 +65,7 @@ export default function SignUp() {
           </button>
           <span className="signup__logo-hover-text">메인으로</span>
         </div>
-        로그인
+        &#32;로그인
         <div className="signup__menu">
           <div className="signup__menu-type">
             <button

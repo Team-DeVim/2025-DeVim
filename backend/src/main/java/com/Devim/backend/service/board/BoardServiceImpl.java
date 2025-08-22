@@ -34,8 +34,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public PageResponseDto<BoardDto> list(PageRequestDto pageRequestDto) {
-        return boardRepository.findAll(pageRequestDto);
+    public PageResponseDto<BoardDto> list(PageRequestDto pageRequestDto, Integer boardTypeNo) {
+        return boardRepository.findAll(pageRequestDto, boardTypeNo);
     }
 
     @Override
@@ -58,6 +58,11 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public void delete(Long boardNo) {
         boardRepository.deleteById(boardNo);
+    }
+
+    @Override
+    public List<BoardDto> getRecent(Integer boardTypeNo, int limit) {
+        return boardRepository.findRecent(boardTypeNo, limit);
     }
 
     @Override

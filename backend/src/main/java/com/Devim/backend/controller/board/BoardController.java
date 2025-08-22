@@ -51,17 +51,16 @@ public class BoardController {
     
     @Operation(
             summary = "게시글 단건 조회",
-            description = "boardNo로 게시글을 조회합니다.",
-            parameters = {
-                    @io.swagger.v3.oas.annotations.Parameter(name = "boardNo", description = "게시글 번호", example = "101", required = true)
-            }
+            description = "boardNo로 게시글을 조회합니다."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(schema = @Schema(implementation = BoardDto.class)))
     })
     @GetMapping("/{boardNo}")
-    public ResponseEntity<BoardDto> get(@PathVariable Long boardNo) {
+    public ResponseEntity<BoardDto> get(
+            @io.swagger.v3.oas.annotations.Parameter(description = "게시글 번호", example = "101", required = true)
+            @PathVariable Long boardNo) {
         return ResponseEntity.ok(boardService.get(boardNo));
     }
 
@@ -79,11 +78,12 @@ public class BoardController {
     })
     @GetMapping
     public ResponseEntity<PageResponseDto<BoardDto>> list(@RequestParam(required = false) String title,
+                                                          @RequestParam(required = false) Integer boardTypeNo,
                                                           @ModelAttribute PageRequestDto pageRequestDto) {
         if (title != null && !title.isEmpty()) {
             return ResponseEntity.ok(boardService.search(title, pageRequestDto));
         } else {
-            return ResponseEntity.ok(boardService.list(pageRequestDto));
+            return ResponseEntity.ok(boardService.list(pageRequestDto, boardTypeNo));
         }
     }
 
@@ -121,11 +121,30 @@ public class BoardController {
             @ApiResponse(responseCode = "204", description = "수정됨"),
     })
     @PatchMapping("/{boardNo}")
-    public ResponseEntity<Void> update(@PathVariable Long boardNo,
+    public ResponseEntity<Void> update(@PathVariable("boardNo") Long boardNo,
                                        @Validated @RequestBody Board board) {
         board.setBoardNo(boardNo);
         boardService.update(board);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(
+            summary = "최신 게시글 조회 (타입별)",
+            description = "게시판 타입(boardTypeNo)과 개수(limit)를 지정하여 최신 게시글을 조회합니다.",
+            parameters = {
+                    @io.swagger.v3.oas.annotations.Parameter(name = "boardTypeNo", description = "게시글 타입 번호", required = true, example = "1"),
+                    @io.swagger.v3.oas.annotations.Parameter(name = "limit", description = "가져올 개수", example = "4")
+            }
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = BoardDto.class))))
+    })
+    @GetMapping("/recent")
+    public ResponseEntity<List<BoardDto>> getRecent(
+            @RequestParam("boardTypeNo") Integer boardTypeNo,
+            @RequestParam(value = "limit", defaultValue = "4") int limit) {
+        return ResponseEntity.ok(boardService.getRecent(boardTypeNo, limit));
     }
 
     
@@ -140,7 +159,7 @@ public class BoardController {
             @ApiResponse(responseCode = "204", description = "삭제됨"),
     })
     @DeleteMapping("/{boardNo}")
-    public ResponseEntity<Void> delete(@PathVariable Long boardNo) {
+    public ResponseEntity<Void> delete(@PathVariable("boardNo") Long boardNo) {
         boardService.delete(boardNo);
         return ResponseEntity.noContent().build();
     }

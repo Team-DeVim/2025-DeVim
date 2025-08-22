@@ -1,5 +1,50 @@
 .myComment {
-    border: 3px dotted var(--color-border);
+    /* border: 1px none var(--color-border); */
     width: 840px;
-    height: 360px;
+    height: auto;
+}
+
+.myComment__group{
+	padding: 20px;
+	background-color: var(--header-bg);
+	border: 1px solid var(--color-border);;
+	height: 280px;
+	border-radius: 15px;
+	display: flex;
+	flex-direction: column;
+}
+/* 내가 ~~ */
+.myComment__title{
+	margin-bottom: 10px;
+}
+/* 댓글 */
+.myComment__write{
+	margin-top: 15px;
+	display: flex;
+	justify-content: space-between;
+	cursor: pointer;
+}
+
+.myComment__my-stats{
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+/* 페이징 */
+.myComment__pagination{
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	position: relative;
+	gap: 20px;
+}
+.myComment__pagination button{
+	font-size: 13px;
+}
+.active{
+	width: 25px;
+	height: 25px;
+	background-color: var(--btn-login-btn);
+	border-radius: 70px;
 }
