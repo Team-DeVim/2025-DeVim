@@ -1,6 +1,5 @@
 .admin-header {
   display: grid;
-  grid-template-columns: 1fr 9fr;
   gap: 20px;
   align-items: center;
   padding: 12px 0;         

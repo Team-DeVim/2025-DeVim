@@ -23,7 +23,7 @@ export default function UsersPage() {
     return MOCK_USERS.slice(start, start + size);
   }, [page]);
 
-  const goDetail = (userNo) => navigate(`/admin/users/${userNo}`);
+  const goDetail = (userNo) => navigate(`/adminPage/users/${userNo}`);
 
   const changePage = (p) => {
     if (p < 1 || p > totalPages) return;
@@ -31,7 +31,6 @@ export default function UsersPage() {
   };
 
   const pages = useMemo(() => {
-    // 1 ... current-1, current, current+1 ... last (간단한 페이지네이션)
     const arr = [];
     if (totalPages <= 7) {
       for (let i = 1; i <= totalPages; i++) arr.push(i);
@@ -53,12 +52,11 @@ export default function UsersPage() {
   return (
     <div className="admin-users">
       <div className="admin-users__panel">
-        <div className="admin-users__empty-icon">≡</div>
-
         <table className="admin-users__table">
           <thead>
             <tr>
               <th>번호</th>
+              <th>프로필</th>
               <th>ID</th>
               <th>이름</th>
               <th>계정 생성일</th>
@@ -73,15 +71,24 @@ export default function UsersPage() {
                 className="admin-users__row"
               >
                 <td>{u.userNo}</td>
+                <td>
+                  <img
+                    className="admin-users__avatar admin-users__avatar--sm"
+                    src={u.profileImageUrl || "https://placehold.co/30x30"}
+                    alt={u.id}
+                  />
+                </td>
                 <td>{u.id}</td>
                 <td>{u.name}</td>
                 <td>{u.createdDate}</td>
-                <td>{u.delete_flag ? "Y" : "N"}</td>
+                {/* delete_flag: 0 → Y, 1 → N */}
+                <td>{u.delete_flag === 0 ? "Y" : "N"}</td>
               </tr>
             ))}
           </tbody>
         </table>
 
+          </div>
         <div className="admin-users__pagination">
           <button onClick={() => changePage(page - 1)} disabled={page === 1}>
             이전
@@ -93,12 +100,12 @@ export default function UsersPage() {
               </span>
             ) : (
               <button
-                key={p}
-                className={
-                  "admin-users__page" +
-                  (p === page ? " admin-users__page--active" : "")
-                }
-                onClick={() => changePage(p)}
+              key={p}
+              className={
+                "admin-users__page" +
+                (p === page ? " admin-users__page--delete_flag" : "")
+              }
+              onClick={() => changePage(p)}
               >
                 {p}
               </button>
@@ -107,10 +114,9 @@ export default function UsersPage() {
           <button
             onClick={() => changePage(page + 1)}
             disabled={page === totalPages}
-          >
+            >
             다음
-          </button>
-        </div>
+            </button>
       </div>
     </div>
   );

@@ -2,7 +2,6 @@ import React, { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./UserDetailPage.css";
 
-// 간단한 목업 조회
 function getMockUser(userNo) {
   return {
     userNo,
@@ -10,13 +9,15 @@ function getMockUser(userNo) {
     password: "********",
     name: `사용자 ${userNo}`,
     createdDate: "2025-08-01",
-    delete_flag: user.delete_flag, // 0 or 1
+    delete_flag: userNo % 3 === 0 ? 1 : 0, 
+    profileImageUrl: null,
   };
 }
 
 export default function UserDetailPage() {
   const { userNo } = useParams();
   const navigate = useNavigate();
+
   const user = useMemo(() => getMockUser(Number(userNo)), [userNo]);
 
   const [form, setForm] = useState({
@@ -24,15 +25,19 @@ export default function UserDetailPage() {
     password: "",
     name: user.name,
     createdDate: user.createdDate,
-    active: user.active ? "Y" : "N",
+    delete_flag: user.delete_flag, 
   });
 
   const onChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({
+      ...prev,
+      [name]: name === "delete_flag" ? Number(value) : value,
+    }));
   };
 
   const onSave = () => {
+    // TODO: 실제 API 연동
     console.log("SAVE USER", { userNo, ...form });
     alert("수정내용 저장(목업)");
   };
@@ -94,8 +99,8 @@ export default function UserDetailPage() {
             value={form.delete_flag}
             onChange={onChange}
           >
-            <option value="Y">Y</option>
-            <option value="N">N</option>
+            <option value={0}>Y</option>
+            <option value={1}>N</option>
           </select>
         </div>
 
