@@ -113,3 +113,26 @@ export async function getDetailPost(boardNo, signal) {
 
 
 //COMMENT
+// detailPage_상세글 댓글리스트
+export async function getCommentList(page = 1, size = 9999, boardNo, signal) {
+    if (boardNo == null || Number.isNaN(Number(boardNo))) {
+        throw new Error("Invalid boardNo");
+    }
+    const params = {
+        boardNo,
+        page,
+        size,
+    }
+    const { data } = await axios.get(`${COMMENT_PREFIX}`, { params, signal })
+    const list = Array.isArray(data?.dtoList) ? data.dtoList : [];
+    const commentData = list.map((c) => ({
+        commentNo: c.commentNo,
+        boardNo: c.boardNo,
+        commentContent: c.commentContent ?? "",
+        writerName: c.writerName ?? "알 수 없음",
+        createdDt: c.createdDt ?? null,
+        deleteFlag: !!c.deleteFlag,
+    }));
+
+    return commentData;
+}

@@ -3,7 +3,6 @@ import "./ContentBox.css";
 
 export default function ContentBox({ data }) {
   // 받은 상세글 정보 변수화
-  console.log(data);
   const boardNo = data.boardNo;
   const boardTypeNo = data.boardTypeNo;
   const title = data.title;

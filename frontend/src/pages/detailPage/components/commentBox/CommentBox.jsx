@@ -51,6 +51,22 @@ function CommentComposer({ isLoggedIn = false, onSubmit }) {
   );
 }
 
+// 시간 포메터
+const formatTimeAgo = (iso) => {
+  if (!iso) return "알수없음";
+  const created = new Date(iso);
+  const now = new Date();
+  const diffMs = now - created;
+  if (Number.isNaN(diffMs)) return "";
+  const min = Math.floor(diffMs / (1000 * 60) - 60 * 9);
+  if (min < 1) return "방금 전";
+  if (min < 60) return `${min}분 전`;
+  const hour = Math.floor(min / 60);
+  if (hour < 24) return `${hour}시간 전`;
+  const day = Math.floor(hour / 24);
+  return `${day}일 전`;
+};
+
 /** ===== 목록(Mock) =====*/
 const MOCK_COMMENTS = [
   { id: 1, writer: { name: "사용자 닉네임" }, timeAgo: "방금 전", content: "댓글 내용", likeCount: 0 },
@@ -65,8 +81,8 @@ function CommentItem({ item }) {
         <div className="commentBox__profile">
           <div className="commentBox__avatar" />
           <div className="commentBox__nameTime">
-            <div className="commentBox__name">{item.writer?.name ?? "알 수 없음"}</div>
-            <div className="commentBox__time">{item.timeAgo ?? ""}</div>
+            <div className="commentBox__name">{item.writerName ?? "알 수 없음"}</div>
+            <div className="commentBox__time">{formatTimeAgo(item.createdDt) ?? ""}</div>
           </div>
         </div>
         <div className="commentBox__actions">
@@ -76,7 +92,7 @@ function CommentItem({ item }) {
         </div>
       </div>
 
-      <div className="commentBox__body">{item.content}</div>
+      <div className="commentBox__body">{item.commentContent}</div>
 
       <div className="commentBox__tail">
         <span className="commentBox__like">좋아요: {item.likeCount ?? 0}</span>
@@ -85,31 +101,39 @@ function CommentItem({ item }) {
   );
 }
 
-export default function CommentBox({
-  comments = MOCK_COMMENTS,
-  isLoggedIn = false, 
-}) {
-  const [items, setItems] = useState(comments);
 
-  const handleAdd = (text) => {
-    const newItem = {
-      id: Date.now(),
-      writer: { name: "현재 사용자" },
-      timeAgo: "방금 전",
-      content: text,
-      likeCount: 0,
-    };
-    setItems((prev) => [newItem, ...prev]);
-  };
+
+export default function CommentBox({
+  data,
+  isLoggedIn = false,
+}) {
+  // const [items, setItems] = useState(comments);
+
+  // const handleAdd = (text) => {
+  //   const newItem = {
+  //     id: Date.now(),
+  //     writer: { name: "현재 사용자" },
+  //     timeAgo: "방금 전",
+  //     content: text,
+  //     likeCount: 0,
+  //   };
+  //   setItems((prev) => [newItem, ...prev]);
+  // };
+
+
 
   return (
     <section className="commentBox">
       {/* 상단: 댓글 작성 창 */}
-      <CommentComposer isLoggedIn={isLoggedIn} onSubmit={handleAdd} />
+      <CommentComposer isLoggedIn={isLoggedIn} />
 
       {/* 리스트 */}
       <ul className="commentBox__list">
-        {items.map((c) => <CommentItem key={c.id} item={c} />)}
+        {Array.isArray(data) && data.length > 0 ? (
+          data.map((c) => <CommentItem key={c.commentNo} item={c} />)
+        ) : (
+          <li className="commentBox__empty">댓글이 없습니다.</li>
+        )}
       </ul>
     </section>
   );
