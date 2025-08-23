@@ -10,14 +10,21 @@
         VALUES (#{commentNo}, #{boardNo}, #{commentContent}, #{writer}, SYSDATE, 0)
     </insert>
 
-    <select id="findById" parameterType="long" resultType="com.Devim.backend.domain.comment.CommentDto">
-        SELECT "comment_no" AS commentNo, "board_no" AS boardNo, "comment_content" AS commentContent, u."name" AS writerName, c."created_dt" AS createdDt, c."delete_flag" AS deleteFlag
+    <select id="findById" parameterType="long" resultType="com.Devim.backend.domain.comment.CommentListResponseDto">
+        SELECT "comment_no" AS commentNo, "board_no" AS boardNo, "comment_content" AS commentContent, u."name" AS writerName, u."profile_image_path" AS profileImagePath, c."created_dt" AS createdDt, c."delete_flag" AS deleteFlag
 		FROM "comment" c JOIN "user" u ON c."writer" = u."user_no"
 		WHERE c."comment_no" = #{commentNo} AND c."delete_flag" = 0
     </select>
 
-    <select id="findByBoardId" parameterType="map" resultType="com.Devim.backend.domain.comment.CommentDto">
-        SELECT "comment_no" AS commentNo, "board_no" AS boardNo, "comment_content" AS commentContent, u."name" AS writerName, c."created_dt" AS createdDt, c."delete_flag" AS deleteFlag
+    <select id="findByBoardId" parameterType="map" resultType="com.Devim.backend.domain.comment.CommentListResponseDto">
+        SELECT
+            c."comment_no" AS commentNo,
+            c."board_no" AS boardNo,
+            c."comment_content" AS commentContent,
+            u."name" AS writerName,
+            u."profile_image_path" AS profileImagePath,
+            c."created_dt" AS createdDt,
+            c."delete_flag" AS deleteFlag
         FROM "comment" c JOIN "user" u ON c."writer" = u."user_no"
         WHERE c."board_no" = #{boardNo} AND c."delete_flag" = 0
         ORDER BY c."comment_no" ASC

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class Comment {
 	private long commentNo;
-	private int boardNo;
+	private long boardNo;
 	private String commentContent;
 	private int writer;
 	private LocalDateTime createdDt;

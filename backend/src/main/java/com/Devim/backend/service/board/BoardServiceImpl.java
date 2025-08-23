@@ -1,7 +1,6 @@
 package com.Devim.backend.service.board;
 
-import com.Devim.backend.domain.board.Board;
-import com.Devim.backend.domain.board.BoardDto;
+import com.Devim.backend.domain.board.*;
 import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
@@ -22,35 +21,44 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public Long create(Board board) {
+    public Long create(BoardCreateRequestDto requestDto, Long userNo) {
+        Board board = new Board();
+        board.setBoardTypeNo(requestDto.getBoardTypeNo());
+        board.setTitle(requestDto.getTitle());
+        board.setBoardContent(requestDto.getBoardContent());
+        board.setWriter(userNo.intValue());
         boardRepository.save(board);
         return board.getBoardNo();
     }
 
     @Override
-    public BoardDto get(Long boardNo) {
+    public BoardDetailResponseDto get(Long boardNo) {
         return boardRepository.findById(boardNo)
                 .orElseThrow(() -> new NoSuchElementException("Board Not Found" + boardNo));
     }
 
     @Override
-    public PageResponseDto<BoardDto> list(PageRequestDto pageRequestDto, Integer boardTypeNo) {
+    public PageResponseDto<BoardListResponseDto> list(PageRequestDto pageRequestDto, Integer boardTypeNo) {
         return boardRepository.findAll(pageRequestDto, boardTypeNo);
     }
 
     @Override
-    public PageResponseDto<BoardDto> search(String title, PageRequestDto pageRequestDto) {
+    public PageResponseDto<BoardListResponseDto> search(String title, PageRequestDto pageRequestDto) {
         return boardRepository.searchByTitle(pageRequestDto, title);
     }
 
     @Override
-    public List<BoardDto> listPopular(int limit) {
+    public List<BoardListResponseDto> listPopular(int limit) {
         return boardRepository.findPopularBoards(limit);
     }
 
     @Override
     @Transactional
-    public void update(Board board) {
+    public void update(Long boardNo, BoardUpdateRequestDto requestDto) {
+        Board board = new Board();
+        board.setBoardNo(boardNo);
+        board.setTitle(requestDto.getTitle());
+        board.setBoardContent(requestDto.getBoardContent());
         boardRepository.update(board);
     }
 
@@ -61,7 +69,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<BoardDto> getRecent(Integer boardTypeNo, int limit) {
+    public List<BoardListResponseDto> getRecent(Integer boardTypeNo, int limit) {
         return boardRepository.findRecent(boardTypeNo, limit);
     }
 
