@@ -113,7 +113,7 @@ public class CommentController {
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "삭제됨"),
     })
-        @DeleteMapping("/{commentNo}")
+    @DeleteMapping("/{commentNo}")
     public ResponseEntity<Void> delete(@PathVariable("commentNo") Long commentNo) {
         commentService.delete(commentNo);
         return ResponseEntity.noContent().build();
