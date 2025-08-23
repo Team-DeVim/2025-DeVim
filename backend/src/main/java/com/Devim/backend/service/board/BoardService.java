@@ -13,7 +13,7 @@ import java.util.List;
 public interface BoardService {
     Long create(BoardCreateRequestDto requestDto, Long userNo);
 
-    BoardDetailResponseDto get(Long boardNo);
+    BoardDetailResponseDto get(Long boardNo, Long currentUserNo);
 
     // boardTypeNo는 필수가 아닌 선택값인데 int는 원시타입으로 null을 가질 수 없기 때문에 Integer 사용
     PageResponseDto<BoardListResponseDto> list(PageRequestDto pageRequestDto, Integer boardTypeNo);

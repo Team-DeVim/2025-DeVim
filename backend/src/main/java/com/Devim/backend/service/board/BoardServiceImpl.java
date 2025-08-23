@@ -32,8 +32,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public BoardDetailResponseDto get(Long boardNo) {
-        return boardRepository.findById(boardNo)
+    public BoardDetailResponseDto get(Long boardNo, Long currentUserNo) {
+        return boardRepository.findById(boardNo, currentUserNo)
                 .orElseThrow(() -> new NoSuchElementException("Board Not Found" + boardNo));
     }
 
