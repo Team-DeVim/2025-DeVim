@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { createSearchParams, Link, useSearchParams } from "react-router-dom";
 import "./BoardSection.css";
 
 function formatDate(iso, tz = "Asia/Seoul") {
@@ -16,6 +16,7 @@ export default function BoardSection({
   data = [],
   pageSize = 4,
 }) {
+  const [params, setParams] = useSearchParams();
 
   const visibleItems = Array.isArray(data) ? data.slice(0, pageSize) : [];
 
@@ -32,8 +33,13 @@ export default function BoardSection({
           {visibleItems.map((item) => (
             <li key={item.boardNo}>
               <Link
-                to={`/board/${item.boardNo}`}
                 className="BoardSection__item BoardSection__item-link"
+                to={{
+                  pathname: `/detailPage/${item.boardNo}`,
+                  search: `?${createSearchParams({
+                    boardTypeNo: item.boardTypeNo ?? "",
+                  })}`,
+                }}
               >
                 <div className="BoardSection__item-top">
                   <span className="BoardSection__item-title" title={item.title}>

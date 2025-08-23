@@ -50,7 +50,7 @@ export default function ContentSection({ data }) {
               to={{
                 pathname: `/detailPage/${post.boardNo}`,
                 search: `?${createSearchParams({
-                  boardTypeNo: params.get("boardTypeNo") ?? "1",
+                  boardTypeNo: post.boardTypeNo ?? "",
                 })}`,
               }}
             >
