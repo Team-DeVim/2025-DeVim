@@ -6,6 +6,7 @@ import com.Devim.backend.domain.user.UserRankDto;
 import com.Devim.backend.domain.user.UserRole;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,7 @@ public interface UserMapper {
 
     void save(User user);
 
-    Optional<User> findById(long userNo);
+    Optional<User> findById(@Param("userNo") long userNo);
 
     List<User> findAll(PageRequestDto pageRequest);
 
@@ -23,9 +24,9 @@ public interface UserMapper {
 
     void update(User user);
 
-    void deleteById(long userNo);
+    void deleteById(@Param("userNo") long userNo);
 
-    void hardDeleteById(long userNo);
+    void hardDeleteById(@Param("userNo") long userNo);
 
     void addRole(UserRole userRole);
 

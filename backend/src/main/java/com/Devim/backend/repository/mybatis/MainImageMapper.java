@@ -11,5 +11,5 @@ public interface MainImageMapper {
     void save(MainImage mainImage);
     List<MainImage> findAll();
     void updatePriority(@Param("imageNo") long imageNo, @Param("priority") int priority);
-    void deleteById(long imageNo);
+    void deleteById(@Param("imageNo") long imageNo);
 }

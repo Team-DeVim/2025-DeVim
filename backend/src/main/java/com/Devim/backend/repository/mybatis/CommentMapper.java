@@ -15,15 +15,15 @@ public interface CommentMapper {
 
     void save(Comment comment);
 
-    Optional<CommentDto> findById(long commentNo);
+    Optional<CommentDto> findById(@Param("commentNo") long commentNo);
 
     List<CommentDto> findByBoardId(@Param("boardNo") long boardNo, @Param("pageRequest") PageRequestDto pageRequest);
 
-    long countByBoardId(long boardNo);
+    long countByBoardId(@Param("boardNo") long boardNo);
 
     void update(Comment comment);
 
-    void deleteById(long commentNo);
+    void deleteById(@Param("commentNo") long commentNo);
 
     List<MonthlyCountDto> countMonthlyComments();
 }

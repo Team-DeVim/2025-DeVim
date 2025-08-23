@@ -51,16 +51,17 @@ public class BoardController {
     
     @Operation(
             summary = "게시글 단건 조회",
-            description = "boardNo로 게시글을 조회합니다."
+            description = "boardNo로 게시글을 조회합니다.",
+            parameters = {
+                    @io.swagger.v3.oas.annotations.Parameter(name = "boardNo", description = "게시글 번호", example = "101", required = true)
+            }
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공",
                     content = @Content(schema = @Schema(implementation = BoardDto.class)))
     })
     @GetMapping("/{boardNo}")
-    public ResponseEntity<BoardDto> get(
-            @io.swagger.v3.oas.annotations.Parameter(description = "게시글 번호", example = "101", required = true)
-            @PathVariable Long boardNo) {
+    public ResponseEntity<BoardDto> get(@PathVariable("boardNo") Long boardNo) {
         return ResponseEntity.ok(boardService.get(boardNo));
     }
 
@@ -77,8 +78,8 @@ public class BoardController {
                     content = @Content(schema = @Schema(implementation = PageResponseDtoOfBoardDto.class)))
     })
     @GetMapping
-    public ResponseEntity<PageResponseDto<BoardDto>> list(@RequestParam(required = false) String title,
-                                                          @RequestParam(required = false) Integer boardTypeNo,
+    public ResponseEntity<PageResponseDto<BoardDto>> list(@RequestParam(name = "title", required = false) String title,
+                                                          @RequestParam(name = "boardTypeNo", required = false) Integer boardTypeNo,
                                                           @ModelAttribute PageRequestDto pageRequestDto) {
         if (title != null && !title.isEmpty()) {
             return ResponseEntity.ok(boardService.search(title, pageRequestDto));
@@ -100,7 +101,7 @@ public class BoardController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = BoardDto.class))))
     })
     @GetMapping("/popular")
-    public ResponseEntity<List<BoardDto>> popular(@RequestParam(defaultValue = "4") int limit) {
+    public ResponseEntity<List<BoardDto>> popular(@RequestParam(value = "limit", defaultValue = "4") int limit) {
         return ResponseEntity.ok(boardService.listPopular(limit));
     }
 
