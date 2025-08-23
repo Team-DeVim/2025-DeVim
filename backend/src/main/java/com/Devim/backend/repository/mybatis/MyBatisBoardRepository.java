@@ -1,7 +1,8 @@
 package com.Devim.backend.repository.mybatis;
 
 import com.Devim.backend.domain.board.Board;
-import com.Devim.backend.domain.board.BoardDto;
+import com.Devim.backend.domain.board.BoardDetailResponseDto;
+import com.Devim.backend.domain.board.BoardListResponseDto;
 import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
@@ -26,20 +27,20 @@ public class MyBatisBoardRepository implements BoardRepository {
     }
 
     @Override
-    public Optional<BoardDto> findById(long boardNo) {
+    public Optional<BoardDetailResponseDto> findById(long boardNo) {
         return boardMapper.findById(boardNo);
     }
 
     @Override
-    public PageResponseDto<BoardDto> findAll(PageRequestDto pageRequest, Integer boardTypeNo) {
-        List<BoardDto> dtoList = boardMapper.findAll(pageRequest, boardTypeNo);
+    public PageResponseDto<BoardListResponseDto> findAll(PageRequestDto pageRequest, Integer boardTypeNo) {
+        List<BoardListResponseDto> dtoList = boardMapper.findAll(pageRequest, boardTypeNo);
         long totalCount = boardMapper.countAll(boardTypeNo);
         return new PageResponseDto<>(dtoList, pageRequest, totalCount);
     }
 
     @Override
-    public PageResponseDto<BoardDto> searchByTitle(PageRequestDto pageRequest, String title) {
-        List<BoardDto> dtoList = boardMapper.searchByTitle(pageRequest, title);
+    public PageResponseDto<BoardListResponseDto> searchByTitle(PageRequestDto pageRequest, String title) {
+        List<BoardListResponseDto> dtoList = boardMapper.searchByTitle(pageRequest, title);
         long totalCount = boardMapper.countByTitle(title);
         return new PageResponseDto<>(dtoList, pageRequest, totalCount);
     }
@@ -55,12 +56,12 @@ public class MyBatisBoardRepository implements BoardRepository {
     }
 
     @Override
-    public List<BoardDto> findPopularBoards(int limit) {
+    public List<BoardListResponseDto> findPopularBoards(int limit) {
         return boardMapper.findPopularBoards(limit);
     }
 
     @Override
-    public List<BoardDto> findRecent(Integer boardTypeNo, int limit) {
+    public List<BoardListResponseDto> findRecent(Integer boardTypeNo, int limit) {
         return boardMapper.findRecent(boardTypeNo, limit);
     }
 

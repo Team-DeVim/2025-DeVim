@@ -1,7 +1,7 @@
 package com.Devim.backend.repository.mybatis;
 
 import com.Devim.backend.domain.comment.Comment;
-import com.Devim.backend.domain.comment.CommentDto;
+import com.Devim.backend.domain.comment.CommentListResponseDto;
 import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -15,9 +15,9 @@ public interface CommentMapper {
 
     void save(Comment comment);
 
-    Optional<CommentDto> findById(@Param("commentNo") long commentNo);
+    Optional<CommentListResponseDto> findById(@Param("commentNo") long commentNo);
 
-    List<CommentDto> findByBoardId(@Param("boardNo") long boardNo, @Param("pageRequest") PageRequestDto pageRequest);
+    List<CommentListResponseDto> findByBoardId(@Param("boardNo") long boardNo, @Param("pageRequest") PageRequestDto pageRequest);
 
     long countByBoardId(@Param("boardNo") long boardNo);
 

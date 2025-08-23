@@ -1,7 +1,9 @@
 package com.Devim.backend.service.comment;
 
 import com.Devim.backend.domain.comment.Comment;
-import com.Devim.backend.domain.comment.CommentDto;
+import com.Devim.backend.domain.comment.CommentCreateRequestDto;
+import com.Devim.backend.domain.comment.CommentListResponseDto;
+import com.Devim.backend.domain.comment.CommentUpdateRequestDto;
 import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
@@ -22,25 +24,32 @@ public class CommentServiceImpl implements CommentService{
 
     @Override
     @Transactional
-    public Long create(Comment comment) {
+    public Long create(CommentCreateRequestDto requestDto, Long userNo) {
+        Comment comment = new Comment();
+        comment.setBoardNo(requestDto.getBoardNo());
+        comment.setCommentContent(requestDto.getCommentContent());
+        comment.setWriter(userNo.intValue()); // Assuming writer is int type
         commentRepository.save(comment);
         return comment.getCommentNo();
     }
 
     @Override
-    public CommentDto get(Long commentNo) {
+    public CommentListResponseDto get(Long commentNo) {
         return commentRepository.findById(commentNo)
                 .orElseThrow(() -> new NoSuchElementException("Comment not Found" + commentNo));
     }
 
-        @Override
-    public PageResponseDto<CommentDto> listByBoard(Long boardNo, PageRequestDto pageRequestDto) {
+    @Override
+    public PageResponseDto<CommentListResponseDto> listByBoard(Long boardNo, PageRequestDto pageRequestDto) {
         return commentRepository.findByBoardId(boardNo, pageRequestDto);
     }
 
     @Override
     @Transactional
-    public void update(Comment comment) {
+    public void update(Long commentNo, CommentUpdateRequestDto requestDto) {
+        Comment comment = new Comment();
+        comment.setCommentNo(commentNo);
+        comment.setCommentContent(requestDto.getCommentContent());
         commentRepository.update(comment);
     }
 

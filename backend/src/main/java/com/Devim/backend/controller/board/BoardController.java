@@ -1,11 +1,9 @@
 package com.Devim.backend.controller.board;
 
-import com.Devim.backend.domain.board.Board;
-import com.Devim.backend.domain.board.BoardDto;
+import com.Devim.backend.domain.board.*;
 import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
-import com.Devim.backend.domain.common.PageResponseDtoOfBoardDto;
 import com.Devim.backend.service.board.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -32,19 +30,20 @@ public class BoardController {
 
     @Operation(
             summary = "게시글 생성",
-            description = "새 게시글을 생성합니다.",
+            description = "새 게시글을 생성합니다. (임시: X-USER-NO 헤더로 작성자 ID 전달)",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     description = "게시글 생성 요청 바디",
-                    content = @Content(schema = @Schema(implementation = Board.class))
+                    content = @Content(schema = @Schema(implementation = BoardCreateRequestDto.class))
             )
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "생성됨 (Location 헤더 포함)")
     })
     @PostMapping
-    public ResponseEntity<Void> create(@Validated @RequestBody Board board) {
-        Long id = boardService.create(board);
+    public ResponseEntity<Void> create(@Validated @RequestBody BoardCreateRequestDto requestDto,
+                                       @RequestHeader("X-USER-NO") Long userNo) {
+        Long id = boardService.create(requestDto, userNo);
         return ResponseEntity.created(URI.create("/api/v1/boards/" + id)).build();
     }
 
@@ -58,10 +57,10 @@ public class BoardController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(schema = @Schema(implementation = BoardDto.class)))
+                    content = @Content(schema = @Schema(implementation = BoardDetailResponseDto.class)))
     })
     @GetMapping("/{boardNo}")
-    public ResponseEntity<BoardDto> get(@PathVariable("boardNo") Long boardNo) {
+    public ResponseEntity<BoardDetailResponseDto> get(@PathVariable("boardNo") Long boardNo) {
         return ResponseEntity.ok(boardService.get(boardNo));
     }
 
@@ -75,12 +74,12 @@ public class BoardController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(schema = @Schema(implementation = PageResponseDtoOfBoardDto.class)))
+                    content = @Content(schema = @Schema(implementation = PageResponseDtoOfBoardListResponseDto.class)))
     })
     @GetMapping
-    public ResponseEntity<PageResponseDto<BoardDto>> list(@RequestParam(name = "title", required = false) String title,
-                                                          @RequestParam(name = "boardTypeNo", required = false) Integer boardTypeNo,
-                                                          @ModelAttribute PageRequestDto pageRequestDto) {
+    public ResponseEntity<PageResponseDto<BoardListResponseDto>> list(@RequestParam(name = "title", required = false) String title,
+                                                                      @RequestParam(name = "boardTypeNo", required = false) Integer boardTypeNo,
+                                                                      @ModelAttribute PageRequestDto pageRequestDto) {
         if (title != null && !title.isEmpty()) {
             return ResponseEntity.ok(boardService.search(title, pageRequestDto));
         } else {
@@ -98,10 +97,10 @@ public class BoardController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = BoardDto.class))))
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = BoardListResponseDto.class))))
     })
     @GetMapping("/popular")
-    public ResponseEntity<List<BoardDto>> popular(@RequestParam(value = "limit", defaultValue = "4") int limit) {
+    public ResponseEntity<List<BoardListResponseDto>> popular(@RequestParam(value = "limit", defaultValue = "4") int limit) {
         return ResponseEntity.ok(boardService.listPopular(limit));
     }
 
@@ -115,7 +114,7 @@ public class BoardController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     description = "수정할 게시글(부분 필드만 포함 가능)",
-                    content = @Content(schema = @Schema(implementation = Board.class))
+                    content = @Content(schema = @Schema(implementation = BoardUpdateRequestDto.class))
             )
     )
     @ApiResponses({
@@ -123,9 +122,8 @@ public class BoardController {
     })
     @PatchMapping("/{boardNo}")
     public ResponseEntity<Void> update(@PathVariable("boardNo") Long boardNo,
-                                       @Validated @RequestBody Board board) {
-        board.setBoardNo(boardNo);
-        boardService.update(board);
+                                       @Validated @RequestBody BoardUpdateRequestDto requestDto) {
+        boardService.update(boardNo, requestDto);
         return ResponseEntity.noContent().build();
     }
 
@@ -139,10 +137,10 @@ public class BoardController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = BoardDto.class))))
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = BoardListResponseDto.class))))
     })
     @GetMapping("/recent")
-    public ResponseEntity<List<BoardDto>> getRecent(
+    public ResponseEntity<List<BoardListResponseDto>> getRecent(
             @RequestParam("boardTypeNo") Integer boardTypeNo,
             @RequestParam(value = "limit", defaultValue = "4") int limit) {
         return ResponseEntity.ok(boardService.getRecent(boardTypeNo, limit));

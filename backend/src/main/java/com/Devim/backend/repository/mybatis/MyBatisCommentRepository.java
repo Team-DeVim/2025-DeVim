@@ -1,7 +1,7 @@
 package com.Devim.backend.repository.mybatis;
 
 import com.Devim.backend.domain.comment.Comment;
-import com.Devim.backend.domain.comment.CommentDto;
+import com.Devim.backend.domain.comment.CommentListResponseDto;
 import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
@@ -26,13 +26,13 @@ public class MyBatisCommentRepository implements CommentRepository {
     }
 
     @Override
-    public Optional<CommentDto> findById(long commentNo) {
+    public Optional<CommentListResponseDto> findById(long commentNo) {
         return commentMapper.findById(commentNo);
     }
 
     @Override
-    public PageResponseDto<CommentDto> findByBoardId(long boardNo, PageRequestDto pageRequest) {
-        List<CommentDto> dtoList = commentMapper.findByBoardId(boardNo, pageRequest);
+    public PageResponseDto<CommentListResponseDto> findByBoardId(long boardNo, PageRequestDto pageRequest) {
+        List<CommentListResponseDto> dtoList = commentMapper.findByBoardId(boardNo, pageRequest);
         long totalCount = commentMapper.countByBoardId(boardNo);
         return new PageResponseDto<>(dtoList, pageRequest, totalCount);
     }
