@@ -27,8 +27,8 @@ public class MyBatisBoardRepository implements BoardRepository {
     }
 
     @Override
-    public Optional<BoardDetailResponseDto> findById(long boardNo) {
-        return boardMapper.findById(boardNo);
+    public Optional<BoardDetailResponseDto> findById(long boardNo, Long currentUserNo) {
+        return boardMapper.findById(boardNo, currentUserNo);
     }
 
     @Override

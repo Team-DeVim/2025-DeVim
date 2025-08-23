@@ -1,6 +1,5 @@
 package com.Devim.backend.controller.comment;
 
-import com.Devim.backend.domain.comment.Comment;
 import com.Devim.backend.domain.comment.CommentCreateRequestDto;
 import com.Devim.backend.domain.comment.CommentListResponseDto;
 import com.Devim.backend.domain.comment.CommentUpdateRequestDto;

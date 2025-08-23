@@ -13,4 +13,5 @@ public class BoardDetailResponseDto {
     private LocalDateTime createdDt;
     private int likeCount;
     private int commentCount;
+    private boolean isLiked;
 }

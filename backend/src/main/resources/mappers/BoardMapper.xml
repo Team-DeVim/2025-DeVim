@@ -11,7 +11,7 @@
     </insert>
 
 	<!-- user 테이블과 join하여 name 출력 -->
-    <select id="findById" parameterType="long" resultType="com.Devim.backend.domain.board.BoardDetailResponseDto">
+    <select id="findById" parameterType="map" resultType="com.Devim.backend.domain.board.BoardDetailResponseDto">
         SELECT
             b."board_no" AS boardNo,
             b."board_type_no" AS boardTypeNo,
@@ -21,7 +21,11 @@
             u."profile_image_path" AS profileImagePath,
             b."created_dt" AS createdDt,
             NVL(l.like_count, 0) AS likeCount,
-            NVL(c.comment_count, 0) AS commentCount
+            NVL(c.comment_count, 0) AS commentCount,
+            CASE WHEN #{currentUserNo} IS NOT NULL AND EXISTS (
+                SELECT 1 FROM "likes"
+                WHERE "target_id" = b."board_no" AND "target_type" = 'board' AND "user_no" = #{currentUserNo}
+            ) THEN 1 ELSE 0 END AS isLiked
         FROM "board" b
         JOIN "user" u ON b."writer" = u."user_no"
         LEFT JOIN (

@@ -50,7 +50,7 @@ public class BoardController {
     
     @Operation(
             summary = "게시글 단건 조회",
-            description = "boardNo로 게시글을 조회합니다.",
+            description = "boardNo로 게시글을 조회합니다. (임시: X-USER-NO 헤더로 현재 사용자 ID 전달)",
             parameters = {
                     @io.swagger.v3.oas.annotations.Parameter(name = "boardNo", description = "게시글 번호", example = "101", required = true)
             }
@@ -60,8 +60,9 @@ public class BoardController {
                     content = @Content(schema = @Schema(implementation = BoardDetailResponseDto.class)))
     })
     @GetMapping("/{boardNo}")
-    public ResponseEntity<BoardDetailResponseDto> get(@PathVariable("boardNo") Long boardNo) {
-        return ResponseEntity.ok(boardService.get(boardNo));
+    public ResponseEntity<BoardDetailResponseDto> get(@PathVariable("boardNo") Long boardNo,
+                                                      @RequestHeader(value = "X-USER-NO", required = false) Long currentUserNo) {
+        return ResponseEntity.ok(boardService.get(boardNo, currentUserNo));
     }
 
 
