@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
+import com.Devim.backend.domain.user.UserSummaryResponseDto;
 
 public interface UserService {
     Long create(User user);
@@ -24,4 +25,6 @@ public interface UserService {
     String uploadProfileImage(long userNo, MultipartFile file) throws IOException;
 
     byte[] getThumbnail(long userNo, int width, int height) throws IOException;
+
+    UserSummaryResponseDto getUserSummary(long userNo);
 }

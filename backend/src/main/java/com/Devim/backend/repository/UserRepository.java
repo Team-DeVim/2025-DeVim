@@ -27,4 +27,8 @@ public interface UserRepository {
 	List<UserRankDto> findTop5ByBoardCount();
 
 	List<UserRankDto> findTop5ByCommentCount();
+
+    long countBoardsByUser(long userNo);
+
+    long countCommentsByUser(long userNo);
 }

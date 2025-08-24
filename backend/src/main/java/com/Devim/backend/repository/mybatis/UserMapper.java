@@ -33,5 +33,9 @@ public interface UserMapper {
     List<UserRankDto> findTop5ByBoardCount();
 
     List<UserRankDto> findTop5ByCommentCount();
+
+    long countBoardsByUser(@Param("userNo") long userNo);
+
+    long countCommentsByUser(@Param("userNo") long userNo);
 }
 

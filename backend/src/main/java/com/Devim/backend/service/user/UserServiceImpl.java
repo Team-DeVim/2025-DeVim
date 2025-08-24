@@ -4,8 +4,10 @@ import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.domain.user.UserRole;
+import com.Devim.backend.domain.user.UserSummaryResponseDto;
 import com.Devim.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnails;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -130,5 +132,24 @@ public class UserServiceImpl implements UserService {
 
         // 생성된 썸네일의 byte 배열 반환
         return outputStream.toByteArray();
+    }
+
+    @Override
+    public UserSummaryResponseDto getUserSummary(long userNo) {
+        User user = userRepository.findById(userNo)
+                .orElseThrow(() -> new NoSuchElementException("User not found: " + userNo));
+
+        long postCount = userRepository.countBoardsByUser(userNo);
+        long commentCount = userRepository.countCommentsByUser(userNo);
+
+        UserSummaryResponseDto summary = new UserSummaryResponseDto();
+        summary.setUserNo(user.getUserNo());
+        summary.setId(user.getId());
+        summary.setName(user.getName());
+        summary.setProfileImagePath(user.getProfileImagePath());
+        summary.setPostCount(postCount);
+        summary.setCommentCount(commentCount);
+
+        return summary;
     }
 }

@@ -51,4 +51,11 @@ public class MyBatisCommentRepository implements CommentRepository {
     public List<MonthlyCountDto> countMonthlyComments() {
         return commentMapper.countMonthlyComments();
     }
+
+    @Override
+    public PageResponseDto<CommentListResponseDto> findByUserNo(long userNo, PageRequestDto pageRequest) {
+        List<CommentListResponseDto> dtoList = commentMapper.findByUserNo(userNo, pageRequest);
+        long totalCount = commentMapper.countByUserNo(userNo);
+        return new PageResponseDto<>(dtoList, pageRequest, totalCount);
+    }
 }
