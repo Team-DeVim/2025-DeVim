@@ -22,9 +22,13 @@
             b."created_dt" AS createdDt,
             NVL(l.like_count, 0) AS likeCount,
             NVL(c.comment_count, 0) AS commentCount,
-            CASE WHEN #{currentUserNo} IS NOT NULL AND EXISTS (
+            CASE WHEN EXISTS (
                 SELECT 1 FROM "likes"
-                WHERE "target_id" = b."board_no" AND "target_type" = 'board' AND "user_no" = #{currentUserNo}
+                WHERE "target_id" = b."board_no"
+                  AND "target_type" = 'board'
+                  <if test="currentUserNo != null">
+                      AND "user_no" = #{currentUserNo}
+                  </if>
             ) THEN 1 ELSE 0 END AS isLiked
         FROM "board" b
         JOIN "user" u ON b."writer" = u."user_no"
@@ -73,11 +77,15 @@
         OFFSET (#{pageRequest.page} - 1) * #{pageRequest.size} ROWS FETCH NEXT #{pageRequest.size} ROWS ONLY
     </select>
 
+	<!-- Page 처리 시 totalCount를 위해 필요 -->
     <select id="countAll" parameterType="map" resultType="long">
         SELECT COUNT(*) FROM "board"
         WHERE "delete_flag" = 0
         <if test="boardTypeNo != null">
             AND "board_type_no" = #{boardTypeNo}
+        </if>
+        <if test="userNo != null">
+            AND "writer" = #{userNo}
         </if>
     </select>
 

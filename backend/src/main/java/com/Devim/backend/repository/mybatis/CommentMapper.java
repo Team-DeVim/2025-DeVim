@@ -26,4 +26,8 @@ public interface CommentMapper {
     void deleteById(@Param("commentNo") long commentNo);
 
     List<MonthlyCountDto> countMonthlyComments();
+
+    List<CommentListResponseDto> findByUserNo(@Param("userNo") long userNo, @Param("pageRequest") PageRequestDto pageRequest);
+
+    long countByUserNo(@Param("userNo") long userNo);
 }

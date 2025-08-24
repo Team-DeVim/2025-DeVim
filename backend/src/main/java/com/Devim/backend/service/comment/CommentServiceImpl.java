@@ -64,4 +64,9 @@ public class CommentServiceImpl implements CommentService{
     public List<MonthlyCountDto> countMonthlyComments() {
         return commentRepository.countMonthlyComments();
     }
+
+    @Override
+    public PageResponseDto<CommentListResponseDto> getCommentsByUser(long userNo, PageRequestDto pageRequestDto) {
+        return commentRepository.findByUserNo(userNo, pageRequestDto);
+    }
 }

@@ -11,10 +11,16 @@ import java.util.Optional;
 
 public interface CommentRepository {
     void save(Comment comment);
+    
     Optional<CommentListResponseDto> findById(long commentNo);
+    
     PageResponseDto<CommentListResponseDto> findByBoardId(long boardNo, PageRequestDto pageRequest);
+    
     void update(Comment comment);
+    
     void deleteById(long commentNo);
 
     List<MonthlyCountDto> countMonthlyComments();
+
+    PageResponseDto<CommentListResponseDto> findByUserNo(long userNo, PageRequestDto pageRequest);
 }

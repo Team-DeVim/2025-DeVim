@@ -21,4 +21,6 @@ public interface CommentService {
     void delete(Long commentNo);
 
     List<MonthlyCountDto> countMonthlyComments();
+
+    PageResponseDto<CommentListResponseDto> getCommentsByUser(long userNo, PageRequestDto pageRequestDto);
 }

@@ -49,7 +49,7 @@ public class BoardController {
 
     
     @Operation(
-            summary = "게시글 단건 조회",
+            summary = "게시글 상세 조회",
             description = "boardNo로 게시글을 조회합니다. (임시: X-USER-NO 헤더로 현재 사용자 ID 전달)",
             parameters = {
                     @io.swagger.v3.oas.annotations.Parameter(name = "boardNo", description = "게시글 번호", example = "101", required = true)
@@ -84,7 +84,7 @@ public class BoardController {
         if (title != null && !title.isEmpty()) {
             return ResponseEntity.ok(boardService.search(title, pageRequestDto));
         } else {
-            return ResponseEntity.ok(boardService.list(pageRequestDto, boardTypeNo));
+            return ResponseEntity.ok(boardService.list(pageRequestDto, boardTypeNo, null));
         }
     }
 
