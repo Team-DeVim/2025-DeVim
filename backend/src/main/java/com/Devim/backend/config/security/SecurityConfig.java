@@ -31,7 +31,7 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/join").permitAll()
+                        .requestMatchers("/login", "/", "/sign-up").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
         //세션 설정
