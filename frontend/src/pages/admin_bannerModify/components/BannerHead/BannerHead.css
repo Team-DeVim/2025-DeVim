@@ -1,0 +1,46 @@
+.banner_head__form {
+  height: 60px;
+  border: 2px solid var(--color-text);
+  background-color: var(--color-bg);
+	width: 100%;
+  display: table-header-group;
+}
+
+.banner_head__form tr{
+	width: 100%;
+	display: table-row;
+}
+
+.banner_head__form th {
+  padding: 0 10px;
+  height: 60px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 각 열 너비 지정 */
+.banner_head__form th:nth-child(1) {
+  width: 5%; /* 선택/삭제 공간 */
+}
+
+.banner_head__form th:nth-child(2) {
+  width: 5%;
+  justify-content: center;
+}
+
+.banner_head__form th:nth-child(3) {
+  width: 50%;
+  justify-content: center;
+}
+
+.banner_head__form th:nth-child(4) {
+  width: 20%;
+  justify-content: flex-start;
+  text-overflow: ellipsis;
+}
+
+.banner_head__form th:nth-child(5) {
+  width: 10%;
+  justify-content: center;
+}

@@ -9,6 +9,7 @@ import "./MainPage.css";
 import { commonPostList, popularPostList, questionPostList } from '../../api/DevimApi';
 
 function MainPage() {
+
   const [popular, setPopular] = useState([]);
   const [common, setCommon] = useState([]);
   const [question, setQuestion] = useState([]);
