@@ -11,23 +11,27 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
-	void save(User user);
+    void save(User user);
 
-	Optional<User> findById(long userNo);
+    Optional<User> findById(long userNo);
 
-	Boolean existsByUsername(String username);
-	Long findUserNoByUsername(String username);
-	PageResponseDto<User> findAll(PageRequestDto pageRequest);
+    Boolean existsByUsername(String username);
 
-	void update(User user);
+    Long findUserNoByUsername(String username);
 
-	void deleteById(long userNo);
+    User findByUsername(String username);
 
-	void hardDeleteById(long userNo);
+    PageResponseDto<User> findAll(PageRequestDto pageRequest);
 
-	void addRole(UserRole userRole);
+    void update(User user);
 
-	List<UserRankDto> findTop5ByBoardCount();
+    void deleteById(long userNo);
 
-	List<UserRankDto> findTop5ByCommentCount();
+    void hardDeleteById(long userNo);
+
+    void addRole(UserRole userRole);
+
+    List<UserRankDto> findTop5ByBoardCount();
+
+    List<UserRankDto> findTop5ByCommentCount();
 }

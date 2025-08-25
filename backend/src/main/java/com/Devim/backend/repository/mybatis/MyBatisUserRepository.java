@@ -40,6 +40,11 @@ public class MyBatisUserRepository implements UserRepository {
         return userMapper.findUserNoByUsername(username);
     }
 
+    @Override
+    public User findByUsername(String username) {
+        return userMapper.findByUsername(username);
+    }
+
 
     @Override
     public PageResponseDto<User> findAll(PageRequestDto pageRequest) {

@@ -24,6 +24,49 @@
         WHERE "user_no" = #{userNo}
     </select>
 
+    <resultMap id="userRoleResultMap" type="com.Devim.backend.domain.user.UserRole">
+        <result property="userNo" column="user_no"/>
+        <result property="role"   column="role"/>
+    </resultMap>
+
+    <resultMap id="userResultMap" type="com.Devim.backend.domain.user.User">
+        <id     property="userNo"           column="user_no"/>
+        <result property="id"               column="id"/>
+        <result property="password"         column="password"/>
+        <result property="name"             column="name"/>
+        <result property="social"           column="social"      jdbcType="NUMERIC"   javaType="boolean"/>
+        <result property="profileImagePath" column="profile_image_path"/>
+        <result property="createdDt"        column="created_dt"  jdbcType="TIMESTAMP"/>
+        <result property="deleteFlag"       column="delete_flag" jdbcType="NUMERIC"   javaType="boolean"/>
+
+        <collection property="roleList"
+                    ofType="com.Devim.backend.domain.user.UserRole"
+                    resultMap="userRoleResultMap"
+                    column="user_no"
+                    select="findRolesMergedByUserNo"/>
+    </resultMap>
+
+    <select id="findByUsername" parameterType="string" resultMap="userResultMap">
+        SELECT
+            "user_no", "id", "password", "name",
+            "social", "profile_image_path", "created_dt", "delete_flag"
+        -- 주의: 여기서는 user.role을 직접 매핑하지 않고,
+        -- 아래 findRolesMergedByUserNo에서 roleList로 합쳐서 가져온다.
+        FROM "user"
+        WHERE "id" = #{username}
+    </select>
+
+    <select id="findRolesMergedByUserNo" parameterType="long" resultMap="userRoleResultMap">
+        SELECT ur."user_no", ur."role"
+        FROM "user_role" ur
+        WHERE ur."user_no" = #{userNo}
+        UNION
+        SELECT u."user_no", u."role"
+        FROM "user" u
+        WHERE u."user_no" = #{userNo}
+          AND u."role" IS NOT NULL
+    </select>
+
 
     <select id="existsByUsername" parameterType="string" resultType="boolean">
         SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END

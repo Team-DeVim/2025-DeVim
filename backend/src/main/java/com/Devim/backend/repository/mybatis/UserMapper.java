@@ -22,6 +22,8 @@ public interface UserMapper {
 
     Long findUserNoByUsername(@Param("username") String username);
 
+    User findByUsername(@Param("username")String username);
+
     List<User> findAll(PageRequestDto pageRequest);
 
     long countAllUsers();
