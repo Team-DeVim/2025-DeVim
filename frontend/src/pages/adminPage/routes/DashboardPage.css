@@ -1,107 +1,133 @@
+/* 메인: 좌 2fr / 우 1fr */
 .admin-dash {
-  display: flex;
-  flex-direction: column;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
   gap: 20px;
   box-sizing: border-box;
-}
-
-/* 행: 좌 2.2fr / 우 1fr */
-.admin-dash__row {
-  --row-h: 360px;  
-  display: grid;
-  grid-template-columns: 2.2fr 1fr;
-  gap: 20px;
-  flex: 1 1 0;
-}
-
-.admin-dash__left,
-.admin-dash__right {
   min-height: 0;
 }
 
-/* 우측은 상/하 카드 스택 */
-.admin-dash__right {
+/* 왼쪽: 차트 2개(1:1) */
+.admin-dash__left {
   display: grid;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
   gap: 20px;
   min-height: 0;
 }
 
-/* 카드는 공통 박스 스타일 */
+/* 오른쪽: 2 : 3 : 2 */
+.admin-dash__right {
+  display: grid;
+  grid-template-rows: minmax(0, 2fr) minmax(0, 3fr) minmax(0, 2fr);
+  gap: 20px;
+  min-height: 0;
+}
+
+/* 공통 카드 */
 .dash-card {
-  border: 1px solid #dcdcdc;
-  border-radius: 12px;
-  padding: 16px;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
+  border: 2px solid #dcdcdc;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
   color: #333;
-  background: #fff; /
+  min-height: 0;
 }
-.dash-card--fill { height: 100%; } 
 .dash-card__title {
   font-weight: 700;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.2;
+  border-bottom: 1px dashed black;
 }
 
 /* 차트 카드 */
 .dash-card--chart {
-  height: var(--row-h);
-  border: 1px solid #dcdcdc;
-  border-radius: 12px;
-  padding: 12px 16px 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
+  border: 1px solid #dcdcdc;
+  padding: 12px;
   background: #fff;
+  min-height: 0;
 }
-.dash-card__title { font-weight: 700; font-size: 16px; line-height: 1.2; }
 .dash-card__chart {
-  flex: 1;
-  min-height: 0; 
+  flex: 1 1 0;
+  min-height: 0;
 }
 
-/* 1~12월 텍스트 나열 */
-.dash-months { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 16px; }
-.dash-months__row { display: flex; justify-content: space-between; }
-.dash-months__label { font-weight: 600; }
-.dash-months__value { opacity: .9; }
-
-/* 표 (요약 통계) */
-.dash-card__table {
+/* ────────────── 월별 통계 ────────────── */
+.dash-months-table {
   width: 100%;
-  border-collapse: collapse;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #fff;
+  height: 100%; 
+  border-collapse: separate;
+  border-spacing: 0 6px;
+  table-layout: fixed; 
 }
-.dash-card__table th,
-.dash-card__table td {
-  padding: 10px 12px;
-  border-bottom: 1px solid #eee;
-  text-align: left;
-  font-size: 14px;
+.dash-months-table tbody {
+  height: 100%;
 }
-.dash-card__table th {
-  width: 100px;
+.dash-months-table tr {
+  height: 25%;
+} 
+
+.dash-months-table td {
+  padding: 4px 8px;
+  vertical-align: middle;
+}
+
+.dash-months-td {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.dash-months-td__label {
+  white-space: nowrap;
   font-weight: 600;
 }
-
-/* 인기글 리스트 */
-.dash-list { display: flex; flex-direction: column; gap: 10px; list-style: none; margin: 0; padding: 0; }
-.dash-list__item { display: flex; justify-content: space-between; align-items: center;
-  border: 1px dashed #dcdcdc; border-radius: 8px; padding: 10px 12px; }
-.dash-list__title { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 75%; }
-.dash-list__meta { opacity: .8; }
-
-/* 반응형 - 폭이 좁아지면 1열로 전환 */
-@media (max-width: 1280px) {
-  .admin-dash__row {
-    grid-template-columns: 1fr;
-  }
-  .admin-dash__right {
-    grid-template-rows: auto auto;
-  }
+.dash-months-td__dot {
+  flex: 1 1 auto;
+  border-bottom: 4px dotted #dcdcdc;
+  min-width: 8px;
 }
+.dash-months-td__value {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ───────── 최근 인기글 ───────── */
+.dash-list {
+  flex: 1 1 0; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+}
+.dash-list__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 44px; 
+  padding: 12px 12px;
+  border: 2px solid #dcdcdc;
+  border-radius: 8px;
+}
+.dash-list__title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 75%;
+  font-size: 14px;
+  line-height: 1.2;
+}
+.dash-list__meta {
+  opacity: 0.8;
+}
+
