@@ -18,6 +18,10 @@ public interface UserMapper {
 
     Optional<User> findById(@Param("userNo") long userNo);
 
+    Boolean existsByUsername(String username);
+
+    Long findUserNoByUsername(@Param("username") String username);
+
     List<User> findAll(PageRequestDto pageRequest);
 
     long countAllUsers();

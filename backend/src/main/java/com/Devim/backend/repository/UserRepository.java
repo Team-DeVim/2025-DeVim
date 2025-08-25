@@ -5,6 +5,7 @@ import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.domain.user.UserRankDto;
 import com.Devim.backend.domain.user.UserRole;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,7 @@ public interface UserRepository {
 	Optional<User> findById(long userNo);
 
 	Boolean existsByUsername(String username);
-
+	Long findUserNoByUsername(String username);
 	PageResponseDto<User> findAll(PageRequestDto pageRequest);
 
 	void update(User user);
