@@ -14,6 +14,8 @@ public interface UserRepository {
 
 	Optional<User> findById(long userNo);
 
+	Boolean existsByUsername(String username);
+
 	PageResponseDto<User> findAll(PageRequestDto pageRequest);
 
 	void update(User user);

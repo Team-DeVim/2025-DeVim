@@ -31,6 +31,12 @@ public class MyBatisUserRepository implements UserRepository {
     }
 
     @Override
+    public Boolean existsByUsername(String username) {
+        return userMapper.existsByUsername(username);
+    }
+
+
+    @Override
     public PageResponseDto<User> findAll(PageRequestDto pageRequest) {
         List<User> dtoList = userMapper.findAll(pageRequest);
         long totalCount = userMapper.countAllUsers();
