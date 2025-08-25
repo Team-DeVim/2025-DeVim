@@ -10,6 +10,7 @@
         VALUES (#{userNo}, #{id}, #{password}, #{name}, #{social}, NULL, SYSDATE, 0)
     </insert>
     
+    <!--
 	<resultMap id="UserResultMap" type="com.Devim.backend.domain.user.User">
 	    <id property="userNo" column="user_no"/>
 	    <result property="id" column="id"/>
@@ -26,25 +27,40 @@
 	    <result property="userNo" column="user_no"/>
 	    <result property="role" column="role"/>
 	</resultMap>
+    -->
 
-    <select id="findById" parameterType="long" resultMap="UserResultMap">
+    <select id="findById" parameterType="long" resultType="com.Devim.backend.domain.user.User">
         SELECT
-            u."user_no",
-            u."id",
-            u."password",
-            u."name",
-            u."social",
-            u."profile_image_path",
-            u."created_dt",
-            u."delete_flag",
-            r."role"
-        FROM "user" u
-        LEFT JOIN "user_role" r ON u."user_no" = r."user_no"
-        WHERE u."user_no" = #{userNo}
+            "user_no" AS userNo,
+            "id",
+            "password",
+            "name",
+            "social",
+            "profile_image_path" AS profileImagePath,
+            "created_dt" AS createdDt,
+            "delete_flag" AS deleteFlag,
+            "role"
+        FROM "user"
+        WHERE "user_no" = #{userNo}
+    </select>
+
+    <select id="findByUserId" parameterType="String" resultType="com.Devim.backend.domain.user.User">
+        SELECT
+            "user_no" AS userNo,
+            "id",
+            "password",
+            "name",
+            "social",
+            "profile_image_path" AS profileImagePath,
+            "created_dt" AS createdDt,
+            "delete_flag" AS deleteFlag,
+            "role"
+        FROM "user"
+        WHERE "id" = #{id}
     </select>
 
     <select id="findAll" parameterType="com.Devim.backend.domain.common.PageRequestDto" resultType="com.Devim.backend.domain.user.User">
-        SELECT "user_no" AS userNo, "id", "password", "name", "social", "profile_image_path" AS profileImagePath, "created_dt" AS createdDt, "delete_flag" AS deleteFlag
+        SELECT "user_no" AS userNo, "id", "password", "name", "social", "profile_image_path" AS profileImagePath, "created_dt" AS createdDt, "delete_flag" AS deleteFlag, "role"
         FROM "user"
         ORDER BY "user_no" DESC
         OFFSET (#{page} - 1) * #{size} ROWS FETCH NEXT #{size} ROWS ONLY
@@ -60,6 +76,7 @@
             <if test="password != null and password != ''">"password" = #{password},</if>
             <if test="name != null and name != ''">"name" = #{name},</if>
             <if test="profileImagePath != null and profileImagePath != ''">"profile_image_path" = #{profileImagePath},</if>
+            <if test="role != null and role != ''">"role" = #{role},</if>
         </set>
         WHERE "user_no" = #{userNo}
     </update>
@@ -72,10 +89,12 @@
         DELETE FROM "user" WHERE "user_no" = #{userNo}
     </delete>
 
+    <!--
     <insert id="addRole" parameterType="com.Devim.backend.domain.user.UserRole">
         INSERT INTO "user_role" ("user_no", "role")
         VALUES (#{userNo}, #{role})
     </insert>
+    -->
 
     <!-- 게시글 작성 수 TOP 5 -->
     <select id="findTop5ByBoardCount" resultType="com.Devim.backend.domain.user.UserRankDto">
