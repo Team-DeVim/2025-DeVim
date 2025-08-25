@@ -4,7 +4,6 @@ import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.domain.user.UserRankDto;
-import com.Devim.backend.domain.user.UserRole;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +13,8 @@ public interface UserRepository {
 
 	Optional<User> findById(long userNo);
 
+	Optional<User> findByUserId(String id);
+
 	PageResponseDto<User> findAll(PageRequestDto pageRequest);
 
 	void update(User user);
@@ -22,7 +23,7 @@ public interface UserRepository {
 
 	void hardDeleteById(long userNo);
 
-	void addRole(UserRole userRole);
+	// void addRole(UserRole userRole);
 
 	List<UserRankDto> findTop5ByBoardCount();
 

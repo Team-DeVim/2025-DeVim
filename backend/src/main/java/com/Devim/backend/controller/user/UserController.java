@@ -5,6 +5,7 @@ import com.Devim.backend.domain.comment.CommentListResponseDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
+import com.Devim.backend.domain.user.UserRankDto;
 import com.Devim.backend.domain.user.UserSummaryResponseDto;
 import com.Devim.backend.service.board.BoardService;
 import com.Devim.backend.service.comment.CommentService;
@@ -17,8 +18,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 @Tag(name="User Controller", description = "유저 도메인 API")
 @RestController
@@ -36,8 +36,8 @@ import java.net.URI;
 public class UserController {
 
     private final UserService userService;
-    private final BoardService boardService; // Inject BoardService
-    private final CommentService commentService; // Inject CommentService
+    private final BoardService boardService;
+    private final CommentService commentService;
 
     @Operation(summary = "사용자 생성", description = "새로운 사용자를 생성합니다.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -54,7 +54,7 @@ public class UserController {
         return ResponseEntity.created(URI.create("/api/v1/users/")).build();
     }
 
-    @Operation(summary = "사용자 단건 조회", description = "userNo로 사용자를 조회합니다.",
+    @Operation(summary = "사용자 단건 조회 (by userNo)", description = "userNo로 사용자를 조회합니다.",
             parameters = {
                     @Parameter(name = "userNo", description = "사용자 번호", required = true)
             }
@@ -65,6 +65,19 @@ public class UserController {
     @GetMapping("/{userNo}")
     public ResponseEntity<User> get(@PathVariable("userNo") Long userNo) {
         return ResponseEntity.ok(userService.get(userNo));
+    }
+
+    @Operation(summary = "사용자 단건 조회 (by id)", description = "로그인 ID로 사용자를 조회합니다.",
+            parameters = {
+                    @Parameter(name = "id", description = "로그인 ID", required = true)
+            }
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공")
+    })
+    @GetMapping("/by-id/{id}")
+    public ResponseEntity<User> getByUserId(@PathVariable("id") String id) {
+        return ResponseEntity.ok(userService.getByUserId(id));
     }
 
     @Operation(summary = "사용자 목록 조회", description = "사용자 목록을 페이지네이션하여 조회합니다.")
@@ -175,6 +188,8 @@ public class UserController {
     @Operation(summary = "사용자별 게시글 목록 조회", description = "특정 사용자가 작성한 게시글 목록을 페이지네이션하여 조회합니다.",
             parameters = {
                     @Parameter(name = "userNo", description = "사용자 번호", required = true),
+                    @Parameter(name = "page", description = "페이지 번호", required = false, example = "1"),
+                    @Parameter(name = "size", description = "페이지당 게시글 수", required = false, example = "10")
             }
     )
     @ApiResponses({
@@ -192,6 +207,8 @@ public class UserController {
     @Operation(summary = "사용자별 댓글 목록 조회", description = "특정 사용자가 작성한 댓글 목록을 페이지네이션하여 조회합니다.",
             parameters = {
                     @Parameter(name = "userNo", description = "사용자 번호", required = true),
+                    @Parameter(name = "page", description = "페이지 번호", required = false, example = "1"),
+                    @Parameter(name = "size", description = "페이지당 댓글 수", required = false, example = "10")
             }
     )
     @ApiResponses({
@@ -203,5 +220,23 @@ public class UserController {
             @PathVariable("userNo") long userNo,
             @ModelAttribute PageRequestDto pageRequestDto) {
         return ResponseEntity.ok(commentService.getCommentsByUser(userNo, pageRequestDto));
+    }
+
+    @Operation(summary = "게시글 작성수 TOP 5 사용자 조회", description = "게시글을 가장 많이 작성한 사용자 5명을 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공")
+    })
+    @GetMapping("/rank/boards")
+    public ResponseEntity<List<UserRankDto>> getTop5ByBoardCount() {
+        return ResponseEntity.ok(userService.findTop5ByBoardCount());
+    }
+
+    @Operation(summary = "댓글 작성수 TOP 5 사용자 조회", description = "댓글을 가장 많이 작성한 사용자 5명을 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공")
+    })
+    @GetMapping("/rank/comments")
+    public ResponseEntity<List<UserRankDto>> getTop5ByCommentCount() {
+        return ResponseEntity.ok(userService.findTop5ByCommentCount());
     }
 }
