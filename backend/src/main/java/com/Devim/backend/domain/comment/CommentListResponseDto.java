@@ -1,15 +1,13 @@
 package com.Devim.backend.domain.comment;
 
 import java.time.LocalDateTime;
-
 import lombok.Data;
 
 @Data
-public class CommentDto {
+public class CommentListResponseDto {
     private long commentNo;
-    private int boardNo;
     private String commentContent;
-    private String writerName; // From user table
+    private String writerName;
+    private String profileImagePath;
     private LocalDateTime createdDt;
-    private boolean deleteFlag;
 }

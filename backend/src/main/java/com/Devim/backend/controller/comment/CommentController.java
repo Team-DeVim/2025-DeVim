@@ -1,11 +1,12 @@
 package com.Devim.backend.controller.comment;
 
-import com.Devim.backend.domain.comment.Comment;
-import com.Devim.backend.domain.comment.CommentDto;
+import com.Devim.backend.domain.comment.CommentCreateRequestDto;
+import com.Devim.backend.domain.comment.CommentListResponseDto;
+import com.Devim.backend.domain.comment.CommentUpdateRequestDto;
+import com.Devim.backend.domain.comment.PageResponseDtoOfCommentListResponseDto;
 import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
-import com.Devim.backend.domain.common.PageResponseDtoOfCommentDto;
 import com.Devim.backend.service.comment.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,19 +32,20 @@ public class CommentController {
 
     @Operation(
             summary = "댓글 생성",
-            description = "새 댓글을 생성합니다.",
+            description = "새 댓글을 생성합니다. (임시: X-USER-NO 헤더로 작성자 ID 전달)",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     description = "댓글 생성 요청 바디",
-                    content = @Content(schema = @Schema(implementation = Comment.class))
+                    content = @Content(schema = @Schema(implementation = CommentCreateRequestDto.class))
             )
     )
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "생성됨 (Location 헤더 포함)")
     })
     @PostMapping
-    public ResponseEntity<Void> create(@Validated @RequestBody Comment comment) {
-        Long id = commentService.create(comment);
+    public ResponseEntity<Void> create(@Validated @RequestBody CommentCreateRequestDto requestDto,
+                                       @RequestHeader("X-USER-NO") Long userNo) {
+        Long id = commentService.create(requestDto, userNo);
         return ResponseEntity.created(URI.create("/api/v1/comments/" + id)).build();
     }
 
@@ -56,10 +58,10 @@ public class CommentController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(schema = @Schema(implementation = CommentDto.class))),
+                    content = @Content(schema = @Schema(implementation = CommentListResponseDto.class))),
     })
     @GetMapping("/{commentNo}")
-    public ResponseEntity<CommentDto> get(@PathVariable("commentNo") Long commentNo) {
+    public ResponseEntity<CommentListResponseDto> get(@PathVariable("commentNo") Long commentNo) {
         return ResponseEntity.ok(commentService.get(commentNo));
     }
 
@@ -72,10 +74,10 @@ public class CommentController {
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "성공",
-                    content = @Content(schema = @Schema(implementation = PageResponseDtoOfCommentDto.class)))
+                    content = @Content(schema = @Schema(implementation = PageResponseDtoOfCommentListResponseDto.class)))
     })
     @GetMapping
-    public ResponseEntity<PageResponseDto<CommentDto>> listByBoard(@RequestParam("boardNo") Long boardNo,
+    public ResponseEntity<PageResponseDto<CommentListResponseDto>> listByBoard(@RequestParam("boardNo") Long boardNo,
                                                                    @ModelAttribute PageRequestDto pageRequestDto) {
         return ResponseEntity.ok(commentService.listByBoard(boardNo, pageRequestDto));
     }
@@ -89,7 +91,7 @@ public class CommentController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     description = "수정할 댓글(부분 필드만 포함 가능)",
-                    content = @Content(schema = @Schema(implementation = Comment.class))
+                    content = @Content(schema = @Schema(implementation = CommentUpdateRequestDto.class))
             )
     )
     @ApiResponses({
@@ -97,9 +99,8 @@ public class CommentController {
     })
     @PatchMapping("/{commentNo}")
     public ResponseEntity<Void> update(@PathVariable("commentNo") Long commentNo,
-                                       @Validated @RequestBody Comment comment) {
-        comment.setCommentNo(commentNo);
-        commentService.update(comment);
+                                       @Validated @RequestBody CommentUpdateRequestDto requestDto) {
+        commentService.update(commentNo, requestDto);
         return ResponseEntity.noContent().build();
     }
 
@@ -113,13 +114,16 @@ public class CommentController {
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "삭제됨"),
     })
-        @DeleteMapping("/{commentNo}")
+    @DeleteMapping("/{commentNo}")
     public ResponseEntity<Void> delete(@PathVariable("commentNo") Long commentNo) {
         commentService.delete(commentNo);
         return ResponseEntity.noContent().build();
     }
 
-//    swagger 추가 필요
+    @Operation(summary = "월별 댓글 수 조회", description = "월별 댓글 작성 수를 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공")
+    })
     @GetMapping("/monthly-counts")
     public ResponseEntity<List<MonthlyCountDto>> getMonthlyCommentCounts() {
         return ResponseEntity.ok(commentService.countMonthlyComments());

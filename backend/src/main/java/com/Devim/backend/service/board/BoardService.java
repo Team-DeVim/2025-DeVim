@@ -1,7 +1,9 @@
 package com.Devim.backend.service.board;
 
-import com.Devim.backend.domain.board.Board;
-import com.Devim.backend.domain.board.BoardDto;
+import com.Devim.backend.domain.board.BoardCreateRequestDto;
+import com.Devim.backend.domain.board.BoardDetailResponseDto;
+import com.Devim.backend.domain.board.BoardListResponseDto;
+import com.Devim.backend.domain.board.BoardUpdateRequestDto;
 import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
@@ -9,22 +11,22 @@ import com.Devim.backend.domain.common.PageResponseDto;
 import java.util.List;
 
 public interface BoardService {
-    Long create(Board board);
+    Long create(BoardCreateRequestDto requestDto, Long userNo);
 
-    BoardDto get(Long boardNo);
+    BoardDetailResponseDto get(Long boardNo, Long currentUserNo);
 
     // boardTypeNo는 필수가 아닌 선택값인데 int는 원시타입으로 null을 가질 수 없기 때문에 Integer 사용
-    PageResponseDto<BoardDto> list(PageRequestDto pageRequestDto, Integer boardTypeNo);
+    PageResponseDto<BoardListResponseDto> list(PageRequestDto pageRequestDto, Integer boardTypeNo, Long userNo);
 
-    PageResponseDto<BoardDto> search(String title, PageRequestDto pageRequestDto);
+    PageResponseDto<BoardListResponseDto> search(String title, PageRequestDto pageRequestDto);
 
-    List<BoardDto> listPopular(int limit);
+    List<BoardListResponseDto> listPopular(int limit);
 
-    void update(Board board);
+    void update(Long boardNo, BoardUpdateRequestDto requestDto);
 
     void delete(Long boardNo);
 
-    List<BoardDto> getRecent(Integer boardTypeNo, int limit);
+    List<BoardListResponseDto> getRecent(Integer boardTypeNo, int limit);
 
     List<MonthlyCountDto> countMonthlyPosts();
 }
