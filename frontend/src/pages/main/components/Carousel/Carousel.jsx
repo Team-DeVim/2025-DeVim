@@ -8,10 +8,9 @@ import image4 from "./CarouselImages/image4.jpg";
 export default function Carousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const cacheRef = useRef([]);
-	const trackRef = useRef(null);
 	const images = [image1, image2, image3, image4];
 
-  // 이미지 캐시저장???
+  // 이미지 캐시저장
   useEffect(() => {
     cacheRef.current = images.map((src) => {
       const img = new Image();
@@ -39,7 +38,7 @@ export default function Carousel() {
           <img
             key={index}
             src={src}
-            alt={`carousel-${index}`}
+            슬라이드이미지={`carousel-${index}`}
             className="carousel__image"
           />
         ))}
@@ -56,7 +55,7 @@ export default function Carousel() {
               onClick={() => setCurrentIndex(i)}
             >
               <span className="carousel__icon">
-                {currentIndex == i ? "■" : "□"}
+                {currentIndex === i ? "■" : "□"}
               </span>
             </button>
           );

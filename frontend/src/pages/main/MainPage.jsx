@@ -7,7 +7,7 @@ import Sidebar from "./components/Sidebar";
 import "./MainPage.css";
 
 function MainPage() {
-  return (
+	return (
     <div className="main">
       <Header />
       <section className="hero">
