@@ -23,11 +23,7 @@
         FROM "user"
         WHERE "user_no" = #{userNo}
     </select>
-    <!-- UserRole 매핑 제거 (안 써도 됨) -->
-    <!-- <resultMap id="userRoleResultMap" type="com.Devim.backend.domain.user.UserRole">
-        <result property="userNo" column="user_no"/>
-        <result property="role"   column="role"/>
-    </resultMap> -->
+
 
     <resultMap id="userResultMap" type="com.Devim.backend.domain.user.User">
         <id     property="userNo"           column="user_no"/>
@@ -54,18 +50,12 @@
         WHERE "id" = #{username}
     </select>
 
-    <select id="findRolesMergedByUserNo" parameterType="long" resultType="com.Devim.backend.domain.user.UserRole">
+    <select id="findRolesMergedByUserNo" parameterType="long"
+            resultType="com.Devim.backend.domain.user.UserRole">
         SELECT ur."user_no" AS userNo, ur."role" AS role
         FROM "user_role" ur
         WHERE ur."user_no" = #{userNo}
-        UNION
-        SELECT u."user_no" AS userNo, u."role" AS role
-        FROM "user" u
-        WHERE u."user_no" = #{userNo}
-          AND u."role" IS NOT NULL
     </select>
-
-
 
 
 
