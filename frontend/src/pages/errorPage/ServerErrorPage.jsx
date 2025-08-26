@@ -6,7 +6,7 @@ export default function ServerErrorPage() {
     <main className="error-page error-page--server">
       <section className="error-page__card" role="alert" aria-live="polite">
         <h1 className="error-page__title">
-          <span className="error-page__code">5xx</span> 문제가 발생했어요
+          <span className="error-page__code">서버에 문제가 발생했어요</span>
         </h1>
         <p className="error-page__desc">
           잠시 후 다시 시도해 주세요. 문제가 계속되면 관리자에게 문의 주세요.
