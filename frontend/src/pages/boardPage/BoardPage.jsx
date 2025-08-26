@@ -26,7 +26,7 @@ function BoardPage() {
         }
     }, [sp, setSp]);
 
-    const page = Number(sp.get("page") ?? 1);  // URL 표시는 1-based라면
+    const page = Number(sp.get("page") ?? 1);
     const size = Number(sp.get("size") ?? 7);
     const boardTypeNo = sp.get("boardTypeNo") != null ? Number(sp.get("boardTypeNo")) : undefined;
 
@@ -58,7 +58,6 @@ function BoardPage() {
                 setError("글을 불러오지 못했습니다.");
             })
             .finally(() => setLoading(false));
-
         return () => controller.abort();
     }, [page, size, boardTypeNo]);
 
