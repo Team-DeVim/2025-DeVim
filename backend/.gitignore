@@ -331,6 +331,7 @@ gradle-app.setting
 # config files
 db-credentials.yml
 file-path.yml
+jwt.yml
 
 # upload files
 upload/
