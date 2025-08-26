@@ -50,20 +50,14 @@ public class JWTUtil {
 
 
 
-    public String createJwt(Long userNo, List<UserRole> roles, Long expiredMs) {
-
-        List<String> roleNames = roles.stream()
-                .map(UserRole::getRole)
-                .toList();
-
+    public String createJwt(Long userNo, List<String> roleNames, Long expiredMs) {
         return Jwts.builder()
                 .claim("userNo", userNo)
                 .claim("roles", roleNames)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                .setExpiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
                 .compact();
     }
-
 
 }

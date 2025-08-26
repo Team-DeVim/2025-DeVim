@@ -29,7 +29,6 @@ public class SecurityConfig {
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
-
         return new BCryptPasswordEncoder();
     }
 
@@ -44,6 +43,7 @@ public class SecurityConfig {
         //http basic 인증 방식 disable
         http
                 .httpBasic((auth) -> auth.disable());
+
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth

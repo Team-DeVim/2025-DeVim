@@ -23,11 +23,11 @@
         FROM "user"
         WHERE "user_no" = #{userNo}
     </select>
-
-    <resultMap id="userRoleResultMap" type="com.Devim.backend.domain.user.UserRole">
+    <!-- UserRole 매핑 제거 (안 써도 됨) -->
+    <!-- <resultMap id="userRoleResultMap" type="com.Devim.backend.domain.user.UserRole">
         <result property="userNo" column="user_no"/>
         <result property="role"   column="role"/>
-    </resultMap>
+    </resultMap> -->
 
     <resultMap id="userResultMap" type="com.Devim.backend.domain.user.User">
         <id     property="userNo"           column="user_no"/>
@@ -39,9 +39,9 @@
         <result property="createdDt"        column="created_dt"  jdbcType="TIMESTAMP"/>
         <result property="deleteFlag"       column="delete_flag" jdbcType="NUMERIC"   javaType="boolean"/>
 
+        <!-- 여기서 select만 사용 -->
         <collection property="roleList"
                     ofType="com.Devim.backend.domain.user.UserRole"
-                    resultMap="userRoleResultMap"
                     column="user_no"
                     select="findRolesMergedByUserNo"/>
     </resultMap>
@@ -50,22 +50,23 @@
         SELECT
             "user_no", "id", "password", "name",
             "social", "profile_image_path", "created_dt", "delete_flag"
-        -- 주의: 여기서는 user.role을 직접 매핑하지 않고,
-        -- 아래 findRolesMergedByUserNo에서 roleList로 합쳐서 가져온다.
         FROM "user"
         WHERE "id" = #{username}
     </select>
 
-    <select id="findRolesMergedByUserNo" parameterType="long" resultMap="userRoleResultMap">
-        SELECT ur."user_no", ur."role"
+    <select id="findRolesMergedByUserNo" parameterType="long" resultType="com.Devim.backend.domain.user.UserRole">
+        SELECT ur."user_no" AS userNo, ur."role" AS role
         FROM "user_role" ur
         WHERE ur."user_no" = #{userNo}
         UNION
-        SELECT u."user_no", u."role"
+        SELECT u."user_no" AS userNo, u."role" AS role
         FROM "user" u
         WHERE u."user_no" = #{userNo}
           AND u."role" IS NOT NULL
     </select>
+
+
+
 
 
     <select id="existsByUsername" parameterType="string" resultType="boolean">
