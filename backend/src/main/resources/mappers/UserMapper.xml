@@ -80,6 +80,27 @@
                "profile_image_path" AS profileImagePath,
                "created_dt"         AS createdDt,
                "delete_flag"        AS deleteFlag
+
+    
+
+    <select id="findByUserId" parameterType="String" resultType="com.Devim.backend.domain.user.User">
+        SELECT
+            "user_no" AS userNo,
+            "id",
+            "password",
+            "name",
+            "social",
+            "profile_image_path" AS profileImagePath,
+            "created_dt" AS createdDt,
+            "delete_flag" AS deleteFlag,
+            "role"
+        FROM "user"
+        WHERE "id" = #{id}
+    </select>
+
+    <select id="findAll" parameterType="com.Devim.backend.domain.common.PageRequestDto" resultType="com.Devim.backend.domain.user.User">
+        SELECT "user_no" AS userNo, "id", "password", "name", "social", "profile_image_path" AS profileImagePath, "created_dt" AS createdDt, "delete_flag" AS deleteFlag
+
         FROM "user"
         ORDER BY "user_no" DESC
         OFFSET (#{page} - 1) * #{size} ROWS FETCH NEXT #{size} ROWS ONLY
@@ -118,6 +139,7 @@
         INSERT INTO "user_role" ("user_no", "role")
         VALUES (#{userNo}, #{role})
     </insert>
+ 
 
     <!-- 게시글 작성 수 TOP 5 -->
     <select id="findTop5ByBoardCount" resultType="com.Devim.backend.domain.user.UserRankDto">

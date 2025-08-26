@@ -18,4 +18,7 @@ public class User {
 	private LocalDateTime createdDt;
 	private boolean deleteFlag;
 	private List<UserRole> roleList;
+	
+	
+	
 }

@@ -31,19 +31,42 @@ function toMonthlySeries(rows, { months = 12, end = new Date() } = {}) {
   });
 }
 
-/* 1~12월 텍스트 나열 */
-function MonthlyCounts({ series }) {
+/* 월별 통계 요약 */
+function MonthlyTable({ series }) {
+  const cells = [...(series || [])].slice(0, 12).map((d) => ({
+    label: `${d.month}월`,
+    value: d.count,
+    key: d.key,
+  }));
+  while (cells.length < 12)
+    cells.push({ label: "", value: "", key: `pad-${cells.length}` });
+
+  // 3열로 나누기 (4행)
+  const rows = [];
+  for (let i = 0; i < 12; i += 3) rows.push(cells.slice(i, i + 3));
+
   return (
-    <div className="dash-months">
-      {series.map((d) => (
-        <div key={d.key} className="dash-months__row">
-          <span className="dash-months__label">{d.month}월</span>
-          <span className="dash-months__value">
-            {d.count.toLocaleString()}개
-          </span>
-        </div>
-      ))}
-    </div>
+    <table className="dash-months-table">
+      <tbody>
+        {rows.map((r, i) => (
+          <tr key={i}>
+            {r.map((c, j) => (
+              <td key={`${i}-${j}`}>
+                <div className="dash-months-td">
+                  <span className="dash-months-td__label">{c.label}</span>
+                  <span className="dash-months-td__dot" />
+                  <span className="dash-months-td__value">
+                    {c.value === ""
+                      ? ""
+                      : `${Number(c.value).toLocaleString()}개`}
+                  </span>
+                </div>
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 
@@ -51,7 +74,7 @@ function MonthlyCounts({ series }) {
 function PopularList({ items }) {
   return (
     <ul className="dash-list">
-      {(items || []).map((it) => (
+      {(items || []).slice(0, 4).map((it) => (
         <li key={it.id} className="dash-list__item">
           <span className="dash-list__title">{it.title}</span>
           <span className="dash-list__meta">❤ {it.like}</span>
@@ -97,7 +120,7 @@ export default function DashboardPage() {
   const [popularPosts, setPopularPosts] = useState([]);
 
   useEffect(() => {
-    // ── MOCK: 서버에서 [{year, month, count}] 내려온다고 가정 ──
+    // MOCK
     const postRows = [
       { year: 2025, month: 1, count: 120 },
       { year: 2025, month: 2, count: 98 },
@@ -138,38 +161,29 @@ export default function DashboardPage() {
 
   return (
     <div className="admin-dash">
-      {/* 상단: 게시물 */}
-      <section className="admin-dash__row">
-        <div className="admin-dash__left">
-          <ChartCard title="월별 게시물 개수" data={postMonthly} />
-        </div>
-        <div className="admin-dash__right">
-          <div className="dash-card dash-card--fill">
-            <div className="dash-card__title">게시물 통계 요약</div>
-            <MonthlyCounts series={postMonthly} />
-          </div>
-          <div className="dash-card dash-card--fill">
-            <div className="dash-card__title">최근 인기글</div>
-            <PopularList items={popularPosts} />
-          </div>
-        </div>
-      </section>
+      {/* 왼쪽: 차트 2개 (1:1) */}
+      <div className="admin-dash__left">
+        <ChartCard title="월별 게시물 개수" data={postMonthly} />
+        <ChartCard title="월별 댓글 개수" data={commentMonthly} />
+      </div>
 
-      {/* 하단: 댓글 */}
-      <section className="admin-dash__row">
-        <div className="admin-dash__left">
-          <ChartCard title="월별 댓글 개수" data={commentMonthly} />
+      {/* 오른쪽: 2 : 3 : 2 */}
+      <div className="admin-dash__right">
+        <div className="dash-card">
+          <div className="dash-card__title">게시물 통계 요약</div>
+          <MonthlyTable series={postMonthly} />
         </div>
-        <div className="admin-dash__right">
-          <div className="dash-card dash-card--fill">
-            <div className="dash-card__title">댓글 통계 요약</div>
-            <MonthlyCounts series={commentMonthly} />
-          </div>
-          <div className="dash-card dash-card--fill dash-card--empty">
-            <div className="dash-card__title">위젯 자리 (추가 예정)</div>
-          </div>
+
+        <div className="dash-card">
+          <div className="dash-card__title">최근 인기글</div>
+          <PopularList items={popularPosts} />
         </div>
-      </section>
+
+        <div className="dash-card">
+          <div className="dash-card__title">댓글 통계 요약</div>
+          <MonthlyTable series={commentMonthly} />
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,18 +1,19 @@
 CREATE TABLE "user" (
   "user_no" number PRIMARY KEY,
   "id" varchar2(50) NOT NULL,
-  "password" varchar2(50) NOT NULL,
+  "password" varchar2(255) NOT NULL,
   "name" varchar2(50) NOT NULL,
   "social" number NOT NULL,
   "profile_image_path" varchar2(255),
   "created_dt" date NOT NULL,
-  "delete_flag" number NOT NULL
+  "delete_flag" number NOT NULL,
+  "role" varchar2(50) DEFAULT 'MEMBER' NOT NULL
 );
 
-CREATE TABLE "user_role" (
-  "user_no" number NOT NULL,
-  "role" varchar2(50) NOT NULL
-);
+--CREATE TABLE "user_role" (
+--  "user_no" number NOT NULL,
+--  "role" varchar2(50) NOT NULL
+--);
 
 CREATE TABLE "board" (
   "board_no" number PRIMARY KEY,
@@ -74,16 +75,19 @@ create sequence "seq_comment_no";
 create sequence "seq_like_no";
 create sequence "seq_main_image_no";
 
---INSERT INTO "board_type" (
---    "board_type_no",
---    "board_name"
---) VALUES ( 1, '자유게시판' );
---INSERT INTO "board_type" (
---    "board_type_no",
---    "board_name"
---) VALUES ( 2, '질문게시판' );
---INSERT INTO "board_type" (
---    "board_type_no",
---    "board_name"
---) VALUES ( 3, '공지사항' );
+INSERT INTO "board_type" (
+    "board_type_no",
+    "board_name"
+) VALUES ( 1, '자유게시판' );
+INSERT INTO "board_type" (
+    "board_type_no",
+    "board_name"
+) VALUES ( 2, '질문게시판' );
+INSERT INTO "board_type" (
+    "board_type_no",
+    "board_name"
+) VALUES ( 3, '공지사항' );
+
+INSERT INTO "user_role" ("user_no", "role")
+VALUES (1, 'ADMIN');
 

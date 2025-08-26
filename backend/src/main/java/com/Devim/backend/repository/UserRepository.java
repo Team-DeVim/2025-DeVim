@@ -4,7 +4,6 @@ import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.domain.user.UserRankDto;
-import com.Devim.backend.domain.user.UserRole;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +14,10 @@ public interface UserRepository {
     Optional<User> findById(long userNo);
 
     Boolean existsByUsername(String username);
+  
+  	Optional<User> findByUserId(String id); 
+
+	PageResponseDto<User> findAll(PageRequestDto pageRequest);
 
     Long findUserNoByUsername(String username);
 

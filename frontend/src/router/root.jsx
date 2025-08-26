@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { lazy } from "react";
 import AdminPage from "../pages/adminPage/AdminPage";
 
+
 const MainPage = lazy(() => import("../pages/main/MainPage"));
 const Register = lazy(() => import("../pages/SignUpRegister/Register"));
 const SignUp = lazy(() => import("../pages/SignUpRegister/SignUp"));
@@ -14,6 +15,8 @@ const UsersPage = lazy(() => import("../pages/adminPage/routes/UsersPage"));
 const UserDetailPage = lazy(() => import("../pages/adminPage/routes/UserDetailPage"));
 const EditorPage = lazy(() => import("../pages/editorPage/EditorPage"));
 const UsersSmokeTest = lazy(() => import("../pages/apiTestPage/UsersSmokeTest"));
+const DashboardPage = lazy(() => import("../pages/adminPage/routes/DashboardPage"));
+
 
 const root = createBrowserRouter([
   {
@@ -53,7 +56,7 @@ const root = createBrowserRouter([
         ),
       },
       {
-        path: "profilePage",
+        path: "profilePage/:userNo",
         element: (
           <Suspense>
             <ProfilePage />
@@ -74,6 +77,7 @@ const root = createBrowserRouter([
         children: [
           { path: "users", element: <UsersPage /> },
           { path: "users/:userNo", element: <UserDetailPage /> },
+          { path: "dashboard", element: <DashboardPage /> },
         ],
       },
       {

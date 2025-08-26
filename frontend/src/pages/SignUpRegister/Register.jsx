@@ -259,7 +259,7 @@ export default function Register() {
             />
             <div className="register__suffix--email">@naver.com</div>
           </div>
-
+          {idError && <p className="register__error-message">{idError}</p>}
           <div className="register__group--password">
             <i className="register__icon fa-solid fa-lock"></i>
             <input
@@ -271,7 +271,6 @@ export default function Register() {
             />
           </div>
 
-          {idError && <p className="register__error-message">{idError}</p>}
           {passwordError && (
             <p className="register__error-message">{passwordError}</p>
           )}
@@ -298,8 +297,8 @@ export default function Register() {
               max={new Date().toISOString().split("T")[0]}
             />
           </div>
-
           {nameError && <p className="register__error-message">{nameError}</p>}
+
           {birthError && (
             <p className="register__error-message">{birthError}</p>
           )}
