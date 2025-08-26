@@ -46,10 +46,6 @@ public class JWTUtil {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
 
-
-
-
-
     public String createJwt(Long userNo, List<String> roleNames, Long expiredMs) {
         return Jwts.builder()
                 .claim("userNo", userNo)
@@ -59,5 +55,4 @@ public class JWTUtil {
                 .signWith(secretKey)
                 .compact();
     }
-
 }

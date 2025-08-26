@@ -1,5 +1,6 @@
 package com.Devim.backend.config.security;
 
+import com.Devim.backend.jwt.JWTFilter;
 import com.Devim.backend.jwt.JWTUtil;
 import com.Devim.backend.jwt.LoginFilter;
 import lombok.RequiredArgsConstructor;
@@ -47,9 +48,12 @@ public class SecurityConfig {
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/login", "/", "/sign-up").permitAll()
+                        .requestMatchers("/login",   "/", "/sign-up").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
+
                         .anyRequest().authenticated());
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class);
 

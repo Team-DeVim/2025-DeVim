@@ -17,6 +17,5 @@ public class User {
 	private String profileImagePath;
 	private LocalDateTime createdDt;
 	private boolean deleteFlag;
-	
 	private List<UserRole> roleList;
 }
