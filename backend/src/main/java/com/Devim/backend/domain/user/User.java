@@ -1,7 +1,6 @@
 package com.Devim.backend.domain.user;
 
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,8 +16,11 @@ public class User {
 	private String name;
 	private boolean social;
 	private String profileImagePath;
-	private Date createdDt;
+	private LocalDateTime createdDt;
 	private boolean deleteFlag;
 	
-	private List<UserRole> roleList;
+	private String role;
+	
+	//private List<UserRole> roleList = new ArrayList<>();
+	
 }

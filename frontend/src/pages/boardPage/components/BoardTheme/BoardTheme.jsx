@@ -1,15 +1,25 @@
 import React from "react";
 import "./BoardTheme.css";
 
-/** "free" | "qna" */
-const currentBoardVariant = "qna"; 
+export default function BoardTheme({ boardTypeNo }) {
+  let boardTitle = "";
+  if (boardTypeNo === 1) {
+    boardTitle = "자유게시판";
+  } else if (boardTypeNo === 2) {
+    boardTitle = "Q&A 게시판";
+  } else {
+    boardTitle = "공지사항";
+  }
 
-const boardTitle =
-  currentBoardVariant === "free" ? "자유게시판" : "Q&A 게시판";
+  let boardSubtitle = "";
+  if (boardTypeNo === 1) {
+    boardSubtitle = "다양한 주제로 생각을 넓혀보세요"
+  } else if (boardTypeNo === 2) {
+    boardSubtitle = "각 분야 코딩러들에게 힘을 빌려보세요";
+  } else {
+    boardSubtitle = "Devim에서 알려드립니다";
+  }
 
-const boardSubtitle = "다양한 주제로 생각을 넓혀보세요";
-
-export default function BoardTheme() {
   return (
     <section className="boardTheme">
       <div className="boardTheme__titleRow">

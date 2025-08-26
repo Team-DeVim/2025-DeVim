@@ -30,6 +30,11 @@ public class MyBatisUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByUserId(String id) {
+        return userMapper.findByUserId(id);
+    }
+
+    @Override
     public PageResponseDto<User> findAll(PageRequestDto pageRequest) {
         List<User> dtoList = userMapper.findAll(pageRequest);
         long totalCount = userMapper.countAllUsers();
@@ -47,6 +52,18 @@ public class MyBatisUserRepository implements UserRepository {
     }
 
     @Override
+    public void hardDeleteById(long userNo) {
+        userMapper.hardDeleteById(userNo);
+    }
+
+    /*
+    @Override
+    public void addRole(UserRole userRole) {
+        userMapper.addRole(userRole);
+    }
+    */
+
+    @Override
     public List<UserRankDto> findTop5ByBoardCount() {
         return userMapper.findTop5ByBoardCount();
     }
@@ -54,5 +71,15 @@ public class MyBatisUserRepository implements UserRepository {
     @Override
     public List<UserRankDto> findTop5ByCommentCount() {
         return userMapper.findTop5ByCommentCount();
+    }
+
+    @Override
+    public long countBoardsByUser(long userNo) {
+        return userMapper.countBoardsByUser(userNo);
+    }
+
+    @Override
+    public long countCommentsByUser(long userNo) {
+        return userMapper.countCommentsByUser(userNo);
     }
 }

@@ -11,71 +11,111 @@
     </insert>
 
 	<!-- user 테이블과 join하여 name 출력 -->
-    <select id="findById" parameterType="long" resultType="com.Devim.backend.domain.board.BoardDto">
+    <select id="findById" parameterType="map" resultType="com.Devim.backend.domain.board.BoardDetailResponseDto">
         SELECT
             b."board_no" AS boardNo,
             b."board_type_no" AS boardTypeNo,
             b."title",
             b."board_content" AS boardContent,
             u."name" AS writerName,
+            u."profile_image_path" AS profileImagePath,
             b."created_dt" AS createdDt,
-            b."delete_flag" AS deleteFlag,
-            NVL(COUNT(l."like_no"), 0) AS likeCount
+            NVL(l.like_count, 0) AS likeCount,
+            NVL(c.comment_count, 0) AS commentCount,
+            CASE WHEN EXISTS (
+                SELECT 1 FROM "likes"
+                WHERE "target_id" = b."board_no"
+                  AND "target_type" = 'board'
+                  <if test="currentUserNo != null">
+                      AND "user_no" = #{currentUserNo}
+                  </if>
+            ) THEN 1 ELSE 0 END AS isLiked
         FROM "board" b
         JOIN "user" u ON b."writer" = u."user_no"
-        LEFT JOIN "likes" l ON b."board_no" = l."target_id" AND l."target_type" = 'board'
+        LEFT JOIN (
+            SELECT "target_id", COUNT(*) AS like_count
+            FROM "likes"
+            WHERE "target_type" = 'board'
+            GROUP BY "target_id"
+        ) l ON b."board_no" = l."target_id"
+        LEFT JOIN (
+            SELECT "board_no", COUNT(*) AS comment_count
+            FROM "comment"
+            GROUP BY "board_no"
+        ) c ON b."board_no" = c."board_no"
         WHERE b."board_no" = #{boardNo} AND b."delete_flag" = 0
-        GROUP BY b."board_no", b."board_type_no", b."title", b."board_content", u."name", b."created_dt", b."delete_flag"
     </select>
 
-    <select id="findAll" parameterType="map" resultType="com.Devim.backend.domain.board.BoardDto">
+    <select id="findAll" parameterType="map" resultType="com.Devim.backend.domain.board.BoardListResponseDto">
         SELECT
             b."board_no" AS boardNo,
             b."board_type_no" AS boardTypeNo,
             b."title",
-            b."board_content" AS boardContent,
             u."name" AS writerName,
+            u."profile_image_path" AS profileImagePath,
             b."created_dt" AS createdDt,
-            b."delete_flag" AS deleteFlag,
-            NVL(COUNT(l."like_no"), 0) AS likeCount
+            NVL(l.like_count, 0) AS likeCount,
+            NVL(c.comment_count, 0) AS commentCount
         FROM "board" b
         JOIN "user" u ON b."writer" = u."user_no"
-        LEFT JOIN "likes" l ON b."board_no" = l."target_id" AND l."target_type" = 'board'
+        LEFT JOIN (
+            SELECT "target_id", COUNT(*) AS like_count
+            FROM "likes"
+            WHERE "target_type" = 'board'
+            GROUP BY "target_id"
+        ) l ON b."board_no" = l."target_id"
+        LEFT JOIN (
+            SELECT "board_no", COUNT(*) AS comment_count
+            FROM "comment"
+            GROUP BY "board_no"
+        ) c ON b."board_no" = c."board_no"
         WHERE b."delete_flag" = 0
         <if test="boardTypeNo != null">
             AND b."board_type_no" = #{boardTypeNo}
         </if>
-        GROUP BY b."board_no", b."board_type_no", b."title", b."board_content", u."name", b."created_dt", b."delete_flag"
         ORDER BY b."board_no" DESC
         OFFSET (#{pageRequest.page} - 1) * #{pageRequest.size} ROWS FETCH NEXT #{pageRequest.size} ROWS ONLY
     </select>
 
+	<!-- Page 처리 시 totalCount를 위해 필요 -->
     <select id="countAll" parameterType="map" resultType="long">
         SELECT COUNT(*) FROM "board"
         WHERE "delete_flag" = 0
         <if test="boardTypeNo != null">
             AND "board_type_no" = #{boardTypeNo}
         </if>
+        <if test="userNo != null">
+            AND "writer" = #{userNo}
+        </if>
     </select>
 
-    <select id="searchByTitle" parameterType="map" resultType="com.Devim.backend.domain.board.BoardDto">
+    <select id="searchByTitle" parameterType="map" resultType="com.Devim.backend.domain.board.BoardListResponseDto">
         SELECT
             b."board_no" AS boardNo,
             b."board_type_no" AS boardTypeNo,
             b."title",
-            b."board_content" AS boardContent,
             u."name" AS writerName,
+            u."profile_image_path" AS profileImagePath,
             b."created_dt" AS createdDt,
-            b."delete_flag" AS deleteFlag,
-            NVL(COUNT(l."like_no"), 0) AS likeCount
+            NVL(l.like_count, 0) AS likeCount,
+            NVL(c.comment_count, 0) AS commentCount
         FROM "board" b
         JOIN "user" u ON b."writer" = u."user_no"
-        LEFT JOIN "likes" l ON b."board_no" = l."target_id" AND l."target_type" = 'board'
+        LEFT JOIN (
+            SELECT "target_id", COUNT(*) AS like_count
+            FROM "likes"
+            WHERE "target_type" = 'board'
+            GROUP BY "target_id"
+        ) l ON b."board_no" = l."target_id"
+        LEFT JOIN (
+            SELECT "board_no", COUNT(*) AS comment_count
+            FROM "comment"
+            GROUP BY "board_no"
+        ) c ON b."board_no" = c."board_no"
         WHERE b."delete_flag" = 0
         <if test="title != null and title != ''">
             AND b."title" LIKE '%' || #{title} || '%'
         </if>
-        GROUP BY b."board_no", b."board_type_no", b."title", b."board_content", u."name", b."created_dt", b."delete_flag"
         ORDER BY b."board_no" DESC
         OFFSET (#{pageRequest.page} - 1) * #{pageRequest.size} ROWS FETCH NEXT #{pageRequest.size} ROWS ONLY
     </select>
@@ -88,23 +128,32 @@
         </if>
     </select>
 
-    <select id="findPopularBoards" parameterType="int" resultType="com.Devim.backend.domain.board.BoardDto">
+    <select id="findPopularBoards" parameterType="int" resultType="com.Devim.backend.domain.board.BoardListResponseDto">
         SELECT
             b."board_no" AS boardNo,
             b."board_type_no" AS boardTypeNo,
             b."title",
-            b."board_content" AS boardContent,
             u."name" AS writerName,
+            u."profile_image_path" AS profileImagePath,
             b."created_dt" AS createdDt,
-            b."delete_flag" AS deleteFlag,
-            NVL(COUNT(l."like_no"), 0) AS likeCount
+            NVL(l.like_count, 0) AS likeCount,
+            NVL(c.comment_count, 0) AS commentCount
         FROM "board" b
         JOIN "user" u ON b."writer" = u."user_no"
-        LEFT JOIN "likes" l ON b."board_no" = l."target_id" AND l."target_type" = 'board'
+        LEFT JOIN (
+            SELECT "target_id", COUNT(*) AS like_count
+            FROM "likes"
+            WHERE "target_type" = 'board'
+            GROUP BY "target_id"
+        ) l ON b."board_no" = l."target_id"
+        LEFT JOIN (
+            SELECT "board_no", COUNT(*) AS comment_count
+            FROM "comment"
+            GROUP BY "board_no"
+        ) c ON b."board_no" = c."board_no"
         WHERE b."delete_flag" = 0
-        GROUP BY b."board_no", b."board_type_no", b."title", b."board_content", u."name", b."created_dt", b."delete_flag"
         ORDER BY likeCount DESC, b."board_no" DESC
-        FETCH NEXT #{limit} ROWS ONLY
+        FETCH FIRST #{limit} ROWS ONLY
     </select>
 
     <update id="update" parameterType="com.Devim.backend.domain.board.Board">
@@ -121,16 +170,29 @@
         UPDATE "board" SET "delete_flag" = 1 WHERE "board_no" = #{boardNo}
     </update>
 
-    <select id="findRecent" parameterType="map" resultType="com.Devim.backend.domain.board.BoardDto">
+    <select id="findRecent" parameterType="map" resultType="com.Devim.backend.domain.board.BoardListResponseDto">
         SELECT
             b."board_no" AS boardNo,
             b."board_type_no" AS boardTypeNo,
             b."title",
             u."name" AS writerName,
+            u."profile_image_path" AS profileImagePath,
             b."created_dt" AS createdDt,
-            (SELECT COUNT(*) FROM "likes" l WHERE l."target_id" = b."board_no" AND l."target_type" = 'board') AS likeCount
+            NVL(l.like_count, 0) AS likeCount,
+            NVL(c.comment_count, 0) AS commentCount
         FROM "board" b
-                 JOIN "user" u ON b."writer" = u."user_no"
+        JOIN "user" u ON b."writer" = u."user_no"
+        LEFT JOIN (
+            SELECT "target_id", COUNT(*) AS like_count
+            FROM "likes"
+            WHERE "target_type" = 'board'
+            GROUP BY "target_id"
+        ) l ON b."board_no" = l."target_id"
+        LEFT JOIN (
+            SELECT "board_no", COUNT(*) AS comment_count
+            FROM "comment"
+            GROUP BY "board_no"
+        ) c ON b."board_no" = c."board_no"
         WHERE b."delete_flag" = 0
           AND b."board_type_no" = #{boardTypeNo}
         ORDER BY b."board_no" DESC
@@ -139,12 +201,12 @@
 
     <select id="countMonthlyPosts" resultType="MonthlyCountDto">
         SELECT
-            EXTRACT(YEAR FROM created_dt) AS year,
-            EXTRACT(MONTH FROM created_dt) AS month,
+            EXTRACT(YEAR FROM "created_dt") AS year,
+            EXTRACT(MONTH FROM "created_dt") AS month,
             COUNT(*) AS count
         FROM "board"
-        WHERE delete_flag = 0
-        GROUP BY EXTRACT(YEAR FROM created_dt), EXTRACT(MONTH FROM created_dt)
+        WHERE "delete_flag" = 0
+        GROUP BY EXTRACT(YEAR FROM "created_dt"), EXTRACT(MONTH FROM "created_dt")
         ORDER BY year ASC, month ASC
     </select>
 

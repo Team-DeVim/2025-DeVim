@@ -1,26 +1,39 @@
 import React, { useState } from "react";
 import "./ContentBox.css";
 
-/** mock post (연동 시 삭제) */
-const MOCK_POST = {
-  title: "게시글 제목",
-  writer: { name: "사용자 닉네임" },
-  timeAgo: "8분 전",
-  body: `내용
--
--`,
-  likeCount: 7,
-  commentCount: 3,
-  tags: ["태그1", "태그2", "태그3"],
-};
+export default function ContentBox({ data }) {
+  // 받은 상세글 정보 변수화
+  const boardNo = data.boardNo;
+  const boardTypeNo = data.boardTypeNo;
+  const title = data.title;
+  const boardContent = data.boardContent;
+  const writerName = data.writerName;
+  const createdDt = data.createdDt;
+  const deleteFlag = data.deleteFlag;
+  const likeCount = data.likeCount;
 
-export default function ContentBox({ post = MOCK_POST }) {
   const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(post.likeCount ?? 0);
+  // const [likeCount, setLikeCount] = useState(postData.likeCount ?? 0);
 
   const handleToggleLike = () => {
     setLiked((v) => !v);
-    setLikeCount((c) => (liked ? Math.max(0, c - 1) : c + 1));
+    // setLikeCount((c) => (liked ? Math.max(0, c - 1) : c + 1));
+  };
+
+  // 시간 포메터
+  const formatTimeAgo = (iso) => {
+    if (!iso) return "알수없음";
+    const created = new Date(iso);
+    const now = new Date();
+    const diffMs = now - created;
+    if (Number.isNaN(diffMs)) return "";
+    const min = Math.floor(diffMs / (1000 * 60) - 60 * 9);
+    if (min < 1) return "방금 전";
+    if (min < 60) return `${min}분 전`;
+    const hour = Math.floor(min / 60);
+    if (hour < 24) return `${hour}시간 전`;
+    const day = Math.floor(hour / 24);
+    return `${day}일 전`;
   };
 
   return (
@@ -31,9 +44,9 @@ export default function ContentBox({ post = MOCK_POST }) {
           <div className="contentBox__avatar" />
           <div className="contentBox__nameTime">
             <div className="contentBox__name">
-              {post.writer?.name ?? "알 수 없음"}
+              {writerName ?? "알 수 없음"}
             </div>
-            <div className="contentBox__time">{post.timeAgo ?? ""}</div>
+            <div className="contentBox__time">{formatTimeAgo(createdDt)}</div>
           </div>
         </div>
 
@@ -50,13 +63,13 @@ export default function ContentBox({ post = MOCK_POST }) {
       </div>
 
       {/* 제목 */}
-      <h2 className="contentBox__title" title={post.title}>
-        {post.title}
+      <h2 className="contentBox__title" title={title}>
+        {title}
       </h2>
 
       {/* 본문 */}
       <article className="contentBox__body" aria-label="게시글 본문">
-        {post.body.split("\n").map((line, i) => (
+        {boardContent.split("\n").map((line, i) => (
           <p key={i} className="contentBox__p">
             {line || "\u00A0"}
           </p>
@@ -66,11 +79,11 @@ export default function ContentBox({ post = MOCK_POST }) {
       {/* 하단: 태그(좌) · 동그란 좋아요(가운데) · 기타 메타(우) */}
       <div className="contentBox__tagsRow">
         <div className="contentBox__tags">
-          {(post.tags || []).map((t) => (
+          {/* {(post.tags || []).map((t) => (
             <span key={t} className="contentBox__tag">
               #{t}
             </span>
-          ))}
+          ))} */}
         </div>
 
         <div className="contentBox__likeWrap">
@@ -89,7 +102,7 @@ export default function ContentBox({ post = MOCK_POST }) {
 
         <div className="contentBox__metaRight">
           <span className="contentBox__comment">
-            댓글 {post.commentCount ?? 0}
+            댓글 {data.commentCount ?? 0}
           </span>
         </div>
       </div>

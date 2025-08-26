@@ -13,13 +13,23 @@ public interface UserRepository {
 
 	Optional<User> findById(long userNo);
 
+	Optional<User> findByUserId(String id);
+
 	PageResponseDto<User> findAll(PageRequestDto pageRequest);
 
 	void update(User user);
 
 	void deleteById(long userNo);
 
+	void hardDeleteById(long userNo);
+
+	// void addRole(UserRole userRole);
+
 	List<UserRankDto> findTop5ByBoardCount();
 
 	List<UserRankDto> findTop5ByCommentCount();
+
+    long countBoardsByUser(long userNo);
+
+    long countCommentsByUser(long userNo);
 }
