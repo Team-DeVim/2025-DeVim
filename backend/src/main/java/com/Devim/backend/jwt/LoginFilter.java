@@ -19,6 +19,7 @@ import java.io.IOException;
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final JWTUtil jwtUtil;
 
 
     @Override
