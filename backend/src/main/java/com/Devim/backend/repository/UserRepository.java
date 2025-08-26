@@ -4,6 +4,7 @@ import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.domain.user.UserRankDto;
+import com.Devim.backend.domain.user.UserRole;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +23,6 @@ public interface UserRepository {
     Long findUserNoByUsername(String username);
 
     User findByUsername(String username);
-
-    PageResponseDto<User> findAll(PageRequestDto pageRequest);
 
     void update(User user);
 

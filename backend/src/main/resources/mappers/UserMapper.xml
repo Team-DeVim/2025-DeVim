@@ -23,7 +23,6 @@
         WHERE "user_no" = #{userNo}
     </select>
 
-
     <resultMap id="userResultMap" type="com.Devim.backend.domain.user.User">
         <id     property="userNo"           column="user_no"/>
         <result property="id"               column="id"/>
@@ -56,8 +55,6 @@
         WHERE ur."user_no" = #{userNo}
     </select>
 
-
-
     <select id="existsByUsername" parameterType="string" resultType="boolean">
         SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
         FROM "user"
@@ -69,19 +66,6 @@
         FROM "user"
         WHERE "id" = #{username}
     </select>
-
-    <select id="findAll" parameterType="com.Devim.backend.domain.common.PageRequestDto"
-            resultType="com.Devim.backend.domain.user.User">
-        SELECT "user_no"            AS userNo,
-               "id",
-               "password",
-               "name",
-               "social",
-               "profile_image_path" AS profileImagePath,
-               "created_dt"         AS createdDt,
-               "delete_flag"        AS deleteFlag
-
-    
 
     <select id="findByUserId" parameterType="String" resultType="com.Devim.backend.domain.user.User">
         SELECT
@@ -139,7 +123,6 @@
         INSERT INTO "user_role" ("user_no", "role")
         VALUES (#{userNo}, #{role})
     </insert>
- 
 
     <!-- 게시글 작성 수 TOP 5 -->
     <select id="findTop5ByBoardCount" resultType="com.Devim.backend.domain.user.UserRankDto">

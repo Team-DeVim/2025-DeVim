@@ -4,6 +4,7 @@ import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.domain.user.UserRankDto;
+import com.Devim.backend.domain.user.UserRole;
 import com.Devim.backend.repository.UserRepository;
 
 import org.springframework.stereotype.Repository;

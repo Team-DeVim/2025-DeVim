@@ -6,14 +6,13 @@ CREATE TABLE "user" (
   "social" number NOT NULL,
   "profile_image_path" varchar2(255),
   "created_dt" date NOT NULL,
-  "delete_flag" number NOT NULL,
-  "role" varchar2(50) DEFAULT 'MEMBER' NOT NULL
+  "delete_flag" number NOT NULL
 );
 
---CREATE TABLE "user_role" (
---  "user_no" number NOT NULL,
---  "role" varchar2(50) NOT NULL
---);
+CREATE TABLE "user_role" (
+  "user_no" number NOT NULL,
+  "role" varchar2(50) NOT NULL
+);
 
 CREATE TABLE "board" (
   "board_no" number PRIMARY KEY,
@@ -89,5 +88,5 @@ INSERT INTO "board_type" (
 ) VALUES ( 3, '공지사항' );
 
 INSERT INTO "user_role" ("user_no", "role")
-VALUES (1, 'ADMIN');
+VALUES (1, 'ROLE_ADMIN');
 

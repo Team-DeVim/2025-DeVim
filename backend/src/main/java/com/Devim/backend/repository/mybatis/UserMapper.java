@@ -3,6 +3,7 @@ package com.Devim.backend.repository.mybatis;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.domain.user.UserRankDto;
+import com.Devim.backend.domain.user.UserRole;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
