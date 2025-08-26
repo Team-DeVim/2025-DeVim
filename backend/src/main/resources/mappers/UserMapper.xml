@@ -6,8 +6,7 @@
         <selectKey keyProperty="userNo" resultType="long" order="BEFORE">
             SELECT "seq_user_no".NEXTVAL FROM DUAL
         </selectKey>
-        INSERT INTO "user" ("user_no", "id", "password", "name", "social", "profile_image_path", "created_dt",
-        "delete_flag")
+        INSERT INTO "user" ("user_no", "id", "password", "name", "social", "profile_image_path", "created_dt", "delete_flag")
         VALUES (#{userNo}, #{id}, #{password}, #{name}, #{social}, NULL, SYSDATE, 0)
     </insert>
 
@@ -142,6 +141,14 @@
         GROUP BY u."name"
         ORDER BY activityCount DESC
             FETCH FIRST 5 ROWS ONLY
+    </select>
+
+    <select id="countBoardsByUser" parameterType="long" resultType="long">
+        SELECT COUNT(*) FROM "board" WHERE "writer" = #{userNo} AND "delete_flag" = 0
+    </select>
+
+    <select id="countCommentsByUser" parameterType="long" resultType="long">
+        SELECT COUNT(*) FROM "comment" WHERE "writer" = #{userNo} AND "delete_flag" = 0
     </select>
 
 </mapper>

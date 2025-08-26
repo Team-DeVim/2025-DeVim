@@ -38,8 +38,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public PageResponseDto<BoardListResponseDto> list(PageRequestDto pageRequestDto, Integer boardTypeNo) {
-        return boardRepository.findAll(pageRequestDto, boardTypeNo);
+    public PageResponseDto<BoardListResponseDto> list(PageRequestDto pageRequestDto, Integer boardTypeNo, Long userNo) {
+        return boardRepository.findAll(pageRequestDto, boardTypeNo, userNo);
     }
 
     @Override

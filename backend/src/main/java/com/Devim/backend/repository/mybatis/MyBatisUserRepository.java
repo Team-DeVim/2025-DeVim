@@ -82,4 +82,14 @@ public class MyBatisUserRepository implements UserRepository {
     public List<UserRankDto> findTop5ByCommentCount() {
         return userMapper.findTop5ByCommentCount();
     }
+
+    @Override
+    public long countBoardsByUser(long userNo) {
+        return userMapper.countBoardsByUser(userNo);
+    }
+
+    @Override
+    public long countCommentsByUser(long userNo) {
+        return userMapper.countCommentsByUser(userNo);
+    }
 }

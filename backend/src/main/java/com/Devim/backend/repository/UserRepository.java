@@ -5,7 +5,6 @@ import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.domain.user.UserRankDto;
 import com.Devim.backend.domain.user.UserRole;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,4 +33,8 @@ public interface UserRepository {
     List<UserRankDto> findTop5ByBoardCount();
 
     List<UserRankDto> findTop5ByCommentCount();
+
+    long countBoardsByUser(long userNo);
+
+    long countCommentsByUser(long userNo);
 }

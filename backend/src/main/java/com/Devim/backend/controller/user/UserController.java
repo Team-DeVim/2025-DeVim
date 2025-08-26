@@ -1,8 +1,13 @@
 package com.Devim.backend.controller.user;
 
+import com.Devim.backend.domain.board.BoardListResponseDto;
+import com.Devim.backend.domain.comment.CommentListResponseDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
+import com.Devim.backend.domain.user.UserSummaryResponseDto;
+import com.Devim.backend.service.board.BoardService;
+import com.Devim.backend.service.comment.CommentService;
 import com.Devim.backend.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,6 +17,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +36,8 @@ import java.net.URI;
 public class UserController {
 
     private final UserService userService;
+    private final BoardService boardService; // Inject BoardService
+    private final CommentService commentService; // Inject CommentService
 
     @Operation(summary = "사용자 생성", description = "새로운 사용자를 생성합니다.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -147,5 +156,52 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
         return ResponseEntity.ok().headers(headers).body(thumbnailBytes);
+    }
+
+    @Operation(summary = "사용자 요약 정보 조회", description = "사용자의 게시글 및 댓글 수 등 요약 정보를 조회합니다.",
+            parameters = {
+                    @Parameter(name = "userNo", description = "사용자 번호", required = true)
+            }
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음")
+    })
+    @GetMapping("/{userNo}/summary")
+    public ResponseEntity<UserSummaryResponseDto> getUserSummary(@PathVariable("userNo") long userNo) {
+        return ResponseEntity.ok(userService.getUserSummary(userNo));
+    }
+
+    @Operation(summary = "사용자별 게시글 목록 조회", description = "특정 사용자가 작성한 게시글 목록을 페이지네이션하여 조회합니다.",
+            parameters = {
+                    @Parameter(name = "userNo", description = "사용자 번호", required = true),
+            }
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음")
+    })
+    @GetMapping("/{userNo}/posts")
+    public ResponseEntity<PageResponseDto<BoardListResponseDto>> getUserPosts(
+            @PathVariable("userNo") Long userNo,
+            @ModelAttribute PageRequestDto pageRequestDto) {
+        // boardTypeNo는 null로 전달하여 모든 게시판 타입의 글을 가져오도록 함
+        return ResponseEntity.ok(boardService.list(pageRequestDto, null, userNo));
+    }
+
+    @Operation(summary = "사용자별 댓글 목록 조회", description = "특정 사용자가 작성한 댓글 목록을 페이지네이션하여 조회합니다.",
+            parameters = {
+                    @Parameter(name = "userNo", description = "사용자 번호", required = true),
+            }
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음")
+    })
+    @GetMapping("/{userNo}/comments")
+    public ResponseEntity<PageResponseDto<CommentListResponseDto>> getUserComments(
+            @PathVariable("userNo") long userNo,
+            @ModelAttribute PageRequestDto pageRequestDto) {
+        return ResponseEntity.ok(commentService.getCommentsByUser(userNo, pageRequestDto));
     }
 }
