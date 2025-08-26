@@ -30,6 +30,22 @@ public class MyBatisUserRepository implements UserRepository {
     }
 
     @Override
+    public Boolean existsByUsername(String username) {
+        return userMapper.existsByUsername(username);
+    }
+
+    @Override
+    public Long findUserNoByUsername(String username) {
+        return userMapper.findUserNoByUsername(username);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userMapper.findByUsername(username);
+    }
+
+
+    @Override
     public Optional<User> findByUserId(String id) {
         return userMapper.findByUserId(id);
     }
@@ -56,12 +72,12 @@ public class MyBatisUserRepository implements UserRepository {
         userMapper.hardDeleteById(userNo);
     }
 
-    /*
+    
     @Override
     public void addRole(UserRole userRole) {
         userMapper.addRole(userRole);
     }
-    */
+    
 
     @Override
     public List<UserRankDto> findTop5ByBoardCount() {
