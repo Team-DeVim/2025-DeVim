@@ -15,10 +15,7 @@ const UsersPage = lazy(() => import("../pages/adminPage/routes/UsersPage"));
 const UserDetailPage = lazy(() => import("../pages/adminPage/routes/UserDetailPage"));
 const EditorPage = lazy(() => import("../pages/editorPage/EditorPage"));
 const UsersSmokeTest = lazy(() => import("../pages/apiTestPage/UsersSmokeTest"));
-const BannerModify = lazy(() =>
-  import("../pages/admin_bannerModify/BannerModify")
-);
-
+const DashboardPage = lazy(() => import("../pages/adminPage/routes/DashboardPage"));
 
 
 const root = createBrowserRouter([
@@ -80,7 +77,7 @@ const root = createBrowserRouter([
         children: [
           { path: "users", element: <UsersPage /> },
           { path: "users/:userNo", element: <UserDetailPage /> },
-          { path: "bannerModify", element: <BannerModify /> },
+          { path: "dashboard", element: <DashboardPage /> },
         ],
       },
       {
