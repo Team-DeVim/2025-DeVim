@@ -3,13 +3,13 @@ import axios from "axios";
 export const API_SERVER_HOST = 'http://localhost:8080';
 
 // User Controller prefix
-const USER_PREFIX = `${API_SERVER_HOST}/api/v1/users`;
+export const USER_PREFIX = `${API_SERVER_HOST}/api/v1/users`;
 
 // Board Controller prefix
-const BOARD_PREFIX = `${API_SERVER_HOST}/api/v1/boards`;
+export const BOARD_PREFIX = `${API_SERVER_HOST}/api/v1/boards`;
 
 // Comment Controller prefix
-const COMMENT_PREFIX = `${API_SERVER_HOST}/api/v1/comments`;
+export const COMMENT_PREFIX = `${API_SERVER_HOST}/api/v1/comments`;
 
 
 //USER
