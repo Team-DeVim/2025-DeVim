@@ -59,7 +59,7 @@ const root = createBrowserRouter([
         ),
       },
       {
-        path: "profilePage",
+        path: "profilePage/:userNo",
         element: (
           <Suspense>
             <ProfilePage />

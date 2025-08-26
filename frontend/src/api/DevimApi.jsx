@@ -31,6 +31,42 @@ export const postUserRegister = async (registerObj) => {
     return res.data;
 };
 
+// profilePage__MyArticle__내 글 리스트 요청
+export async function getMypostList(userNo, page = 1, size = 5, signal) {
+    const params = {
+        page: Number(page),
+        size: Number(size),
+    };
+    try {
+        const { data } = await axios.get(`${USER_PREFIX}/${encodeURIComponent(userNo)}/posts`,
+            { params, signal });
+        return data;
+    } catch (err) {
+        if (err?.code === "ERR_CANCELED" || err?.name === "CanceledError") {
+            throw err;
+        }
+        throw err;
+    }
+}
+
+// profilePage__MyArticle__내 글 리스트 요청
+export async function getMycommentList(userNo, page = 1, size = 5, signal) {
+    const params = {
+        page: Number(page),
+        size: Number(size),
+    };
+    try {
+        const { data } = await axios.get(`${USER_PREFIX}/${encodeURIComponent(userNo)}/comments`,
+            { params, signal });
+        return data;
+    } catch (err) {
+        if (err?.code === "ERR_CANCELED" || err?.name === "CanceledError") {
+            throw err;
+        }
+        throw err;
+    }
+}
+
 //BOARD
 
 //mainPage__인기글,자유게시판,Q&A게시판 글 4개
@@ -110,6 +146,8 @@ export async function getDetailPost(boardNo, signal) {
         throw err;
     }
 }
+
+
 
 
 //COMMENT
