@@ -4,7 +4,6 @@ import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.domain.user.UserRankDto;
-import com.Devim.backend.domain.user.UserRole;
 import com.Devim.backend.repository.UserRepository;
 
 import org.springframework.stereotype.Repository;
@@ -31,6 +30,27 @@ public class MyBatisUserRepository implements UserRepository {
     }
 
     @Override
+    public Boolean existsByUsername(String username) {
+        return userMapper.existsByUsername(username);
+    }
+
+    @Override
+    public Long findUserNoByUsername(String username) {
+        return userMapper.findUserNoByUsername(username);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userMapper.findByUsername(username);
+    }
+
+
+    @Override
+    public Optional<User> findByUserId(String id) {
+        return userMapper.findByUserId(id);
+    }
+
+    @Override
     public PageResponseDto<User> findAll(PageRequestDto pageRequest) {
         List<User> dtoList = userMapper.findAll(pageRequest);
         long totalCount = userMapper.countAllUsers();
@@ -52,10 +72,12 @@ public class MyBatisUserRepository implements UserRepository {
         userMapper.hardDeleteById(userNo);
     }
 
+    
     @Override
     public void addRole(UserRole userRole) {
         userMapper.addRole(userRole);
     }
+    
 
     @Override
     public List<UserRankDto> findTop5ByBoardCount() {

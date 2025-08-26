@@ -3,13 +3,13 @@ import axios from "axios";
 export const API_SERVER_HOST = 'http://localhost:8080';
 
 // User Controller prefix
-const USER_PREFIX = `${API_SERVER_HOST}/api/v1/users`;
+export const USER_PREFIX = `${API_SERVER_HOST}/api/v1/users`;
 
 // Board Controller prefix
-const BOARD_PREFIX = `${API_SERVER_HOST}/api/v1/boards`;
+export const BOARD_PREFIX = `${API_SERVER_HOST}/api/v1/boards`;
 
 // Comment Controller prefix
-const COMMENT_PREFIX = `${API_SERVER_HOST}/api/v1/comments`;
+export const COMMENT_PREFIX = `${API_SERVER_HOST}/api/v1/comments`;
 
 
 //USER
@@ -30,6 +30,42 @@ export const postUserRegister = async (registerObj) => {
     const res = await axios.post(`${USER_PREFIX}`, registerObj);
     return res.data;
 };
+
+// profilePage__MyArticle__내 글 리스트 요청
+export async function getMypostList(userNo, page = 1, size = 5, signal) {
+    const params = {
+        page: Number(page),
+        size: Number(size),
+    };
+    try {
+        const { data } = await axios.get(`${USER_PREFIX}/${encodeURIComponent(userNo)}/posts`,
+            { params, signal });
+        return data;
+    } catch (err) {
+        if (err?.code === "ERR_CANCELED" || err?.name === "CanceledError") {
+            throw err;
+        }
+        throw err;
+    }
+}
+
+// profilePage__MyArticle__내 글 리스트 요청
+export async function getMycommentList(userNo, page = 1, size = 5, signal) {
+    const params = {
+        page: Number(page),
+        size: Number(size),
+    };
+    try {
+        const { data } = await axios.get(`${USER_PREFIX}/${encodeURIComponent(userNo)}/comments`,
+            { params, signal });
+        return data;
+    } catch (err) {
+        if (err?.code === "ERR_CANCELED" || err?.name === "CanceledError") {
+            throw err;
+        }
+        throw err;
+    }
+}
 
 //BOARD
 
@@ -110,6 +146,8 @@ export async function getDetailPost(boardNo, signal) {
         throw err;
     }
 }
+
+
 
 
 //COMMENT

@@ -1,23 +1,8 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./Sidebar.css";
+import axios from "axios";
+import { USER_PREFIX } from "../../../api/DevimApi.jsx";
 
-// ---- mockData ----
-const rankingData = {
-  posts: [
-    { userId: 101, nickname: "제로콜라", count: 128 },
-    { userId: 102, nickname: "초코칩", count: 113 },
-    { userId: 103, nickname: "독일의", count: 98 },
-    { userId: 104, nickname: "세계최강", count: 76 },
-    { userId: 105, nickname: "기술력", count: 70 },
-  ],
-  comments: [
-    { userId: 201, nickname: "환수", count: 251 },
-    { userId: 202, nickname: "우강", count: 230 },
-    { userId: 203, nickname: "호강", count: 221 },
-    { userId: 204, nickname: "진우", count: 205 },
-    { userId: 205, nickname: "현세", count: 202 },
-  ],
-};
 
 // ---- 로그인 테스트용 프로필 ----
 const mockProfile = {
@@ -37,6 +22,33 @@ function Sidebar() {
   const handleLoginClick = () => setProfile(mockProfile);
   const handleLogoutClick = () => setProfile(null);
   const handleRegisterClick = () => alert("회원가입 페이지(연동 예정)");
+
+  // --- 랭킹 데이터 처리 ---
+  const [boardRanks, setBoardRanks] = useState([]);
+  const [commentRanks, setCommentRanks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // DevimApi.jsx를 통해 API 호출
+        const boardsRes = await axios.get(`${USER_PREFIX}/rank/boards`);
+        const commentsRes = await axios.get(`${USER_PREFIX}/rank/comments`);
+
+        setBoardRanks(boardsRes.data);
+        setCommentRanks(commentsRes.data);
+      } catch (err) {
+        setError("랭킹 정보를 불러오는 데 실패했습니다.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <aside className="Sidebar">
@@ -130,13 +142,33 @@ function Sidebar() {
         <h2 id="sidebar-rank-title" className="Sidebar__card-title">
           랭킹
         </h2>
-         <div>
-        <RankSection title="게시물왕" unit="개" items={rankingData.posts} />
-        </div>
-        <div
-        className="Sidebar__divider"
-        aria-hidden="true" />
-        <RankSection title="댓글왕" unit="개" items={rankingData.comments} />
+        {loading && <div>랭킹을 불러오는 중...</div>}
+        {error && <div>{error}</div>}
+        {!loading && !error && (
+          <>
+            <div>
+              <RankSection
+                title="게시물왕"
+                unit="개"
+                items={boardRanks.map((item) => ({
+                  userId: item.userName, // userName을 고유 ID로 사용
+                  nickname: item.userName,
+                  count: item.activityCount,
+                }))}
+              />
+            </div>
+            <div className="Sidebar__divider" aria-hidden="true" />
+            <RankSection
+              title="댓글왕"
+              unit="개"
+              items={commentRanks.map((item) => ({
+                userId: item.userName, // userName을 고유 ID로 사용
+                nickname: item.userName,
+                count: item.activityCount,
+              }))}
+            />
+          </>
+        )}
       </section>
 
       {/* 배너 카드 */}

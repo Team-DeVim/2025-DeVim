@@ -42,7 +42,7 @@ function AdminSideBar() {
         </li>
         <li>
           <NavLink
-            to="/adminPage/banner"
+            to="/adminPage/bannerModify"
             end
             className={({ isActive }) =>
               "admin-sidebar__item" +

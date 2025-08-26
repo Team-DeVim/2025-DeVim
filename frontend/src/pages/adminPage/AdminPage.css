@@ -17,10 +17,11 @@
   box-sizing: border-box;
 }
 
+/* 사이드바 영역 */
 .admin-page__sidebar {
   height: 100%;
   position: sticky;
-  top: clamp(12px, 2vw, 20px);
+  top: clamp(12px, 2vw, 20px); 
 }
 
 .admin-page__right {
@@ -28,15 +29,13 @@
   grid-template-rows: auto 1fr;
   gap: clamp(12px, 2vw, 20px);
   height: 100%;
-  min-height: 0; 
+
+  min-height: 0;
 }
 
-
+/* 본문 */
 .admin-page__main {
-  border: 1px solid #e0e0e0;
   border-radius: 12px;
-
-  /* 스크롤은 본문만 */
   min-height: 0;
-  overflow: auto;
+  overflow: hidden;
 }

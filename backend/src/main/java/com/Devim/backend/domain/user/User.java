@@ -1,15 +1,12 @@
 package com.Devim.backend.domain.user;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class User {
 	private long userNo;
@@ -20,7 +17,8 @@ public class User {
 	private String profileImagePath;
 	private LocalDateTime createdDt;
 	private boolean deleteFlag;
+	private List<UserRole> roleList;
 	
-	private List<UserRole> roleList = new ArrayList<>();
+	
 	
 }

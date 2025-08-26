@@ -3,11 +3,10 @@ package com.Devim.backend.service.user;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
-import com.Devim.backend.domain.user.UserRole;
+import com.Devim.backend.domain.user.UserRankDto;
 import com.Devim.backend.domain.user.UserSummaryResponseDto;
 import com.Devim.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import net.coobird.thumbnailator.Thumbnails;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -38,12 +38,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public Long create(User user) {
         userRepository.save(user);
-
-        // User의 기본 권한 생성
-        UserRole userRole = new UserRole(user.getUserNo(), "MEMBER");
-
-        userRepository.addRole(userRole);
-
         return user.getUserNo();
     }
 
@@ -51,6 +45,12 @@ public class UserServiceImpl implements UserService {
     public User get(Long userNo) {
         return userRepository.findById(userNo)
                 .orElseThrow(()-> new NoSuchElementException("User not found :" + userNo));
+    }
+
+    @Override
+    public User getByUserId(String id) {
+        return userRepository.findByUserId(id)
+                .orElseThrow(() -> new NoSuchElementException("User not found :" + id));
     }
 
     @Override
@@ -151,5 +151,15 @@ public class UserServiceImpl implements UserService {
         summary.setCommentCount(commentCount);
 
         return summary;
+    }
+
+    @Override
+    public List<UserRankDto> findTop5ByBoardCount() {
+        return userRepository.findTop5ByBoardCount();
+    }
+
+    @Override
+    public List<UserRankDto> findTop5ByCommentCount() {
+        return userRepository.findTop5ByCommentCount();
     }
 }

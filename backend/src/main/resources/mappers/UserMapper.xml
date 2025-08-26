@@ -9,49 +9,107 @@
         INSERT INTO "user" ("user_no", "id", "password", "name", "social", "profile_image_path", "created_dt", "delete_flag")
         VALUES (#{userNo}, #{id}, #{password}, #{name}, #{social}, NULL, SYSDATE, 0)
     </insert>
-    
-	<resultMap id="UserResultMap" type="com.Devim.backend.domain.user.User">
-	    <id property="userNo" column="user_no"/>
-	    <result property="id" column="id"/>
-	    <result property="password" column="password"/>
-	    <result property="name" column="name"/>
-	    <result property="social" column="social"/>
-	    <result property="profileImagePath" column="profile_image_path"/>
-	    <result property="createdDt" column="created_dt"/>
-	    <result property="deleteFlag" column="delete_flag"/>
-	    
-	    <collection property="roleList" resultMap="UserRoleResultMap"/>
-	</resultMap>
-	<resultMap id="UserRoleResultMap" type="com.Devim.backend.domain.user.UserRole">
-	    <result property="userNo" column="user_no"/>
-	    <result property="role" column="role"/>
-	</resultMap>
 
-    <select id="findById" parameterType="long" resultMap="UserResultMap">
+    <select id="findById" parameterType="long" resultType="com.Devim.backend.domain.user.User">
+        SELECT "user_no"            AS userNo,
+               "id",
+               "password",
+               "name",
+               "social",
+               "profile_image_path" AS profileImagePath,
+               "created_dt"         AS createdDt,
+               "delete_flag"        AS deleteFlag
+        FROM "user"
+        WHERE "user_no" = #{userNo}
+    </select>
+
+
+    <resultMap id="userResultMap" type="com.Devim.backend.domain.user.User">
+        <id     property="userNo"           column="user_no"/>
+        <result property="id"               column="id"/>
+        <result property="password"         column="password"/>
+        <result property="name"             column="name"/>
+        <result property="social"           column="social"      jdbcType="NUMERIC"   javaType="boolean"/>
+        <result property="profileImagePath" column="profile_image_path"/>
+        <result property="createdDt"        column="created_dt"  jdbcType="TIMESTAMP"/>
+        <result property="deleteFlag"       column="delete_flag" jdbcType="NUMERIC"   javaType="boolean"/>
+
+        <!-- 여기서 select만 사용 -->
+        <collection property="roleList"
+                    ofType="com.Devim.backend.domain.user.UserRole"
+                    column="user_no"
+                    select="findRolesMergedByUserNo"/>
+    </resultMap>
+
+    <select id="findByUsername" parameterType="string" resultMap="userResultMap">
         SELECT
-            u."user_no",
-            u."id",
-            u."password",
-            u."name",
-            u."social",
-            u."profile_image_path",
-            u."created_dt",
-            u."delete_flag",
-            r."role"
-        FROM "user" u
-        LEFT JOIN "user_role" r ON u."user_no" = r."user_no"
-        WHERE u."user_no" = #{userNo}
+            "user_no", "id", "password", "name",
+            "social", "profile_image_path", "created_dt", "delete_flag"
+        FROM "user"
+        WHERE "id" = #{username}
+    </select>
+
+    <select id="findRolesMergedByUserNo" parameterType="long"
+            resultType="com.Devim.backend.domain.user.UserRole">
+        SELECT ur."user_no" AS userNo, ur."role" AS role
+        FROM "user_role" ur
+        WHERE ur."user_no" = #{userNo}
+    </select>
+
+
+
+    <select id="existsByUsername" parameterType="string" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+        FROM "user"
+        WHERE "id" = #{username}
+    </select>
+
+    <select id="findUserNoByUsername" parameterType="string" resultType="long">
+        SELECT "user_no"
+        FROM "user"
+        WHERE "id" = #{username}
+    </select>
+
+    <select id="findAll" parameterType="com.Devim.backend.domain.common.PageRequestDto"
+            resultType="com.Devim.backend.domain.user.User">
+        SELECT "user_no"            AS userNo,
+               "id",
+               "password",
+               "name",
+               "social",
+               "profile_image_path" AS profileImagePath,
+               "created_dt"         AS createdDt,
+               "delete_flag"        AS deleteFlag
+
+    
+
+    <select id="findByUserId" parameterType="String" resultType="com.Devim.backend.domain.user.User">
+        SELECT
+            "user_no" AS userNo,
+            "id",
+            "password",
+            "name",
+            "social",
+            "profile_image_path" AS profileImagePath,
+            "created_dt" AS createdDt,
+            "delete_flag" AS deleteFlag,
+            "role"
+        FROM "user"
+        WHERE "id" = #{id}
     </select>
 
     <select id="findAll" parameterType="com.Devim.backend.domain.common.PageRequestDto" resultType="com.Devim.backend.domain.user.User">
         SELECT "user_no" AS userNo, "id", "password", "name", "social", "profile_image_path" AS profileImagePath, "created_dt" AS createdDt, "delete_flag" AS deleteFlag
+
         FROM "user"
         ORDER BY "user_no" DESC
         OFFSET (#{page} - 1) * #{size} ROWS FETCH NEXT #{size} ROWS ONLY
     </select>
 
     <select id="countAllUsers" resultType="long">
-        SELECT COUNT(*) FROM "user" WHERE "delete_flag" = 0
+        SELECT COUNT(*)
+        FROM "user"
+        WHERE "delete_flag" = 0
     </select>
 
     <update id="update" parameterType="com.Devim.backend.domain.user.User">
@@ -59,44 +117,52 @@
         <set>
             <if test="password != null and password != ''">"password" = #{password},</if>
             <if test="name != null and name != ''">"name" = #{name},</if>
-            <if test="profileImagePath != null and profileImagePath != ''">"profile_image_path" = #{profileImagePath},</if>
+            <if test="profileImagePath != null and profileImagePath != ''">"profile_image_path" = #{profileImagePath},
+            </if>
         </set>
         WHERE "user_no" = #{userNo}
     </update>
 
     <update id="deleteById" parameterType="long">
-        UPDATE "user" SET "delete_flag" = 1 WHERE "user_no" = #{userNo}
+        UPDATE "user"
+        SET "delete_flag" = 1
+        WHERE "user_no" = #{userNo}
     </update>
 
     <delete id="hardDeleteById" parameterType="long">
-        DELETE FROM "user" WHERE "user_no" = #{userNo}
+        DELETE
+        FROM "user"
+        WHERE "user_no" = #{userNo}
     </delete>
 
     <insert id="addRole" parameterType="com.Devim.backend.domain.user.UserRole">
         INSERT INTO "user_role" ("user_no", "role")
         VALUES (#{userNo}, #{role})
     </insert>
+ 
 
     <!-- 게시글 작성 수 TOP 5 -->
     <select id="findTop5ByBoardCount" resultType="com.Devim.backend.domain.user.UserRankDto">
         SELECT u."name" AS userName, COUNT(b."board_no") AS activityCount
         FROM "user" u
-        JOIN "board" b ON u."user_no" = b."writer"
-        WHERE u."delete_flag" = 0 AND b."delete_flag" = 0
+                 JOIN "board" b ON u."user_no" = b."writer"
+        WHERE u."delete_flag" = 0
+          AND b."delete_flag" = 0
         GROUP BY u."name"
         ORDER BY activityCount DESC
-        FETCH FIRST 5 ROWS ONLY
+            FETCH FIRST 5 ROWS ONLY
     </select>
 
     <!-- 댓글 작성 수 TOP 5 -->
     <select id="findTop5ByCommentCount" resultType="com.Devim.backend.domain.user.UserRankDto">
         SELECT u."name" AS userName, COUNT(c."comment_no") AS activityCount
         FROM "user" u
-        JOIN "comment" c ON u."user_no" = c."writer"
-        WHERE u."delete_flag" = 0 AND c."delete_flag" = 0
+                 JOIN "comment" c ON u."user_no" = c."writer"
+        WHERE u."delete_flag" = 0
+          AND c."delete_flag" = 0
         GROUP BY u."name"
         ORDER BY activityCount DESC
-        FETCH FIRST 5 ROWS ONLY
+            FETCH FIRST 5 ROWS ONLY
     </select>
 
     <select id="countBoardsByUser" parameterType="long" resultType="long">
