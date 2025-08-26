@@ -4,7 +4,6 @@ import "./MyArticle.css";
 
 const MyArticle = ({ postPagingList }) => {
   const [params, setParams] = useSearchParams();
-  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
 
 
@@ -20,12 +19,7 @@ const MyArticle = ({ postPagingList }) => {
   }
 
   /* 페이징 배열 */
-  const pageNumbers = postPagingList.pageNumList;
-
-  /* 상세페이지로 이동 */
-  const handleDetailPage = () => {
-    navigate("/detailPage");
-  };
+  const pageNumbers = postPagingList.pageNumList ?? [];
 
   //페이지 이동에 대한 쿼리스트링 변경
   const setPage = (p) => {
@@ -83,9 +77,10 @@ const MyArticle = ({ postPagingList }) => {
 
           {/* ✅ 다음 페이지 그룹 버튼 */}
           {postPagingList.next && (
-            <button onClick={
-              () => { setPage(postPagingList.nextPage); }
-            }>▶</button>
+            <button
+              onClick={
+                () => { setPage(postPagingList.nextPage); }
+              }>▶</button>
           )}
         </div>
       </div>

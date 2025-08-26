@@ -6,14 +6,16 @@ import MyComment from "./components/myComment/MyComment";
 import ProfileCard from "./components/profileCard/ProfileCard";
 import "./profilePage.css";
 import { useEffect, useState } from "react";
-import { getMypostList } from "../../api/DevimApi";
+import { getMycommentList, getMypostList } from "../../api/DevimApi";
 
 function ProfilePage() {
     const { userNo } = useParams();
     const [sp, setSp] = useSearchParams();
     const [postPagingList, setPostPagingList] = useState();
+    const [commentPagingList, setCommentPagingList] = useState();
     const [error, setError] = useState("");
-    const [loading, setLoading] = useState(true);
+    const [loadingPost, setLoadingPost] = useState(true);
+    const [loadingComment, setLoadingComment] = useState(true);
 
 
     // 기본 쿼리스트링 생성
@@ -42,11 +44,28 @@ function ProfilePage() {
                 console.error(e);
                 setError("데이터를 불러오지 못했습니다.");
             })
-            .finally(() => setLoading(false));
+            .finally(() => setLoadingPost(false));
         return () => controller.abort();
     }, [userNo, Apage, size])
 
+    // 내 댓글 페이징 요청
+    useEffect(() => {
+        const controller = new AbortController();
+
+        getMycommentList(userNo, Cpage, size, controller.signal)
+            .then(setCommentPagingList)
+            .catch((e) => {
+                if (e.name === "CanceledError" || e.code === "ERR_CANCELED") return;
+                console.error(e);
+                setError("데이터를 불러오지 못했습니다.");
+            })
+            .finally(() => setLoadingComment(false));
+        return () => controller.abort();
+    }, [userNo, Cpage, size])
+
     // console.log(postPagingList);
+    const loading = loadingPost || loadingComment;
+
     if (loading) return <div>loading...</div>;
     if (error) return <div>{error}</div>;
 
@@ -56,7 +75,7 @@ function ProfilePage() {
             <div className="profilePage--content">
                 <ProfileCard />
                 <MyArticle postPagingList={postPagingList} />
-                <MyComment />
+                <MyComment commentPagingList={commentPagingList} />
             </div>
             <Footer />
         </div>
