@@ -29,6 +29,7 @@
   grid-template-rows: auto 1fr;
   gap: clamp(12px, 2vw, 20px);
   height: 100%;
+
   min-height: 0;
 }
 
