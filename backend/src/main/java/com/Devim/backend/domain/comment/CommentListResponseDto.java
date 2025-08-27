@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 public class CommentListResponseDto {
     private long commentNo;
+    private long boardNo;
+    private int boardTypeNo;
     private String commentContent;
     private String writerName;
     private String profileImagePath;
