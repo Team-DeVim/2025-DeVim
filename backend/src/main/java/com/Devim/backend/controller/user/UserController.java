@@ -7,6 +7,7 @@ import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.domain.user.UserRankDto;
 import com.Devim.backend.domain.user.UserSummaryResponseDto;
+import com.Devim.backend.jwt.JWTUserPrincipal;
 import com.Devim.backend.service.board.BoardService;
 import com.Devim.backend.service.comment.CommentService;
 import com.Devim.backend.service.user.UserService;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +40,15 @@ public class UserController {
     private final UserService userService;
     private final BoardService boardService;
     private final CommentService commentService;
+
+    @Operation(summary = "내 정보 조회", description = "현재 로그인된 사용자의 정보를 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공")
+    })
+    @GetMapping("/me")
+    public ResponseEntity<User> getMyInfo(@AuthenticationPrincipal JWTUserPrincipal userPrincipal) {
+        return ResponseEntity.ok(userService.get(userPrincipal.getUserNo()));
+    }
 
     @Operation(summary = "사용자 생성", description = "새로운 사용자를 생성합니다.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
