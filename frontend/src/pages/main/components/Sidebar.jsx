@@ -1,7 +1,7 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 import axios from "axios";
-import { USER_PREFIX } from "../../../api/DevimApi.jsx";
+import { api, USER_PREFIX } from "../../../api/DevimApi.jsx";
 
 
 // ---- 로그인 테스트용 프로필 ----
@@ -34,8 +34,8 @@ function Sidebar() {
       setLoading(true);
       try {
         // DevimApi.jsx를 통해 API 호출
-        const boardsRes = await axios.get(`${USER_PREFIX}/rank/boards`);
-        const commentsRes = await axios.get(`${USER_PREFIX}/rank/comments`);
+        const boardsRes = await api.get(`${USER_PREFIX}/rank/boards`);
+        const commentsRes = await api.get(`${USER_PREFIX}/rank/comments`);
 
         setBoardRanks(boardsRes.data);
         setCommentRanks(commentsRes.data);

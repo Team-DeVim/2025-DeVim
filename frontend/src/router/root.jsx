@@ -44,7 +44,7 @@ const root = createBrowserRouter([
         ),
       },
       {
-        path: "signUp",
+        path: "login",
         element: (
           <Suspense>
             <SignUp />

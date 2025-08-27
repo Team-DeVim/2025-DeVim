@@ -18,11 +18,12 @@ export default function DetailPage() {
   const [content, setContent] = useState(null);
   const [comment, setComment] = useState(null);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [postLoading, setPostLoading] = useState(true);
+  const [commentLoading, setCommentLoading] = useState(true);
 
   useEffect(() => {
     const controller = new AbortController();
-    setLoading(true);
+    setPostLoading(true);
 
     getDetailPost(boardNo, controller.signal)
       .then(setContent)
@@ -31,13 +32,13 @@ export default function DetailPage() {
         console.error(e);
         setError("상세 글을 불러오지 못했습니다.");
       })
-      .finally(() => setLoading(false));
+      .finally(() => setPostLoading(false));
     return () => controller.abort();
   }, [boardNo]);
 
   useEffect(() => {
     const controller = new AbortController();
-    setLoading(true);
+    setCommentLoading(true);
 
     getCommentList(1, 9999, boardNo, controller.signal)
       .then(setComment)
@@ -46,11 +47,11 @@ export default function DetailPage() {
         console.error(e);
         setError("댓글을 불러오지 못했습니다.");
       })
-      .finally(() => setLoading(false));
+      .finally(() => setCommentLoading(false));
     return () => controller.abort();
   }, [boardNo]);
 
-  if (loading) return <div>loading...</div>;
+  if (postLoading || commentLoading) return <div>loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
