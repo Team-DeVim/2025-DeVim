@@ -30,10 +30,10 @@ export default function Register() {
 
   // 아이디 체크
   const validateId = (value) => {
-    const specialText = /[!@#$%^&*(),.?":{}|<>]/;
-    if (!value) {
+    const specialText = /[!@#$%^&*(),.?":{}|<>]/; // 특수문자 정규식표현 제한
+    if (!value) { // if 으로 조건 실행
       setIdError("아이디: 필수 입력해주세요.");
-    } else if (specialText.test(value)) {
+    } else if (specialText.test(value)) { // 그게 아니면 밑 코드 실행
       setIdError("아이디: 특수문자를 입력할 수 없습니다.");
     } else {
       setIdError("");
@@ -43,7 +43,7 @@ export default function Register() {
 
   // 비밀번호 체크
   const validatePassword = (value) => {
-    const specialText = /[!@#$%^&*(),.?":{}|<>]/g;
+    const specialText = /[!@#$%^&*(),.?":{}|<>]/g; // 특수문자 정규식표현 제한
     const matches = value.match(specialText);
     const count = matches ? matches.length : 0;
 
