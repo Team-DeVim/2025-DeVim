@@ -7,6 +7,7 @@ import com.Devim.backend.domain.comment.PageResponseDtoOfCommentListResponseDto;
 import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
+import com.Devim.backend.jwt.JWTUserPrincipal;
 import com.Devim.backend.service.comment.CommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +34,7 @@ public class CommentController {
 
     @Operation(
             summary = "댓글 생성",
-            description = "새 댓글을 생성합니다. (임시: X-USER-NO 헤더로 작성자 ID 전달)",
+            description = "새 댓글을 생성합니다.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     description = "댓글 생성 요청 바디",
@@ -44,8 +46,8 @@ public class CommentController {
     })
     @PostMapping
     public ResponseEntity<Void> create(@Validated @RequestBody CommentCreateRequestDto requestDto,
-                                       @RequestHeader("X-USER-NO") Long userNo) {
-        Long id = commentService.create(requestDto, userNo);
+                                       @AuthenticationPrincipal JWTUserPrincipal userPrincipal) {
+        Long id = commentService.create(requestDto, userPrincipal.getUserNo());
         return ResponseEntity.created(URI.create("/api/v1/comments/" + id)).build();
     }
 

@@ -1,5 +1,6 @@
 package com.Devim.backend.controller.likes;
 
+import com.Devim.backend.jwt.JWTUserPrincipal;
 import com.Devim.backend.service.likes.LikesService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Likes Controller", description = "좋아요 기능 API")
@@ -18,7 +20,7 @@ public class LikesController {
 
     private final LikesService likesService;
 
-    @Operation(summary = "좋아요/좋아요 취소", description = "게시글 또는 댓글에 좋아요를 누르거나 취소합니다. (임시: X-USER-NO 헤더로 사용자 ID 전달)",
+    @Operation(summary = "좋아요/좋아요 취소", description = "게시글 또는 댓글에 좋아요를 누르거나 취소합니다.",
             parameters = {
                     @Parameter(name = "targetType", description = "좋아요 대상 타입 (board 또는 comment)", example = "board", required = true),
                     @Parameter(name = "targetId", description = "좋아요 대상 ID (게시글 번호 또는 댓글 번호)", example = "101", required = true)
@@ -33,12 +35,12 @@ public class LikesController {
     public ResponseEntity<Void> toggleLike(
             @PathVariable("targetType") String targetType,
             @PathVariable("targetId") long targetId,
-            @RequestHeader("X-USER-NO") Long userNo) {
+            @AuthenticationPrincipal JWTUserPrincipal userPrincipal) {
 
         // TODO: targetType 유효성 검사 (board, comment 등)
         // TODO: targetId가 실제로 존재하는지 검사
 
-        likesService.toggleLike(userNo, targetId, targetType);
+        likesService.toggleLike(userPrincipal.getUserNo(), targetId, targetType);
         return ResponseEntity.ok().build();
     }
 }
