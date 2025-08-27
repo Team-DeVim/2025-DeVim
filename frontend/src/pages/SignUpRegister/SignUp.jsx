@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import "./SignUp.css";
 import { useEffect, useState } from "react";
+import { login } from "../../api/DevimApi";
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>;
 
 export default function SignUp() {
@@ -10,6 +11,23 @@ export default function SignUp() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [isFocused, setIsFocused] = useState({ id: false, password: false });
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
+
+
+  const loginClick = async () => {
+    if (loading) return;
+    setErr("");
+    setLoading(true);
+    try {
+      await login(id, password);    // 토큰 발급 및 저장
+      navigate("/main");      // ✅ 로그인 성공 후 /main 으로 이동
+    } catch (e) {
+      setErr("로그인에 실패했습니다. 아이디/비밀번호를 확인해주세요.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (window.Kakao && !window.Kakao.isInitialized()) {
@@ -24,8 +42,8 @@ export default function SignUp() {
 
   /*카카오 로그인  08.12 미구현 / 8.15 */
 
-  const kakaoLogin = () =>{
-  	window.Kakao.Auth.login({
+  const kakaoLogin = () => {
+    window.Kakao.Auth.login({
       success: function (authObj) {
         console.log("카카오 로그인 성공", authObj);
         window.Kakao.API.request({
@@ -98,7 +116,7 @@ export default function SignUp() {
             />
           </div>
 
-          <button className="signup__login-button" type="submit">
+          <button className="signup__login-button" onClick={loginClick} disabled={loading}>
             로그인
           </button>
           <button
