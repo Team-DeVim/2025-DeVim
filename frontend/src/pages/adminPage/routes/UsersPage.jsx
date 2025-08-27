@@ -1,57 +1,81 @@
-import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { getUserList } from "../../../api/DevimApi"; 
 import "./UsersPage.css";
 
-const MOCK_USERS = Array.from({ length: 68 }).map((_, i) => ({
-  userNo: i + 1,
-  id: `user${i + 1}`,
-  name: `사용자 ${i + 1}`,
-  createdDate: "2025-08-01",
-  delete_flag: i % 3 === 0 ? 1 : 0, // 1=비활성, 0=활성
-}));
+function normalizeUserPage(data) {
+  const list = Array.isArray(data?.dtoList) ? data.dtoList : [];
+
+  const size = Number(data?.pageRequestDTO?.size ?? 10);
+  const page0 = Number(data?.current ?? data?.pageRequestDTO?.page ?? 0); // 0-based
+  const totalPagesRaw = Number(data?.totalPage ?? 0);
+  const totalPages = Math.max(1, totalPagesRaw || 1);
+  const totalElements = Number(data?.totalCount ?? list.length);
+
+  const pageNumList0 = Array.isArray(data?.pageNumList) ? data.pageNumList : [];
+  const pages = pageNumList0.length
+    ? pageNumList0.map((n) => Number(n) + 1) 
+    : Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  return {
+    list,
+    page: page0 + 1, 
+    size,
+    totalPages,
+    totalElements,
+    hasPrev: !!data?.prev,
+    hasNext: !!data?.next,
+    pages,
+  };
+}
 
 export default function UsersPage() {
-  const navigate = useNavigate();
-  const [page, setPage] = useState(1);
+  const nav = useNavigate();
+  const [sp, setSp] = useSearchParams();
+
+  const [loading, setLoading] = useState(false);
+  const [rows, setRows] = useState([]);
+  const [page, setPage] = useState(Number(sp.get("page") || 1)); 
   const size = 10;
 
-  const total = MOCK_USERS.length;
-  const totalPages = Math.ceil(total / size);
+  const [totalPages, setTotalPages] = useState(1);
+  const [pages, setPages] = useState([]);
+  const [hasPrev, setHasPrev] = useState(false);
+  const [hasNext, setHasNext] = useState(false);
 
-  const pageData = useMemo(() => {
-    const start = (page - 1) * size;
-    return MOCK_USERS.slice(start, start + size);
+  useEffect(() => {
+    const ac = new AbortController();
+    (async () => {
+      try {
+        setLoading(true);
+        
+        const data = await getUserList(page - 1, size, ac.signal);
+        const std = normalizeUserPage(data);
+        setRows(std.list);
+        setTotalPages(std.totalPages);
+        setPages(std.pages);
+        setHasPrev(std.hasPrev);
+        setHasNext(std.hasNext);
+      } catch (e) {
+        if (e?.name !== "CanceledError") console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    })();
+
+    setSp({ page: String(page) });
+    return () => ac.abort();
   }, [page]);
 
-  const goDetail = (userNo) => navigate(`/adminPage/users/${userNo}`);
-
-  const changePage = (p) => {
-    if (p < 1 || p > totalPages) return;
-    setPage(p);
-  };
-
-  const pages = useMemo(() => {
-    const arr = [];
-    if (totalPages <= 7) {
-      for (let i = 1; i <= totalPages; i++) arr.push(i);
-    } else {
-      arr.push(1);
-      if (page > 3) arr.push("…");
-      for (
-        let i = Math.max(2, page - 1);
-        i <= Math.min(totalPages - 1, page + 1);
-        i++
-      )
-        arr.push(i);
-      if (page < totalPages - 2) arr.push("…");
-      arr.push(totalPages);
-    }
-    return arr;
-  }, [page, totalPages]);
+  const goDetail = (userNo) => nav(`/adminPage/users/${userNo}`);
 
   return (
     <div className="admin-users">
       <div className="admin-users__panel">
+        <div className="admin-users__empty-icon">
+          {loading ? "로딩중…" : "≡"}
+        </div>
+
         <table className="admin-users__table">
           <thead>
             <tr>
@@ -64,59 +88,64 @@ export default function UsersPage() {
             </tr>
           </thead>
           <tbody>
-            {pageData.map((u) => (
-              <tr
-                key={u.userNo}
-                onClick={() => goDetail(u.userNo)}
-                className="admin-users__row"
-              >
-                <td>{u.userNo}</td>
-                <td>
-                  <img
-                    className="admin-users__avatar admin-users__avatar--sm"
-                    src={u.profileImageUrl || "https://placehold.co/30x30"}
-                    alt={u.id}
-                  />
-                </td>
-                <td>{u.id}</td>
-                <td>{u.name}</td>
-                <td>{u.createdDate}</td>
-                {/* delete_flag: 0 → Y, 1 → N */}
-                <td>{u.delete_flag === 0 ? "Y" : "N"}</td>
-              </tr>
-            ))}
+            {rows.map((u) => {
+              const active = !u.deleteFlag; 
+              return (
+                <tr
+                  key={u.userNo}
+                  onClick={() => goDetail(u.userNo)}
+                  className="admin-users__row"
+                >
+                  <td>{u.userNo}</td>
+                  <td>
+                    <img
+                      className="admin-users__avatar--sm"
+                      src={u.profileImagePath || "/placeholder.png"}
+                      alt=""
+                    />
+                  </td>
+                  <td>{u.id}</td>
+                  <td>{u.name}</td>
+                  <td>{(u.createdDt || "").slice(0, 10)}</td>
+                  <td>{active ? "Y" : "N"}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
 
-          </div>
         <div className="admin-users__pagination">
-          <button onClick={() => changePage(page - 1)} disabled={page === 1}>
+          <button
+            disabled={!hasPrev || page <= 1}
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+          >
             이전
           </button>
-          {pages.map((p, idx) =>
-            p === "…" ? (
-              <span key={`ellipsis-${idx}`} className="admin-users__ellipsis">
-                …
-              </span>
-            ) : (
+
+          {(pages?.length
+            ? pages
+            : Array.from({ length: totalPages }, (_, i) => i + 1)
+          )
+            .slice(0, 8)
+            .map((p) => (
               <button
-              key={p}
-              className={
-                "admin-users__page" +
-                (p === page ? " admin-users__page--delete_flag" : "")
-              }
-              onClick={() => changePage(p)}
+                key={p}
+                className={`admin-users__page ${
+                  p === page ? "admin-users__page--active" : ""
+                }`}
+                onClick={() => setPage(p)}
               >
                 {p}
               </button>
-            )
-          )}
+            ))}
+
           <button
-            onClick={() => changePage(page + 1)}
-            disabled={page === totalPages}
-            >
+            disabled={!hasNext || page >= totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
             다음
-            </button>
+          </button>
+        </div>
       </div>
     </div>
   );
