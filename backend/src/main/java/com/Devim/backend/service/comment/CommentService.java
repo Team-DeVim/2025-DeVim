@@ -23,4 +23,6 @@ public interface CommentService {
     List<MonthlyCountDto> countMonthlyComments();
 
     PageResponseDto<CommentListResponseDto> getCommentsByUser(long userNo, PageRequestDto pageRequestDto);
+
+    PageResponseDto<CommentListResponseDto> getCommentsByUserDesc(long userNo, PageRequestDto pageRequestDto);
 }

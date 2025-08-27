@@ -41,12 +41,15 @@
         SELECT
             c."comment_no" AS commentNo,
             c."board_no" AS boardNo,
+            b."board_type_no" AS boardTypeNo,
             c."comment_content" AS commentContent,
             u."name" AS writerName,
             u."profile_image_path" AS profileImagePath,
             c."created_dt" AS createdDt,
             c."delete_flag" AS deleteFlag
-        FROM "comment" c JOIN "user" u ON c."writer" = u."user_no"
+        FROM "comment" c
+        JOIN "user" u ON c."writer" = u."user_no"
+        JOIN "board" b ON c."board_no" = b."board_no"
         WHERE c."writer" = #{userNo} AND c."delete_flag" = 0
         ORDER BY c."comment_no" ASC
         OFFSET (#{pageRequest.page} - 1) * #{pageRequest.size} ROWS FETCH NEXT #{pageRequest.size} ROWS ONLY
@@ -56,6 +59,24 @@
         SELECT COUNT(*)
         FROM "comment"
         WHERE "writer" = #{userNo} AND "delete_flag" = 0
+    </select>
+
+    <select id="findByUserNoDesc" parameterType="map" resultType="com.Devim.backend.domain.comment.CommentListResponseDto">
+        SELECT
+            c."comment_no" AS commentNo,
+            c."board_no" AS boardNo,
+            b."board_type_no" AS boardTypeNo,
+            c."comment_content" AS commentContent,
+            u."name" AS writerName,
+            u."profile_image_path" AS profileImagePath,
+            c."created_dt" AS createdDt,
+            c."delete_flag" AS deleteFlag
+        FROM "comment" c
+        JOIN "user" u ON c."writer" = u."user_no"
+        JOIN "board" b ON c."board_no" = b."board_no"
+        WHERE c."writer" = #{userNo} AND c."delete_flag" = 0
+        ORDER BY c."comment_no" DESC
+        OFFSET (#{pageRequest.page} - 1) * #{pageRequest.size} ROWS FETCH NEXT #{pageRequest.size} ROWS ONLY
     </select>
 
     <update id="update" parameterType="com.Devim.backend.domain.comment.Comment">

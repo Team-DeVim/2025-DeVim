@@ -23,4 +23,6 @@ public interface CommentRepository {
     List<MonthlyCountDto> countMonthlyComments();
 
     PageResponseDto<CommentListResponseDto> findByUserNo(long userNo, PageRequestDto pageRequest);
+
+    PageResponseDto<CommentListResponseDto> findByUserNoDesc(long userNo, PageRequestDto pageRequest);
 }

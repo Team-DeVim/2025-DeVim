@@ -87,6 +87,4 @@ INSERT INTO "board_type" (
     "board_name"
 ) VALUES ( 3, '공지사항' );
 
-INSERT INTO "user_role" ("user_no", "role")
-VALUES (1, 'ROLE_ADMIN');
 

@@ -69,4 +69,9 @@ public class CommentServiceImpl implements CommentService{
     public PageResponseDto<CommentListResponseDto> getCommentsByUser(long userNo, PageRequestDto pageRequestDto) {
         return commentRepository.findByUserNo(userNo, pageRequestDto);
     }
+
+    @Override
+    public PageResponseDto<CommentListResponseDto> getCommentsByUserDesc(long userNo, PageRequestDto pageRequestDto) {
+        return commentRepository.findByUserNoDesc(userNo, pageRequestDto);
+    }
 }

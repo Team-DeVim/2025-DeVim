@@ -30,4 +30,6 @@ public interface CommentMapper {
     List<CommentListResponseDto> findByUserNo(@Param("userNo") long userNo, @Param("pageRequest") PageRequestDto pageRequest);
 
     long countByUserNo(@Param("userNo") long userNo);
+
+    List<CommentListResponseDto> findByUserNoDesc(@Param("userNo") long userNo, @Param("pageRequest") PageRequestDto pageRequest);
 }
