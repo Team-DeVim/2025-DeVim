@@ -119,7 +119,7 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "사용자 소프트 삭제", description = "사용자 정보를 논리적으로 삭제합니다 (delete_flag = 1).",
+    @Operation(summary = "사용자 비활성화 (소프트 삭제)", description = "사용자 정보를 논리적으로 삭제합니다 (delete_flag = 1).",
             parameters = {
                     @Parameter(name = "userNo", description = "사용자 번호", required = true)
             }
@@ -130,6 +130,20 @@ public class UserController {
     @DeleteMapping("/{userNo}")
     public ResponseEntity<Void> delete(@PathVariable("userNo") Long userNo) {
         userService.delete(userNo);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "사용자 활성화", description = "비활성화된 사용자를 다시 활성화합니다 (delete_flag = 0).",
+            parameters = {
+                    @Parameter(name = "userNo", description = "사용자 번호", required = true)
+            }
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "활성화 성공")
+    })
+    @PatchMapping("/{userNo}/reactivate")
+    public ResponseEntity<Void> reactivate(@PathVariable("userNo") Long userNo) {
+        userService.reactivate(userNo);
         return ResponseEntity.noContent().build();
     }
 

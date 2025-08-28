@@ -26,6 +26,8 @@ public interface UserService {
 
     void hardDelete(Long userNo);
 
+    void reactivate(Long userNo);
+
     String uploadProfileImage(long userNo, MultipartFile file) throws IOException;
 
     byte[] getThumbnail(long userNo, int width, int height) throws IOException;

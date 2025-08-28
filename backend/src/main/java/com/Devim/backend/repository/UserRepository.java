@@ -30,6 +30,8 @@ public interface UserRepository {
 
     void hardDeleteById(long userNo);
 
+    void reactivateById(long userNo);
+
     void addRole(UserRole userRole);
 
     List<UserRankDto> findTop5ByBoardCount();
