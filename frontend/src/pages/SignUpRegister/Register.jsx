@@ -2,15 +2,16 @@ import { useState } from "react";
 import "./Register.css";
 import { useNavigate } from "react-router";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import { signUp } from "../../api/DevimApi";
 
 export default function Register() {
   const navigate = useNavigate();
 
   //[id, password, name, birth, gender, foreigner, phone]
-  const [id, setid] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [birth, setBirth] = useState("");
   const [birthFormatted, setBirthFormatted] = useState(""); // "YYYY년 MM월 DD일"
   const [gender, setGender] = useState("");
@@ -22,6 +23,9 @@ export default function Register() {
   const [birthError, setBirthError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [submitError, setSubmitError] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
 
   // 메인으로 가기
   const main = () => {
@@ -36,9 +40,9 @@ export default function Register() {
     } else if (specialText.test(value)) { // 그게 아니면 밑 코드 실행
       setIdError("아이디: 특수문자를 입력할 수 없습니다.");
     } else {
-      setIdError("");
+      setUsername("");
     }
-    setid(value);
+    setUsername(value);
   };
 
   // 비밀번호 체크
@@ -75,85 +79,85 @@ export default function Register() {
     setName(value);
   };
 
-  // 생년월일 자동포맷체크
-  const formatBirthDate = (value) => {
-    const onlyNumber = value.replace(/\D/g, "").slice(0, 8);
+  // // 생년월일 자동포맷체크
+  // const formatBirthDate = (value) => {
+  //   const onlyNumber = value.replace(/\D/g, "").slice(0, 8);
 
-    if (onlyNumber.length !== 8) return value;
+  //   if (onlyNumber.length !== 8) return value;
 
-    const year = onlyNumber.slice(0, 4);
-    const month = onlyNumber.slice(4, 6);
-    const day = onlyNumber.slice(6, 8);
+  //   const year = onlyNumber.slice(0, 4);
+  //   const month = onlyNumber.slice(4, 6);
+  //   const day = onlyNumber.slice(6, 8);
 
-    return `${year}년 ${month}월 ${day}일`;
-  };
+  //   return `${year}년 ${month}월 ${day}일`;
+  // };
 
-  // 생년월일 체크
-  const validateBirth = (value) => {
-    if (!value) {
-      setBirthError("생년월일: 필수 입력입니다.");
-      setBirth("");
-      return;
-    }
+  // // 생년월일 체크
+  // const validateBirth = (value) => {
+  //   if (!value) {
+  //     setBirthError("생년월일: 필수 입력입니다.");
+  //     setBirth("");
+  //     return;
+  //   }
 
-    const date = new Date(value);
-    if (isNaN(date.getTime())) {
-      setBirthError("유효한 날짜를 선택해주세요.");
-      setBirth("");
-      return;
-    }
+  //   const date = new Date(value);
+  //   if (isNaN(date.getTime())) {
+  //     setBirthError("유효한 날짜를 선택해주세요.");
+  //     setBirth("");
+  //     return;
+  //   }
 
-    // 오늘 날짜보다 미래 선택 방지
-    const today = new Date();
-    if (date > today) {
-      setBirthError("미래 날짜는 선택할 수 없습니다.");
-      setBirth("");
-      return;
-    }
+  //   // 오늘 날짜보다 미래 선택 방지
+  //   const today = new Date();
+  //   if (date > today) {
+  //     setBirthError("미래 날짜는 선택할 수 없습니다.");
+  //     setBirth("");
+  //     return;
+  //   }
 
-    setBirthError("");
-    setBirth(value); // YYYY-MM-DD 형식 그대로 저장
-    setBirthFormatted(formatBirthDate(value.replace(/-/g, ""))); // YYYY년 MM월 DD일 포맷 저장
-  };
+  //   setBirthError("");
+  //   setBirth(value); // YYYY-MM-DD 형식 그대로 저장
+  //   setBirthFormatted(formatBirthDate(value.replace(/-/g, ""))); // YYYY년 MM월 DD일 포맷 저장
+  // };
 
-  // 성별 선택
-  const handleGenderSelect = (selected) => {
-    setGender(selected);
-  };
+  // // 성별 선택
+  // const handleGenderSelect = (selected) => {
+  //   setGender(selected);
+  // };
 
-  // 핸드폰 체크
-  const validatePhone = (value) => {
-    const onlyNumber = value.replace(/\s+/g, "");
-    let formatted = value;
-    if (onlyNumber.length === 11) {
-      formatted = `${onlyNumber.slice(0, 3)}-${onlyNumber.slice(
-        3,
-        7
-      )}-${onlyNumber.slice(7)}`;
-    }
+  // // 핸드폰 체크
+  // const validatePhone = (value) => {
+  //   const onlyNumber = value.replace(/\s+/g, "");
+  //   let formatted = value;
+  //   if (onlyNumber.length === 11) {
+  //     formatted = `${onlyNumber.slice(0, 3)}-${onlyNumber.slice(
+  //       3,
+  //       7
+  //     )}-${onlyNumber.slice(7)}`;
+  //   }
 
-    const phoneRegex = /^01[0-9]-?\d{3,4}-?\d{4}$/;
+  //   const phoneRegex = /^01[0-9]-?\d{3,4}-?\d{4}$/;
 
-    if (!onlyNumber) {
-      setPhoneError("휴대전화번호: 필수 입력입니다.");
-    } else if (!phoneRegex.test(onlyNumber)) {
-      setPhoneError(
-        "휴대전화번호: 형식이 올바르지 않습니다. 예: 010-1234-5678"
-      );
-    } else {
-      setPhoneError("");
-    }
+  //   if (!onlyNumber) {
+  //     setPhoneError("휴대전화번호: 필수 입력입니다.");
+  //   } else if (!phoneRegex.test(onlyNumber)) {
+  //     setPhoneError(
+  //       "휴대전화번호: 형식이 올바르지 않습니다. 예: 010-1234-5678"
+  //     );
+  //   } else {
+  //     setPhoneError("");
+  //   }
 
-    setPhone(formatted);
-  };
-  // 핸드폰 자동포맷체크
-  const handlePhoneChange = (e) => {
-    const raw = e.target.value;
-    const formatted = raw.replace(/\D/g, "");
+  //   setPhone(formatted);
+  // };
+  // // 핸드폰 자동포맷체크
+  // const handlePhoneChange = (e) => {
+  //   const raw = e.target.value;
+  //   const formatted = raw.replace(/\D/g, "");
 
-    setPhone(formatted);
-    validatePhone(formatted);
-  };
+  //   setPhone(formatted);
+  //   validatePhone(formatted);
+  // };
 
   // 백엔드 API 호출 함수
   // const sendRegisterRequest = async (userData) => {
@@ -187,12 +191,9 @@ export default function Register() {
   const handleCheckRequest = async () => {
     // 입력값이 없거나, 공백이 있을때
     if (
-      !id.trim() ||
+      !username.trim() ||
       !password.trim() ||
-      !name.trim() ||
-      !birth.trim() ||
-      !gender ||
-      !phone.trim()
+      !name.trim()
     ) {
       setSubmitError("나머지 정보를 입력해주세요");
       return;
@@ -207,32 +208,20 @@ export default function Register() {
     // 모든 값에 에러가 없으면 에러메세지 초기화하고 전송 진행
     setSubmitError("");
 
-    // 실제 전송 로직 (예: API 호출)
-  //    try {
-  //      // 백엔드로 보낼 데이터 구성
-  //      const userData = {
-  //        id: id.trim(),
-  //        password: password,
-  //        name: name.trim(),
-  //        birthDate: new Date(birth).toISOString(),
-  //        gender: gender,
-  //        phoneNumber: phone.replace(/-/g, ""),
-  //      };
+    if (loading) return;
+    setErr("");
+    setLoading(true);
 
-  //      await sendRegisterRequest(userData);
-  //    } catch (error) {
-  //      // 에러 처리
-  //      let errorMessage = "회원가입 중 오류가 발생했습니다.";
+    try {
+      await signUp({ username, password, name });
+      alert("회원가입이 완료되었습니다. 로그인해주세요!");
+      navigate("/login"); // ✅ 회원가입 후 로그인 페이지로 리다이렉트
+    } catch (e) {
+      setErr("회원가입에 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      setLoading(false);
+    }
 
-  //      if (error.message.includes("아이디")) {
-  //        errorMessage = "이미 존재하는 아이디입니다.";
-  //      } else if (error.message) {
-  //        errorMessage = error.message;
-  //      }
-
-  //      setSubmitError(errorMessage);
-  //    }
-     
   };
 
   /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
@@ -254,7 +243,7 @@ export default function Register() {
               className="register__input--id"
               type="text"
               placeholder="아이디"
-              value={id}
+              value={username}
               onChange={(e) => validateId(e.target.value)}
             />
             <div className="register__suffix--email">@naver.com</div>
@@ -285,7 +274,7 @@ export default function Register() {
               onChange={(e) => validateName(e.target.value)}
             />
           </div>
-
+          {/* 
           <div className="register__group--birth">
             <i className="register__icon fa-solid fa-calendar-days"></i>
             <input
@@ -342,27 +331,27 @@ export default function Register() {
 
             {phoneError && (
               <p className="register__error-message">{phoneError}</p>
-            )}
+            )} */}
 
-            <button
-              className="register__submit-button"
-              type="submit"
-              onClick={handleCheckRequest}
+          <button
+            className="register__submit-button"
+            type="submit"
+            onClick={handleCheckRequest}
+          >
+            회원가입
+          </button>
+
+          {submitError && (
+            <p
+              className="register__error-message"
+              style={{ marginTop: "8px" }}
             >
-              회원가입
-            </button>
-
-            {submitError && (
-              <p
-                className="register__error-message"
-                style={{ marginTop: "8px" }}
-              >
-                {submitError}
-              </p>
-            )}
-          </div>
+              {submitError}
+            </p>
+          )}
         </div>
       </div>
     </div>
+    // </div>
   );
 }
