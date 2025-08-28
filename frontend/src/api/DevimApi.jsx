@@ -87,7 +87,6 @@ api.interceptors.response.use(
 
 // Login
 export async function login(username, password, signal) {
-    // form-urlencoded로 전송
     const body = new URLSearchParams();
     body.set("username", username);
     body.set("password", password);
@@ -106,6 +105,20 @@ export async function login(username, password, signal) {
     return true;
 }
 
+// 회원가입
+export async function signUp({ username, password, name }, signal) {
+    const form = new FormData();
+    form.append("username", username);
+    form.append("password", password);
+    form.append("name", name);
+
+    const res = await api.post("/sign-up", form, {
+        signal,
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    return res.data;
+}
 
 
 
@@ -123,11 +136,6 @@ export const getUserList = async (page = 0, size = 20, signal) => {
     return res.data;
 };
 
-// 유저 생성 ( 회원 가입 )
-export const postUserRegister = async (registerObj) => {
-    const res = await axios.post(`${USER_PREFIX}`, registerObj);
-    return res.data;
-};
 
 // profilePage__MyArticle__내 글 리스트 요청
 export async function getMypostList(userNo, page = 1, size = 5, signal) {
