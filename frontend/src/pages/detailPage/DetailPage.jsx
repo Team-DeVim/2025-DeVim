@@ -9,7 +9,7 @@ import BoardTheme from "../boardPage/components/BoardTheme/BoardTheme";
 import ContentBox from "./components/contentBox/ContentBox";
 import CommentBox from "./components/commentBox/CommentBox";
 import { useParams, useSearchParams } from "react-router-dom";
-import { getCommentList, getDetailPost } from "../../api/DevimApi";
+import { fetchMyInfo, getCommentList, getDetailPost, getToken } from "../../api/DevimApi";
 
 export default function DetailPage() {
   const { boardNo } = useParams();
@@ -20,6 +20,8 @@ export default function DetailPage() {
   const [error, setError] = useState("");
   const [postLoading, setPostLoading] = useState(true);
   const [commentLoading, setCommentLoading] = useState(true);
+  const [me, setMe] = useState(null);
+  const isLogin = !!getToken();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -35,6 +37,18 @@ export default function DetailPage() {
       .finally(() => setPostLoading(false));
     return () => controller.abort();
   }, [boardNo]);
+
+  // 내 정보 불러오기
+  useEffect(() => {
+    if (!isLogin) { return; }
+    const controller = new AbortController();
+
+    fetchMyInfo(controller.signal)
+      .then((data) => setMe(data))
+      .catch((err) => setError(err.message));
+
+    return () => controller.abort();
+  }, [isLogin]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -62,8 +76,8 @@ export default function DetailPage() {
         <div className="detailPage--main--left">
           <BoardTheme boardTypeNo={boardTypeNo} />
           {/* 본문 + 댓글 */}
-          <ContentBox data={content} />
-          <CommentBox data={comment} />
+          <ContentBox data={content} isLogin={isLogin} accountInfo={me} />
+          <CommentBox data={comment} isLogin={isLogin} accountInfo={me} boardNo={boardNo} />
         </div>
 
         <aside className="detailPage--main--side">

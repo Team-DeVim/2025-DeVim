@@ -64,9 +64,11 @@ public class SecurityConfig {
                         .requestMatchers("/upload/**").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/boards/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/comments/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/users/rank/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/comments/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/rank/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users/me").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/comments/").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/boards/").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
 
                         .anyRequest().authenticated());
