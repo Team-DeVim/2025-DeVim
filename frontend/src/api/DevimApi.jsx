@@ -3,13 +3,111 @@ import axios from "axios";
 export const API_SERVER_HOST = 'http://localhost:8080';
 
 // User Controller prefix
-const USER_PREFIX = `${API_SERVER_HOST}/api/v1/users`;
+export const USER_PREFIX = `${API_SERVER_HOST}/api/v1/users`;
 
 // Board Controller prefix
-const BOARD_PREFIX = `${API_SERVER_HOST}/api/v1/boards`;
+export const BOARD_PREFIX = `${API_SERVER_HOST}/api/v1/boards`;
 
 // Comment Controller prefix
-const COMMENT_PREFIX = `${API_SERVER_HOST}/api/v1/comments`;
+export const COMMENT_PREFIX = `${API_SERVER_HOST}/api/v1/comments`;
+
+// 로그인 api
+
+// ===== 설정 =====
+const TOKEN_KEY = "auth/bearer";
+
+const toBearer = (token) => {
+    if (!token) return null;
+    return token.startsWith("Bearer ") ? token : `Bearer ${token}`;
+};
+
+export function setToken(token /* "Bearer xxx" or "xxx" */) {
+    const bearer = toBearer(token);
+    if (bearer) sessionStorage.setItem(TOKEN_KEY, bearer);
+    else sessionStorage.removeItem(TOKEN_KEY);
+}
+
+export function clearToken() {
+    sessionStorage.removeItem(TOKEN_KEY);
+}
+
+export function getToken() {
+    return sessionStorage.getItem(TOKEN_KEY); // 없으면 null
+}
+
+// ===== axios 인스턴스 =====
+export const api = axios.create({
+    baseURL: API_SERVER_HOST,
+    // 헤더 방식이므로 withCredentials 불필요(쿠키 미사용)
+});
+
+// 요청마다 Authorization 자동 부착
+api.interceptors.request.use((cfg) => {
+    const bearerToken = getToken();
+    if (bearerToken) {
+        cfg.headers = cfg.headers ?? {};
+        cfg.headers.Authorization = bearerToken;
+    }
+    return cfg;
+});
+
+// 401 처리: 토큰 제거 + 전역 이벤트 + /login 이동(폴백)
+api.interceptors.response.use(
+    (res) => res,
+    (err) => {
+        if (err?.response?.status === 401) {
+            clearToken();
+            // 라우터에서 잡아 처리할 수 있도록 이벤트 발행
+            // window.dispatchEvent(new Event("auth:unauthorized"));
+
+            // 라우터 연동이 아직 없다면 폴백으로 바로 이동
+            if (location.pathname !== "/login") {
+                // 필요 없으면 이 줄은 지워도 됨(이벤트만 사용)
+                location.assign("/login");
+            }
+            alert("로그인 오류!");
+            return Promise.reject(err);
+        }
+        if (err?.response?.status === 403) {
+            alert("관리자 권한이 필요합니다.");
+            clearToken();
+            // 라우터에서 잡아 처리할 수 있도록 이벤트 발행
+            // window.dispatchEvent(new Event("auth:unauthorized"));
+
+            // 라우터 연동이 아직 없다면 폴백으로 바로 이동
+            if (location.pathname !== "/login") {
+                // 필요 없으면 이 줄은 지워도 됨(이벤트만 사용)
+                location.assign("/login");
+            }
+            return Promise.reject(err);
+        }
+    }
+);
+// ----------------------------------------------------
+
+// Login
+export async function login(username, password, signal) {
+    // form-urlencoded로 전송
+    const body = new URLSearchParams();
+    body.set("username", username);
+    body.set("password", password);
+
+    const res = await api.post("/login", body, {
+        signal,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    });
+
+    // 헤더에서 토큰 획득("Bearer xxx")
+    const auth = res.headers?.authorization;
+    if (!auth) {
+        throw new Error("Authorization header missing. Ensure Access-Control-Expose-Headers: Authorization is set on server.");
+    }
+    setToken(auth);
+    return true;
+}
+
+
+
 
 
 //USER
@@ -30,6 +128,42 @@ export const postUserRegister = async (registerObj) => {
     const res = await axios.post(`${USER_PREFIX}`, registerObj);
     return res.data;
 };
+
+// profilePage__MyArticle__내 글 리스트 요청
+export async function getMypostList(userNo, page = 1, size = 5, signal) {
+    const params = {
+        page: Number(page),
+        size: Number(size),
+    };
+    try {
+        const { data } = await axios.get(`${USER_PREFIX}/${encodeURIComponent(userNo)}/posts`,
+            { params, signal });
+        return data;
+    } catch (err) {
+        if (err?.code === "ERR_CANCELED" || err?.name === "CanceledError") {
+            throw err;
+        }
+        throw err;
+    }
+}
+
+// profilePage__MyArticle__내 글 리스트 요청
+export async function getMycommentList(userNo, page = 1, size = 5, signal) {
+    const params = {
+        page: Number(page),
+        size: Number(size),
+    };
+    try {
+        const { data } = await axios.get(`${USER_PREFIX}/${encodeURIComponent(userNo)}/comments`,
+            { params, signal });
+        return data;
+    } catch (err) {
+        if (err?.code === "ERR_CANCELED" || err?.name === "CanceledError") {
+            throw err;
+        }
+        throw err;
+    }
+}
 
 //BOARD
 
@@ -110,6 +244,8 @@ export async function getDetailPost(boardNo, signal) {
         throw err;
     }
 }
+
+
 
 
 //COMMENT

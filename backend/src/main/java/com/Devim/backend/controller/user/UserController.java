@@ -7,6 +7,7 @@ import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.domain.user.UserRankDto;
 import com.Devim.backend.domain.user.UserSummaryResponseDto;
+import com.Devim.backend.jwt.JWTUserPrincipal;
 import com.Devim.backend.service.board.BoardService;
 import com.Devim.backend.service.comment.CommentService;
 import com.Devim.backend.service.user.UserService;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +40,15 @@ public class UserController {
     private final UserService userService;
     private final BoardService boardService;
     private final CommentService commentService;
+
+    @Operation(summary = "내 정보 조회", description = "현재 로그인된 사용자의 정보를 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공")
+    })
+    @GetMapping("/me")
+    public ResponseEntity<User> getMyInfo(@AuthenticationPrincipal JWTUserPrincipal userPrincipal) {
+        return ResponseEntity.ok(userService.get(userPrincipal.getUserNo()));
+    }
 
     @Operation(summary = "사용자 생성", description = "새로운 사용자를 생성합니다.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -220,6 +231,24 @@ public class UserController {
             @PathVariable("userNo") long userNo,
             @ModelAttribute PageRequestDto pageRequestDto) {
         return ResponseEntity.ok(commentService.getCommentsByUser(userNo, pageRequestDto));
+    }
+
+    @Operation(summary = "사용자별 댓글 목록 조회 (최신순)", description = "특정 사용자가 작성한 댓글 목록을 최신순으로 페이지네이션하여 조회합니다.",
+            parameters = {
+                    @Parameter(name = "userNo", description = "사용자 번호", required = true),
+                    @Parameter(name = "page", description = "페이지 번호", required = false, example = "1"),
+                    @Parameter(name = "size", description = "페이지당 댓글 수", required = false, example = "10")
+            }
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공"),
+            @ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없음")
+    })
+    @GetMapping("/{userNo}/comments/desc")
+    public ResponseEntity<PageResponseDto<CommentListResponseDto>> getUserCommentsDesc(
+            @PathVariable("userNo") long userNo,
+            @ModelAttribute PageRequestDto pageRequestDto) {
+        return ResponseEntity.ok(commentService.getCommentsByUserDesc(userNo, pageRequestDto));
     }
 
     @Operation(summary = "게시글 작성수 TOP 5 사용자 조회", description = "게시글을 가장 많이 작성한 사용자 5명을 조회합니다.")

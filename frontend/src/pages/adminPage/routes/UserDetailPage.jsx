@@ -9,7 +9,7 @@ function getMockUser(userNo) {
     password: "********",
     name: `사용자 ${userNo}`,
     createdDate: "2025-08-01",
-    delete_flag: userNo % 3 === 0 ? 1 : 0, 
+    delete_flag: userNo % 3 === 0 ? 1 : 0,
     profileImageUrl: null,
   };
 }
@@ -25,7 +25,7 @@ export default function UserDetailPage() {
     password: "",
     name: user.name,
     createdDate: user.createdDate,
-    delete_flag: user.delete_flag, 
+    delete_flag: user.delete_flag,
   });
 
   const onChange = (e) => {

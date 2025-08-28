@@ -3,6 +3,8 @@ import Layout from "../layout/Layout";
 import { Suspense } from "react";
 import { lazy } from "react";
 import AdminPage from "../pages/adminPage/AdminPage";
+import ClientErrorPage from "../pages/errorPage/ClientErrorPage.jsx";
+import ServerErrorPage from "../pages/errorPage/ServerErrorPage.jsx";
 
 
 const MainPage = lazy(() => import("../pages/main/MainPage"));
@@ -12,13 +14,12 @@ const BoardPage = lazy(() => import("../pages/boardPage/BoardPage"));
 const ProfilePage = lazy(() => import("../pages/profilePage/ProfilePage"));
 const DetailPage = lazy(() => import("../pages/detailPage/DetailPage"));
 const UsersPage = lazy(() => import("../pages/adminPage/routes/UsersPage"));
-const UserDetailPage = lazy(() => import("../pages/adminPage/routes/UserDetailPage"));
+const UserDetailPage = lazy(() =>
+  import("../pages/adminPage/routes/UserDetailPage")
+);
 const EditorPage = lazy(() => import("../pages/editorPage/EditorPage"));
 const UsersSmokeTest = lazy(() => import("../pages/apiTestPage/UsersSmokeTest"));
-const BannerModify = lazy(() =>
-  import("../pages/admin_bannerModify/BannerModify")
-);
-
+const DashboardPage = lazy(() => import("../pages/adminPage/routes/DashboardPage"));
 
 
 const root = createBrowserRouter([
@@ -43,7 +44,7 @@ const root = createBrowserRouter([
         ),
       },
       {
-        path: "signUp",
+        path: "login",
         element: (
           <Suspense>
             <SignUp />
@@ -59,7 +60,7 @@ const root = createBrowserRouter([
         ),
       },
       {
-        path: "profilePage",
+        path: "profilePage/:userNo",
         element: (
           <Suspense>
             <ProfilePage />
@@ -80,7 +81,7 @@ const root = createBrowserRouter([
         children: [
           { path: "users", element: <UsersPage /> },
           { path: "users/:userNo", element: <UserDetailPage /> },
-          { path: "bannerModify", element: <BannerModify /> },
+          { path: "dashboard", element: <DashboardPage /> },
         ],
       },
       {
@@ -99,6 +100,15 @@ const root = createBrowserRouter([
           </Suspense>
         ),
       },
+      {
+        path: "/",
+        element: <Layout />,
+        children: [
+          { index: true, element: <MainPage /> },
+          { path: "*", element: <ClientErrorPage /> },
+        ],
+      },
+      { path: "/errorPage", element: <ServerErrorPage /> },
     ],
   },
 ]);

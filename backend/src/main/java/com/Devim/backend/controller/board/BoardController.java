@@ -4,6 +4,7 @@ import com.Devim.backend.domain.board.*;
 import com.Devim.backend.domain.common.MonthlyCountDto;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
+import com.Devim.backend.jwt.JWTUserPrincipal;
 import com.Devim.backend.service.board.BoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +32,7 @@ public class BoardController {
 
     @Operation(
             summary = "게시글 생성",
-            description = "새 게시글을 생성합니다. (임시: X-USER-NO 헤더로 작성자 ID 전달)",
+            description = "새 게시글을 생성합니다.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     description = "게시글 생성 요청 바디",
@@ -42,15 +44,15 @@ public class BoardController {
     })
     @PostMapping
     public ResponseEntity<Void> create(@Validated @RequestBody BoardCreateRequestDto requestDto,
-                                       @RequestHeader("X-USER-NO") Long userNo) {
-        Long id = boardService.create(requestDto, userNo);
+                                       @AuthenticationPrincipal JWTUserPrincipal userPrincipal) {
+        Long id = boardService.create(requestDto, userPrincipal.getUserNo());
         return ResponseEntity.created(URI.create("/api/v1/boards/" + id)).build();
     }
 
     
     @Operation(
-            summary = "게시글 상세 조회",
-            description = "boardNo로 게시글을 조회합니다. (임시: X-USER-NO 헤더로 현재 사용자 ID 전달)",
+            summary = "게시글 단건 조회",
+            description = "boardNo로 게시글을 조회합니다.",
             parameters = {
                     @io.swagger.v3.oas.annotations.Parameter(name = "boardNo", description = "게시글 번호", example = "101", required = true)
             }
@@ -61,7 +63,8 @@ public class BoardController {
     })
     @GetMapping("/{boardNo}")
     public ResponseEntity<BoardDetailResponseDto> get(@PathVariable("boardNo") Long boardNo,
-                                                      @RequestHeader(value = "X-USER-NO", required = false) Long currentUserNo) {
+                                                      @AuthenticationPrincipal JWTUserPrincipal userPrincipal) {
+        Long currentUserNo = (userPrincipal != null) ? userPrincipal.getUserNo() : null;
         return ResponseEntity.ok(boardService.get(boardNo, currentUserNo));
     }
 

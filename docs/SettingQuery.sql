@@ -1,7 +1,7 @@
 CREATE TABLE "user" (
   "user_no" number PRIMARY KEY,
   "id" varchar2(50) NOT NULL,
-  "password" varchar2(50) NOT NULL,
+  "password" varchar2(255) NOT NULL,
   "name" varchar2(50) NOT NULL,
   "social" number NOT NULL,
   "profile_image_path" varchar2(255),
@@ -74,16 +74,17 @@ create sequence "seq_comment_no";
 create sequence "seq_like_no";
 create sequence "seq_main_image_no";
 
---INSERT INTO "board_type" (
---    "board_type_no",
---    "board_name"
---) VALUES ( 1, '자유게시판' );
---INSERT INTO "board_type" (
---    "board_type_no",
---    "board_name"
---) VALUES ( 2, '질문게시판' );
---INSERT INTO "board_type" (
---    "board_type_no",
---    "board_name"
---) VALUES ( 3, '공지사항' );
+INSERT INTO "board_type" (
+    "board_type_no",
+    "board_name"
+) VALUES ( 1, '자유게시판' );
+INSERT INTO "board_type" (
+    "board_type_no",
+    "board_name"
+) VALUES ( 2, '질문게시판' );
+INSERT INTO "board_type" (
+    "board_type_no",
+    "board_name"
+) VALUES ( 3, '공지사항' );
+
 

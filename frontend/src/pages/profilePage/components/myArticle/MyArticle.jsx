@@ -1,59 +1,32 @@
-import { useNavigate } from "react-router";
+import { createSearchParams, Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import "./MyArticle.css";
 
-/*예비데이터*/
-const articleData = [
-  { title: "JPA 지연로딩 N+1 해결", likes: 55, comments: 2 },
-  { title: "Oracle 커넥션 풀 튜닝 팁", likes: 31, comments: 8 },
-  { title: "NestJS로 백엔드 구조 잡기", likes: 31, comments: 12 },
-  { title: "GitHub Actions로 CI/CD 구축하기", likes: 51, comments: 22 },
-  { title: "VSCode 꿀팁 10가지", likes: 55, comments: 25 },
-  { title: "React에서 useEffect 완벽 가이드", likes: 42, comments: 18 },
-  { title: "타입스크립트 초보 탈출기", likes: 27, comments: 9 },
-  { title: "JPA 지연로딩 N+1 해결", likes: 55, comments: 2 },
-  { title: "Oracle 커넥션 풀 튜닝 팁", likes: 31, comments: 8 },
-  { title: "NestJS로 백엔드 구조 잡기", likes: 31, comments: 12 },
-  { title: "GitHub Actions로 CI/CD 구축하기", likes: 51, comments: 22 },
-  { title: "VSCode 꿀팁 10가지", likes: 55, comments: 25 },
-  { title: "React에서 useEffect 완벽 가이드", likes: 42, comments: 18 },
-
-];
-
-const MyArticle = () => {
-  const navigate = useNavigate();
+const MyArticle = ({ postPagingList }) => {
+  const [params, setParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageGroup, setPageGroup] = useState(0);
-  const articlesPerPage = 5;
-  const pagesPerGroup = 10;
 
-  const totalPages = Math.ceil(articleData.length / articlesPerPage);
-  const startIndex = (currentPage - 1) * articlesPerPage;
-  const currentArticles = articleData.slice(
-    startIndex,
-    startIndex + articlesPerPage
-  );
 
   /* 오늘 날짜 함수 출력 */
-  const today = new Date();
-  const formattedDate = today.toLocaleDateString("ko-KR", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
-  /* 페이징그룹 시작과 끝 계산 */
-  const startPage = pageGroup * pagesPerGroup + 1;
-  const endPage = Math.min(startPage + pagesPerGroup - 1, totalPages);
-  /* 페이징 배열 */
-  const pageNumbers = [];
-  for (let i = startPage; i <= endPage; i++) {
-    pageNumbers.push(i);
+  // const today = new Date();
+  function formatDate(iso, tz = "Asia/Seoul") {
+    if (!iso) return "";
+    const d = new Date(iso);
+    const y = new Intl.DateTimeFormat("ko-KR", { timeZone: tz, year: "numeric" }).format(d);
+    const m = new Intl.DateTimeFormat("ko-KR", { timeZone: tz, month: "2-digit" }).format(d);
+    const day = new Intl.DateTimeFormat("ko-KR", { timeZone: tz, day: "2-digit" }).format(d);
+    return `${y}-${m}-${day}`;
   }
 
-  /* 상세페이지로 이동 */
-  const handleDetailPage = () => {
-    navigate("/detailPage");
+  /* 페이징 배열 */
+  const pageNumbers = postPagingList.pageNumList ?? [];
+
+  //페이지 이동에 대한 쿼리스트링 변경
+  const setPage = (p) => {
+    const next = new URLSearchParams(params);
+    next.set("Apage", String(p));
+    setParams(next);
+    setCurrentPage(Number(next.get("Apage")));
   };
 
   return (
@@ -61,28 +34,32 @@ const MyArticle = () => {
       <div className="myArticle__group">
         <h3 className="myArticle__title">내가 쓴 글</h3>
         <hr />
-        {currentArticles.map((article, index) => (
-          <div
-            key={index}
+        {postPagingList.dtoList.map((article) => (
+          <Link
+            key={article.boardNo}
+            to={{
+              pathname: `/detailPage/${article.boardNo}`,
+              search: `?${createSearchParams({
+                boardTypeNo: article.boardTypeNo ?? "",
+              })}`,
+            }}
             className="myArticle__my-write"
-            onClick={handleDetailPage}
           >
             <span>{article.title}</span>
             <div className="myArticle__my-stats">
-              <span>추천 {article.likes}</span>
-              <span>댓글 {article.comments}</span>
+              <span>추천 {article.likeCount}</span>
+              <span>댓글 {article.commentCount}</span>
               <span>|</span>
-              <span>{formattedDate}</span>
+              <span>{formatDate(article.createdDt)}</span>
             </div>
-          </div>
+          </Link>
         ))}
 
         <div className="myArticle__pagination">
-          {pageGroup > 0 && (
+          {postPagingList.prev && (
             <button
               onClick={() => {
-                setPageGroup(pageGroup - 1);
-                setCurrentPage(startPage - pagesPerGroup); // 이전 그룹의 첫 페이지로 이동
+                setPage(postPagingList.prevPage);
               }}
             >
               ◀
@@ -92,15 +69,18 @@ const MyArticle = () => {
             <button
               key={page}
               className={currentPage === page ? "active" : ""}
-              onClick={() => setCurrentPage(page)}
+              onClick={() => setPage(page)}
             >
               {page}
             </button>
           ))}
 
           {/* ✅ 다음 페이지 그룹 버튼 */}
-          {endPage < totalPages && (
-            <button onClick={() => setPageGroup(pageGroup + 1)}>▶</button>
+          {postPagingList.next && (
+            <button
+              onClick={
+                () => { setPage(postPagingList.nextPage); }
+              }>▶</button>
           )}
         </div>
       </div>

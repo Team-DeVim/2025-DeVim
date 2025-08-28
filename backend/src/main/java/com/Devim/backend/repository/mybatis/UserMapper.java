@@ -3,6 +3,7 @@ package com.Devim.backend.repository.mybatis;
 import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.domain.user.UserRankDto;
+import com.Devim.backend.domain.user.UserRole;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -17,6 +18,12 @@ public interface UserMapper {
 
     Optional<User> findById(@Param("userNo") long userNo);
 
+    Boolean existsByUsername(String username);
+
+    Long findUserNoByUsername(@Param("username") String username);
+
+    User findByUsername(@Param("username")String username);
+  
     Optional<User> findByUserId(@Param("id") String id);
 
     List<User> findAll(PageRequestDto pageRequest);
@@ -29,7 +36,7 @@ public interface UserMapper {
 
     void hardDeleteById(@Param("userNo") long userNo);
 
-    // void addRole(UserRole userRole);
+    void addRole(UserRole userRole);
 
     List<UserRankDto> findTop5ByBoardCount();
 

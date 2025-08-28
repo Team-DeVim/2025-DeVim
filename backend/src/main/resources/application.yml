@@ -3,6 +3,7 @@ spring:
     import:
       - classpath:db-credentials.yml   # username, password만 불러옴
       - classpath:file-path.yml
+      - classpath:jwt.yml
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
     hikari:

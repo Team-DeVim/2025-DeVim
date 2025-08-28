@@ -4,30 +4,37 @@ import com.Devim.backend.domain.common.PageRequestDto;
 import com.Devim.backend.domain.common.PageResponseDto;
 import com.Devim.backend.domain.user.User;
 import com.Devim.backend.domain.user.UserRankDto;
+import com.Devim.backend.domain.user.UserRole;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
-	void save(User user);
+    void save(User user);
 
-	Optional<User> findById(long userNo);
+    Optional<User> findById(long userNo);
 
-	Optional<User> findByUserId(String id);
+    Boolean existsByUsername(String username);
+  
+  	Optional<User> findByUserId(String id); 
 
 	PageResponseDto<User> findAll(PageRequestDto pageRequest);
 
-	void update(User user);
+    Long findUserNoByUsername(String username);
 
-	void deleteById(long userNo);
+    User findByUsername(String username);
 
-	void hardDeleteById(long userNo);
+    void update(User user);
 
-	// void addRole(UserRole userRole);
+    void deleteById(long userNo);
 
-	List<UserRankDto> findTop5ByBoardCount();
+    void hardDeleteById(long userNo);
 
-	List<UserRankDto> findTop5ByCommentCount();
+    void addRole(UserRole userRole);
+
+    List<UserRankDto> findTop5ByBoardCount();
+
+    List<UserRankDto> findTop5ByCommentCount();
 
     long countBoardsByUser(long userNo);
 

@@ -1,4 +1,3 @@
-/*
 package com.Devim.backend.domain.user;
 
 import lombok.AllArgsConstructor;
@@ -12,4 +11,3 @@ public class UserRole {
 	private long userNo;
 	private String role;
 }
-*/

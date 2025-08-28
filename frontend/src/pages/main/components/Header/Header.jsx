@@ -33,7 +33,7 @@ export default function Header() {
 
   // 로그인
   const signUp = () => {
-    navigate("/SignUp");
+    navigate("/login");
   };
 
   // 게시판 이동
