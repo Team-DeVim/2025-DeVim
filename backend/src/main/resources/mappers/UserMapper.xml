@@ -10,19 +10,6 @@
         VALUES (#{userNo}, #{id}, #{password}, #{name}, #{social}, NULL, SYSDATE, 0)
     </insert>
 
-    <select id="findById" parameterType="long" resultType="com.Devim.backend.domain.user.User">
-        SELECT "user_no"            AS userNo,
-               "id",
-               "password",
-               "name",
-               "social",
-               "profile_image_path" AS profileImagePath,
-               "created_dt"         AS createdDt,
-               "delete_flag"        AS deleteFlag
-        FROM "user"
-        WHERE "user_no" = #{userNo}
-    </select>
-
     <resultMap id="userResultMap" type="com.Devim.backend.domain.user.User">
         <id     property="userNo"           column="user_no"/>
         <result property="id"               column="id"/>
@@ -47,6 +34,19 @@
         FROM "user"
         WHERE "id" = #{username}
     </select>
+    
+    <select id="findById" parameterType="long" resultMap="userResultMap">
+        SELECT "user_no",
+               "id",
+               "password",
+               "name",
+               "social",
+               "profile_image_path",
+               "created_dt",
+               "delete_flag"
+        FROM "user"
+        WHERE "user_no" = #{userNo}
+    </select>
 
     <select id="findRolesMergedByUserNo" parameterType="long"
             resultType="com.Devim.backend.domain.user.UserRole">
@@ -67,24 +67,22 @@
         WHERE "id" = #{username}
     </select>
 
-    <select id="findByUserId" parameterType="String" resultType="com.Devim.backend.domain.user.User">
+    <select id="findByUserId" parameterType="String" resultMap="userResultMap">
         SELECT
-            "user_no" AS userNo,
+            "user_no",
             "id",
             "password",
             "name",
             "social",
-            "profile_image_path" AS profileImagePath,
-            "created_dt" AS createdDt,
-            "delete_flag" AS deleteFlag,
-            "role"
+            "profile_image_path",
+            "created_dt",
+            "delete_flag"
         FROM "user"
         WHERE "id" = #{id}
     </select>
 
     <select id="findAll" parameterType="com.Devim.backend.domain.common.PageRequestDto" resultType="com.Devim.backend.domain.user.User">
         SELECT "user_no" AS userNo, "id", "password", "name", "social", "profile_image_path" AS profileImagePath, "created_dt" AS createdDt, "delete_flag" AS deleteFlag
-
         FROM "user"
         ORDER BY "user_no" DESC
         OFFSET (#{page} - 1) * #{size} ROWS FETCH NEXT #{size} ROWS ONLY
@@ -111,6 +109,10 @@
         UPDATE "user"
         SET "delete_flag" = 1
         WHERE "user_no" = #{userNo}
+    </update>
+
+    <update id="reactivateById" parameterType="long">
+        UPDATE "user" SET "delete_flag" = 0 WHERE "user_no" = #{userNo}
     </update>
 
     <delete id="hardDeleteById" parameterType="long">

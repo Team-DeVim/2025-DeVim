@@ -36,6 +36,8 @@ public interface UserMapper {
 
     void hardDeleteById(@Param("userNo") long userNo);
 
+    void reactivateById(@Param("userNo") long userNo);
+
     void addRole(UserRole userRole);
 
     List<UserRankDto> findTop5ByBoardCount();

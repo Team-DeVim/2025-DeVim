@@ -46,9 +46,13 @@ public class MainImageServiceImpl implements MainImageService {
         }
 
         String originalFileName = file.getOriginalFilename();
-        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-        String storedFileName = UUID.randomUUID().toString() + fileExtension;
-        String storedThumbnailName = UUID.randomUUID().toString() + "_thumb" + fileExtension;
+        // Remove extension from original name
+        String baseName = originalFileName.substring(0, originalFileName.lastIndexOf("."));
+        String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+        
+        String uuid = UUID.randomUUID().toString();
+        String storedFileName = uuid + "_" + baseName + extension;
+        String storedThumbnailName = uuid + "_" + baseName + "_thumb" + extension;
 
         Path mainImageUploadPath = Paths.get(uploadPath, "mainImage");
         if (!Files.exists(mainImageUploadPath)) {

@@ -75,6 +75,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void reactivate(Long userNo) {
+        userRepository.reactivateById(userNo);
+    }
+
+    @Override
     @Transactional
     public String uploadProfileImage(long userNo, MultipartFile file) throws IOException {
         if (file.isEmpty()) {
@@ -98,10 +103,10 @@ public class UserServiceImpl implements UserService {
         // User의 profile image path를 업데이트
         User userToUpdate = new User();
         userToUpdate.setUserNo(userNo);
-        userToUpdate.setProfileImagePath(filePath.toString());
+        userToUpdate.setProfileImagePath("/upload/profile/" + uniqueFilename);
         userRepository.update(userToUpdate);
 
-        return filePath.toString();
+        return "/upload/profile/" + uniqueFilename;
     }
 
     @Override
