@@ -83,7 +83,6 @@
 
     <select id="findAll" parameterType="com.Devim.backend.domain.common.PageRequestDto" resultType="com.Devim.backend.domain.user.User">
         SELECT "user_no" AS userNo, "id", "password", "name", "social", "profile_image_path" AS profileImagePath, "created_dt" AS createdDt, "delete_flag" AS deleteFlag
-
         FROM "user"
         ORDER BY "user_no" DESC
         OFFSET (#{page} - 1) * #{size} ROWS FETCH NEXT #{size} ROWS ONLY
@@ -110,6 +109,10 @@
         UPDATE "user"
         SET "delete_flag" = 1
         WHERE "user_no" = #{userNo}
+    </update>
+
+    <update id="reactivateById" parameterType="long">
+        UPDATE "user" SET "delete_flag" = 0 WHERE "user_no" = #{userNo}
     </update>
 
     <delete id="hardDeleteById" parameterType="long">

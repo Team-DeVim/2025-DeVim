@@ -73,6 +73,11 @@ public class MyBatisUserRepository implements UserRepository {
         userMapper.hardDeleteById(userNo);
     }
 
+    @Override
+    public void reactivateById(long userNo) {
+        userMapper.reactivateById(userNo);
+    }
+
     
     @Override
     public void addRole(UserRole userRole) {

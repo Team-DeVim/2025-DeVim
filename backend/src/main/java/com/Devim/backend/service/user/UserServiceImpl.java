@@ -75,6 +75,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void reactivate(Long userNo) {
+        userRepository.reactivateById(userNo);
+    }
+
+    @Override
     @Transactional
     public String uploadProfileImage(long userNo, MultipartFile file) throws IOException {
         if (file.isEmpty()) {
