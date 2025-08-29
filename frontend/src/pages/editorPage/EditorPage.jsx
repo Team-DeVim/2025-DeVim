@@ -8,12 +8,15 @@ import TitleInput from "./components/TitleInput/TitleInput";
 import Editor from "./components/Editor/Editor";
 
 import "./EditorPage.css";
+import { createBoard } from "../../api/DevimApi";
 
 export default function EditorPage() {
   // boardTypeNo: 1=자유, 2=QnA, 3=공지
   const [boardTypeNo, setBoardTypeNo] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const canSubmit = useMemo(() => {
     const plain = content.replace(/<[^>]+>/g, "").trim();
@@ -21,15 +24,21 @@ export default function EditorPage() {
   }, [boardTypeNo, title, content]);
 
   const handleSubmit = async () => {
-    if (!canSubmit) return;
-    const payload = {
-      boardTypeNo, 
-      title, 
-      boardContent: content, 
-    };
-    console.log("submit", payload);
-    alert("작성 완료 (API 연결 예정)");
+    if (loading) return;
+    setLoading(true);
+    try {
+      const { data } = await createBoard({ boardTypeNo, title, boardContent: content });
+      alert("게시글이 등록되었습니다.")
+      navigate(`/main`);
+
+    } catch (e) {
+      alert(e.message || "게시글 등록에 실패했습니다.");
+    } finally {
+      setLoading(false);
+    }
   };
+
+
 
   const handleCancel = () => {
     history.back();
@@ -42,7 +51,7 @@ export default function EditorPage() {
         <TopicSelect
           value={boardTypeNo}
           onChange={setBoardTypeNo}
-          // disabledOptions={[3]} // 공지 제한 시 사용
+        // disabledOptions={[3]} // 공지 제한 시 사용
         />
         <TitleInput value={title} onChange={setTitle} />
 

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./ContentBox.css";
+import DOMPurify from "dompurify";
 
-export default function ContentBox({ data }) {
+export default function ContentBox({ data, isLogin }) {
   // 받은 상세글 정보 변수화
   const boardNo = data.boardNo;
   const boardTypeNo = data.boardTypeNo;
@@ -11,6 +12,7 @@ export default function ContentBox({ data }) {
   const createdDt = data.createdDt;
   const deleteFlag = data.deleteFlag;
   const likeCount = data.likeCount;
+
 
   const [liked, setLiked] = useState(false);
   // const [likeCount, setLikeCount] = useState(postData.likeCount ?? 0);
@@ -68,13 +70,16 @@ export default function ContentBox({ data }) {
       </h2>
 
       {/* 본문 */}
-      <article className="contentBox__body" aria-label="게시글 본문">
-        {boardContent.split("\n").map((line, i) => (
-          <p key={i} className="contentBox__p">
-            {line || "\u00A0"}
-          </p>
-        ))}
-      </article>
+      <article
+        className="contentBox__body"
+        aria-label="게시글 본문"
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(boardContent, {
+            ALLOWED_TAGS: ["p", "br", "b", "i", "u", "strong", "em", "ul", "ol", "li", "a"],
+            ALLOWED_ATTR: ["href", "target", "rel"]
+          })
+        }}
+      />
 
       {/* 하단: 태그(좌) · 동그란 좋아요(가운데) · 기타 메타(우) */}
       <div className="contentBox__tagsRow">

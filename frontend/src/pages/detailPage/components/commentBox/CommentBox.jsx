@@ -1,15 +1,26 @@
 import React, { useState } from "react";
 import "./CommentBox.css";
+import { createComment } from "../../../../api/DevimApi";
 
 /** ===== 댓글 작성 컴포저 (이미지 UI 99%) ===== */
-function CommentComposer({ isLoggedIn = false, onSubmit }) {
+function CommentComposer({ isLogin = false, boardNo }) {
   const [value, setValue] = useState("");
-  const disabled = !isLoggedIn || value.trim().length === 0;
+  const disabled = !isLogin || value.trim().length === 0;
+  const [loading, setLoading] = useState(false);
 
-  const submit = () => {
+  const submit = async () => {
     if (disabled) return;
-    onSubmit?.(value.trim());
-    setValue("");
+    if (!value.trim()) return alert("댓글 내용을 입력하세요.");
+    setLoading(true);
+    try {
+      await createComment(boardNo, value);
+      setValue("");
+      window.location.reload();
+    } catch (e) {
+      alert("댓글 등록에 실패했습니다.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -17,7 +28,7 @@ function CommentComposer({ isLoggedIn = false, onSubmit }) {
       <div className="commentComposer__avatar" aria-hidden />
 
       <div className="commentComposer__editor">
-        {isLoggedIn ? (
+        {isLogin ? (
           <textarea
             className="commentComposer__textarea"
             placeholder="댓글을 입력하세요"
@@ -105,7 +116,8 @@ function CommentItem({ item }) {
 
 export default function CommentBox({
   data,
-  isLoggedIn = false,
+  isLogin = false,
+  boardNo
 }) {
   // const [items, setItems] = useState(comments);
 
@@ -125,7 +137,7 @@ export default function CommentBox({
   return (
     <section className="commentBox">
       {/* 상단: 댓글 작성 창 */}
-      <CommentComposer isLoggedIn={isLoggedIn} />
+      <CommentComposer isLogin={isLogin} boardNo={boardNo} />
 
       {/* 리스트 */}
       <ul className="commentBox__list">
