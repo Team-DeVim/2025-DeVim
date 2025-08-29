@@ -83,9 +83,8 @@
   height: 30px;
   border-radius: 50%;
   object-fit: cover;
-  display: block;
+  margin-left: 12px;
 }
-/* 컬럼 정렬/폭 - 내용 성격에 맞게 */
 .admin-users__table th:nth-child(1),
 .admin-users__table td:nth-child(1) {
   width: 100px;

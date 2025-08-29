@@ -1,5 +1,7 @@
+// src/pages/adminPage/routes/DashboardPage.jsx
 import React, { useEffect, useState } from "react";
 import "./DashboardPage.css";
+import { api } from "../../../api/DevimApi";
 import {
   BarChart,
   Bar,
@@ -10,14 +12,29 @@ import {
   CartesianGrid,
 } from "recharts";
 
-/* year, month, count → 최근 12개월 시계열 */
-function toMonthlySeries(rows, { months = 12, end = new Date() } = {}) {
+function inferEndFrom(rows = []) {
+  let y = 0,
+    m = 0;
+  for (const r of rows) {
+    const yy = Number(r?.year ?? 0);
+    const mm = Number(r?.month ?? 0);
+    if (yy > y || (yy === y && mm > m)) {
+      y = yy;
+      m = mm;
+    }
+  }
+  return y > 0 && m > 0 ? new Date(y, m - 1, 1) : new Date();
+}
+
+/* year, month, count → 최근 12개월 시계열(누락 월 0 보정) */
+function toMonthlySeries(rows, { months = 12, end } = {}) {
+  const endDate = end || inferEndFrom(rows);
   const keys = [];
-  const d = new Date(end.getFullYear(), end.getMonth(), 1);
+  const d = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
   for (let i = 0; i < months; i++) {
-    const y = d.getFullYear();
-    const m = d.getMonth() + 1;
-    keys.unshift(`${y}-${String(m).padStart(2, "0")}`);
+    keys.unshift(
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`
+    );
     d.setMonth(d.getMonth() - 1);
   }
   const map = new Map(keys.map((k) => [k, 0]));
@@ -27,21 +44,25 @@ function toMonthlySeries(rows, { months = 12, end = new Date() } = {}) {
   }
   return keys.map((k) => {
     const [y, m] = k.split("-");
-    return { key: k, year: Number(y), month: m, count: map.get(k) || 0 };
+    return {
+      key: k,
+      year: Number(y),
+      month: Number(m),
+      count: map.get(k) || 0,
+    };
   });
 }
 
 /* 월별 통계 요약 */
 function MonthlyTable({ series }) {
-  const cells = [...(series || [])].slice(0, 12).map((d) => ({
+  const cells = (series || []).slice(0, 12).map((d) => ({
+    key: d.key,
     label: `${d.month}월`,
     value: d.count,
-    key: d.key,
   }));
   while (cells.length < 12)
-    cells.push({ label: "", value: "", key: `pad-${cells.length}` });
+    cells.push({ key: `pad-${cells.length}`, label: "", value: "" });
 
-  // 3열로 나누기 (4행)
   const rows = [];
   for (let i = 0; i < 12; i += 3) rows.push(cells.slice(i, i + 3));
 
@@ -77,7 +98,9 @@ function PopularList({ items }) {
       {(items || []).slice(0, 4).map((it) => (
         <li key={it.id} className="dash-list__item">
           <span className="dash-list__title">{it.title}</span>
-          <span className="dash-list__meta">❤ {it.like}</span>
+          <span className="dash-list__meta">
+            ❤ {it.like} · 💬 {it.comment}
+          </span>
         </li>
       ))}
     </ul>
@@ -120,43 +143,61 @@ export default function DashboardPage() {
   const [popularPosts, setPopularPosts] = useState([]);
 
   useEffect(() => {
-    // MOCK
-    const postRows = [
-      { year: 2025, month: 1, count: 120 },
-      { year: 2025, month: 2, count: 98 },
-      { year: 2025, month: 3, count: 135 },
-      { year: 2025, month: 4, count: 180 },
-      { year: 2025, month: 5, count: 165 },
-      { year: 2025, month: 6, count: 210 },
-      { year: 2025, month: 7, count: 188 },
-      { year: 2025, month: 8, count: 232 },
-      { year: 2025, month: 9, count: 205 },
-      { year: 2025, month: 10, count: 240 },
-      { year: 2025, month: 11, count: 198 },
-      { year: 2025, month: 12, count: 260 },
-    ];
-    const commentRows = [
-      { year: 2025, month: 1, count: 320 },
-      { year: 2025, month: 2, count: 280 },
-      { year: 2025, month: 3, count: 360 },
-      { year: 2025, month: 4, count: 410 },
-      { year: 2025, month: 5, count: 390 },
-      { year: 2025, month: 6, count: 470 },
-      { year: 2025, month: 7, count: 430 },
-      { year: 2025, month: 8, count: 510 },
-      { year: 2025, month: 9, count: 480 },
-      { year: 2025, month: 10, count: 550 },
-      { year: 2025, month: 11, count: 495 },
-      { year: 2025, month: 12, count: 590 },
-    ];
-    setPostMonthly(toMonthlySeries(postRows));
-    setCommentMonthly(toMonthlySeries(commentRows));
-    setPopularPosts([
-      { id: 101, title: "React 19 마이그레이션 가이드", like: 56 },
-      { id: 102, title: "JPA N+1 완전정복", like: 49 },
-      { id: 103, title: "스프링 시큐리티 JWT 베스트프랙티스", like: 44 },
-      { id: 104, title: "Vite + React 프로젝트 구조", like: 40 },
-    ]);
+    const ac = new AbortController();
+
+    // axios v1 기준: transformRequest에서 인터셉터가 붙인 헤더를 제거
+    const stripAuth = (data, headers) => {
+      // AxiosHeaders 타입이면 delete가 있음
+      if (headers?.delete) headers.delete("Authorization");
+      // 일부 버전 호환
+      if ("Authorization" in (headers || {})) headers.Authorization = undefined;
+      return data;
+    };
+
+    (async () => {
+      try {
+        const [postsRes, commentsRes, popularRes] = await Promise.all([
+          api.get("/api/v1/boards/monthly-counts", {
+            signal: ac.signal,
+            transformRequest: [stripAuth],
+          }),
+          api.get("/api/v1/comments/monthly-counts", {
+            signal: ac.signal,
+            transformRequest: [stripAuth],
+          }),
+          api.get("/api/v1/boards/popular", {
+            params: { limit: 4 },
+            signal: ac.signal,
+            transformRequest: [stripAuth],
+          }),
+        ]);
+
+        const posts = Array.isArray(postsRes?.data) ? postsRes.data : [];
+        const comments = Array.isArray(commentsRes?.data)
+          ? commentsRes.data
+          : [];
+        const popular = Array.isArray(popularRes?.data) ? popularRes.data : [];
+
+        setPostMonthly(toMonthlySeries(posts, { end: inferEndFrom(posts) }));
+        setCommentMonthly(
+          toMonthlySeries(comments, { end: inferEndFrom(comments) })
+        );
+        setPopularPosts(
+          popular.slice(0, 4).map((p) => ({
+            id: p.boardNo,
+            title: p.title,
+            like: Number(p.likeCount ?? 0),
+            comment: Number(p.commentCount ?? 0),
+          }))
+        );
+      } catch (e) {
+        if (e?.name !== "CanceledError") {
+          console.error("[Dashboard] fetch error:", e);
+        }
+      }
+    })();
+
+    return () => ac.abort();
   }, []);
 
   return (
