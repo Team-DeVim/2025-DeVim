@@ -20,6 +20,9 @@ const API_BASE =
     ? String(import.meta.env.VITE_API_BASE).replace(/\/$/, "")
     : "");
 
+/** 기본 프로필 이미지 */
+const PLACEHOLDER = `${API_BASE}/upload/profile/placeholder.png`;
+
 function mapUser(raw) {
   const df = raw.deleteFlag ?? raw.delete_flag;
   const active = df === 0 || df === false;
@@ -161,11 +164,13 @@ export default function UserDetailPage() {
               ? `${API_BASE}/api/v1/users/${encodeURIComponent(
                   user.userNo
                 )}/thumbnail?width=120&height=120&cb=${Date.now()}`
-              : "/placeholder.png"
+              : PLACEHOLDER
           }
           alt="프로필 이미지"
           onError={(e) => {
-            e.currentTarget.src = "/placeholder.png";
+            if (e.currentTarget.src !== PLACEHOLDER) {
+              e.currentTarget.src = PLACEHOLDER;
+            }
           }}
         />
         <div className="admin-user-detail__meta">
