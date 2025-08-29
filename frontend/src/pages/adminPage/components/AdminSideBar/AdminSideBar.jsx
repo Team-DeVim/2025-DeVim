@@ -24,6 +24,7 @@ function AdminSideBar() {
               "admin-sidebar__item" +
               (isActive ? " admin-sidebar__item--active" : "")
             }
+            reloadDocument
           >
             유저관리
           </NavLink>
@@ -36,6 +37,7 @@ function AdminSideBar() {
               "admin-sidebar__item" +
               (isActive ? " admin-sidebar__item--active" : "")
             }
+            reloadDocument
           >
             메인 대시보드
           </NavLink>
@@ -48,6 +50,7 @@ function AdminSideBar() {
               "admin-sidebar__item" +
               (isActive ? " admin-sidebar__item--active" : "")
             }
+            reloadDocument
           >
             배너이미지 관리
           </NavLink>

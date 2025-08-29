@@ -7,6 +7,19 @@ import axios from "axios";
 const BannerModify = () => {
   const [bannerItems, setBannerItems] = useState([]);
 
+  useEffect(() => {
+    const fetchInitialBanners = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/v1/main-images");
+        setBannerItems(response.data);
+      } catch (error) {
+        console.error("배너 목록을 불러오는 데 실패했습니다.", error);
+      }
+    };
+
+    fetchInitialBanners();
+  }, []);
+
   /*배너순서 변경*/
   const moveBanner = (priority, direction) => {
     // priority 우선순위, direction (up, down)을 인자로 받음
@@ -24,7 +37,7 @@ const BannerModify = () => {
     ) {
       return;
     }
-   
+
     const newItems = [...bannerItems];
     // bannerItems 배열을 새롭게 newItem으로 배열객체를 만듦
     const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;

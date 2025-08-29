@@ -16,7 +16,7 @@
 .header__logo {
     font-size: 2rem;
     font-weight: bold;
-		cursor: pointer;
+    cursor: pointer;
 }
 
 .header__menu {
@@ -26,24 +26,26 @@
     font-size: 20px;
 }
 
-.header__search{
-  position: relative;
-  display: inline-block;
+.header__search {
+    position: relative;
+    display: inline-block;
 }
+
 .header__search--input {
     width: 300px;
     height: 30px;
     padding: 5px 10px;
     border-radius: 30px;
 }
+
 .header__search .search-icon {
-  position: absolute;
-  right: 10px;
-	font-size: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #888;
-  cursor: pointer;
+    position: absolute;
+    right: 10px;
+    font-size: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    cursor: pointer;
 }
 
 
@@ -64,4 +66,8 @@
 .btn--register {
     width: 100px;
     font-size: 16px;
+}
+
+.head__auth--login {
+    gap: 50px;
 }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 import axios from "axios";
-import { api, USER_PREFIX } from "../../../api/DevimApi.jsx";
+import { api, fetchMyInfo, getToken, logout, USER_PREFIX } from "../../../api/DevimApi.jsx";
+import { useNavigate } from "react-router";
 
 
 // ---- 로그인 테스트용 프로필 ----
@@ -13,15 +14,29 @@ const mockProfile = {
 
 function Sidebar() {
   // 내부 로그인/비로그인 토글
-  const [profile, setProfile] = useState(null);
-  const isLoggedIn = !!profile;
-  const myStats = isLoggedIn
+  // const [profile, setProfile] = useState(null);
+  // const isLoggedIn = !!profile;
+  const isLogin = !!getToken();
+  const myStats = isLogin
     ? { posts: 12, comments: 34 }
     : { posts: 0, comments: 0 };
+  const navigate = useNavigate();
+  const handleLoginClick = () => navigate("/login");
+  const handleLogoutClick = () => logout();
+  const handleRegisterClick = () => navigate("/register");
+  const [me, setMe] = useState(null);
 
-  const handleLoginClick = () => setProfile(mockProfile);
-  const handleLogoutClick = () => setProfile(null);
-  const handleRegisterClick = () => alert("회원가입 페이지(연동 예정)");
+  // 내 정보 불러오기
+  useEffect(() => {
+    if (!isLogin) { return; }
+    const controller = new AbortController();
+
+    fetchMyInfo(controller.signal)
+      .then((data) => setMe(data))
+      .catch((err) => setError(err.message));
+
+    return () => controller.abort();
+  }, [isLogin]);
 
   // --- 랭킹 데이터 처리 ---
   const [boardRanks, setBoardRanks] = useState([]);
@@ -61,19 +76,19 @@ function Sidebar() {
           프로필
         </h2>
 
-        {isLoggedIn ? (
+        {isLogin ? (
           <div className="Sidebar__profile Sidebar__profile--in">
             <div className="Sidebar__media">
               <div className="Sidebar__avatar Sidebar__avatar--square Sidebar__avatar--lg">
-                {profile?.profile_image_path ? (
+                {me?.profile_image_path ? (
                   <img
-                    src={profile.profile_image_path}
+                    src={me.profile_image_path}
                     alt="프로필 이미지"
                     loading="lazy"
                   />
                 ) : (
                   <div className="Sidebar__avatarFallback">
-                    {(profile?.name ?? profile?.id ?? "U").slice(0, 2)}
+                    {(me?.name ?? me?.id ?? "U").slice(0, 3)}
                   </div>
                 )}
               </div>
@@ -81,10 +96,10 @@ function Sidebar() {
 
             <div className="Sidebar__info">
               <div className="Sidebar__name">
-                {profile?.name ?? profile?.id ?? "사용자"}
+                {me?.name ?? me?.id ?? "사용자"}
               </div>
               <div className="Sidebar__id">
-                {profile?.id ? `@${profile.id}` : ""}
+                {me?.id ? `@${me.id}` : ""}
               </div>
 
               <div className="Sidebar__counts">

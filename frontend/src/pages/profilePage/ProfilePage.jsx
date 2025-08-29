@@ -6,17 +6,17 @@ import MyComment from "./components/myComment/MyComment";
 import ProfileCard from "./components/profileCard/ProfileCard";
 import "./profilePage.css";
 import { useEffect, useState } from "react";
-import { getMycommentList, getMypostList } from "../../api/DevimApi";
+import { fetchMyInfo, getMycommentList, getMypostList } from "../../api/DevimApi";
 
 function ProfilePage() {
-    const { userNo } = useParams();
+    // const { userNo } = useParams();
     const [sp, setSp] = useSearchParams();
     const [postPagingList, setPostPagingList] = useState();
     const [commentPagingList, setCommentPagingList] = useState();
     const [error, setError] = useState("");
     const [loadingPost, setLoadingPost] = useState(true);
     const [loadingComment, setLoadingComment] = useState(true);
-
+    const [me, setMe] = useState(null);
 
     // 기본 쿼리스트링 생성
     useEffect(() => {
@@ -29,13 +29,29 @@ function ProfilePage() {
         }
     }, [sp, setSp]);
 
+    // 내 정보 불러오기
+    useEffect(() => {
+        const controller = new AbortController();
+
+        fetchMyInfo(controller.signal)
+            .then((data) => setMe(data))
+            .catch((err) => setError(err.message));
+
+        return () => controller.abort();
+    }, []);
+
+    const userNo = me?.userNo ?? null;
+
     const Apage = Number(sp.get("Apage") ?? 1);
     const Cpage = Number(sp.get("Cpage") ?? 1);
     const size = Number(sp.get("size") ?? 5);
 
-    // 내 게시글 페이징 요청
+    // 내 게시글 요청
     useEffect(() => {
+        if (!userNo) return;
+
         const controller = new AbortController();
+        setLoadingPost(true);
 
         getMypostList(userNo, Apage, size, controller.signal)
             .then(setPostPagingList)
@@ -45,12 +61,16 @@ function ProfilePage() {
                 setError("데이터를 불러오지 못했습니다.");
             })
             .finally(() => setLoadingPost(false));
-        return () => controller.abort();
-    }, [userNo, Apage, size])
 
-    // 내 댓글 페이징 요청
+        return () => controller.abort();
+    }, [userNo, Apage, size]);
+
+    // 내 댓글 요청
     useEffect(() => {
+        if (!userNo) return;
+
         const controller = new AbortController();
+        setLoadingComment(true);
 
         getMycommentList(userNo, Cpage, size, controller.signal)
             .then(setCommentPagingList)
@@ -60,11 +80,12 @@ function ProfilePage() {
                 setError("데이터를 불러오지 못했습니다.");
             })
             .finally(() => setLoadingComment(false));
-        return () => controller.abort();
-    }, [userNo, Cpage, size])
 
-    // console.log(postPagingList);
-    const loading = loadingPost || loadingComment;
+        return () => controller.abort();
+    }, [userNo, Cpage, size]);
+
+    // 로딩/에러 UI 처리
+    const loading = !me || loadingPost || loadingComment;
 
     if (loading) return <div>loading...</div>;
     if (error) return <div>{error}</div>;
