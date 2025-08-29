@@ -2,6 +2,7 @@ import "./BannerModify.css";
 import BannerHead from "./components/BannerHead/BannerHead";
 import BannerBody from "./components/BannerBody/BannerBody";
 import { useEffect, useState } from "react";
+import { API_SERVER_HOST } from "../../api/DevimApi";
 import axios from "axios";
 
 const BannerModify = () => {
@@ -10,7 +11,7 @@ const BannerModify = () => {
   useEffect(() => {
     const fetchInitialBanners = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/v1/main-images");
+        const response = await axios.get(`${API_SERVER_HOST}/api/v1/main-images`);
         setBannerItems(response.data);
       } catch (error) {
         console.error("배너 목록을 불러오는 데 실패했습니다.", error);

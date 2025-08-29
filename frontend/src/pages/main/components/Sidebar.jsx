@@ -49,8 +49,8 @@ function Sidebar() {
       setLoading(true);
       try {
         // DevimApi.jsx를 통해 API 호출
-        const boardsRes = await api.get(`${USER_PREFIX}/rank/boards`);
-        const commentsRes = await api.get(`${USER_PREFIX}/rank/comments`);
+        const boardsRes = await axios.get(`${USER_PREFIX}/rank/boards`);
+        const commentsRes = await axios.get(`${USER_PREFIX}/rank/comments`);
 
         setBoardRanks(boardsRes.data);
         setCommentRanks(commentsRes.data);

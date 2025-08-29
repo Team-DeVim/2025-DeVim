@@ -70,6 +70,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/comments/").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/boards/").permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        .requestMatchers("/**").permitAll()
+            			.requestMatchers(HttpMethod.GET, "/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/**").permitAll()
 
                         .anyRequest().authenticated());
         http
