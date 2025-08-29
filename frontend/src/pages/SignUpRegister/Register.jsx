@@ -25,7 +25,7 @@ export default function Register() {
   const [submitError, setSubmitError] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
+  
 
   // 메인으로 가기
   const main = () => {
@@ -40,7 +40,7 @@ export default function Register() {
     } else if (specialText.test(value)) { // 그게 아니면 밑 코드 실행
       setIdError("아이디: 특수문자를 입력할 수 없습니다.");
     } else {
-      setUsername("");
+      setIdError("");
     }
     setUsername(value);
   };
@@ -200,7 +200,7 @@ export default function Register() {
     }
 
     // 에러가 1개라도 존재하면 메세지 출력
-    if (idError || passwordError || nameError || birthError || phoneError) {
+    if (idError || passwordError || nameError) {
       setSubmitError("필수입력 혹은 입력값이 잘못되었습니다.");
       return;
     }
@@ -209,7 +209,6 @@ export default function Register() {
     setSubmitError("");
 
     if (loading) return;
-    setErr("");
     setLoading(true);
 
     try {
@@ -217,7 +216,8 @@ export default function Register() {
       alert("회원가입이 완료되었습니다. 로그인해주세요!");
       navigate("/login"); // ✅ 회원가입 후 로그인 페이지로 리다이렉트
     } catch (e) {
-      setErr("회원가입에 실패했습니다. 다시 시도해주세요.");
+      console.error("회원가입 실패:", e); // 개발자를 위해 콘솔에 상세 에러 출력
+      setSubmitError("회원가입에 실패했습니다. 다시 시도해주세요."); // 사용자에게 보여줄 메시지
     } finally {
       setLoading(false);
     }
@@ -274,6 +274,7 @@ export default function Register() {
               onChange={(e) => validateName(e.target.value)}
             />
           </div>
+          {nameError && <p className="register__error-message">{nameError}</p>}
           {/* 
           <div className="register__group--birth">
             <i className="register__icon fa-solid fa-calendar-days"></i>
