@@ -5,11 +5,13 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import ThemeSwitch from '../../../../components/common/ThemeSwitch';
 import { useState } from "react";
 import { createSearchParams } from "react-router-dom";
+import { getToken } from "../../../../api/DevimApi";
 
 
 export default function Header() {
   const navigate = useNavigate();
   const [keyword, setKeyword] = useState("");
+  const isLogin = !!getToken();
 
   // 메인으로
   const main = () => {
@@ -84,12 +86,24 @@ export default function Header() {
         </div>
         <div className="header__auth">
           <ThemeSwitch className="btn" name={"Switch Theme"} />
-          <button className="btn btn--sign" onClick={signUp}>
-            로그인
-          </button>
-          <button className="btn btn--register" onClick={register}>
-            회원가입
-          </button>
+          {isLogin ? (
+            <div>
+              <nav className="head__auth--login">
+                <Link to="/editorPage" reloadDocument>글쓰기</Link>
+                <Link to="/profilePage" reloadDocument>마이페이지</Link>
+              </nav>
+            </div>
+          ) : (
+            <div>
+              <button className="btn btn--sign" onClick={signUp}>
+                로그인
+              </button>
+              <button className="btn btn--register" onClick={register}>
+                회원가입
+              </button>
+            </div>
+          )}
+
         </div>
       </div>
     </header>

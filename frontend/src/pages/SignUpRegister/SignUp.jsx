@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import "./SignUp.css";
 import { useEffect, useState } from "react";
-import { login } from "../../api/DevimApi";
+import { fetchMyInfo, login } from "../../api/DevimApi";
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>;
 
 export default function SignUp() {

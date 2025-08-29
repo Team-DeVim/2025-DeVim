@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 export const API_SERVER_HOST = 'http://localhost:8080';
 
@@ -55,34 +56,22 @@ api.interceptors.request.use((cfg) => {
 api.interceptors.response.use(
     (res) => res,
     (err) => {
+        const navigate = useNavigate();
         if (err?.response?.status === 401) {
             clearToken();
-            // 라우터에서 잡아 처리할 수 있도록 이벤트 발행
-            // window.dispatchEvent(new Event("auth:unauthorized"));
-
-            // 라우터 연동이 아직 없다면 폴백으로 바로 이동
-            if (location.pathname !== "/login") {
-                // 필요 없으면 이 줄은 지워도 됨(이벤트만 사용)
-                location.assign("/login");
-            }
             alert("로그인 오류!");
+            navigate("/login");
             return Promise.reject(err);
         }
         if (err?.response?.status === 403) {
-            alert("관리자 권한이 필요합니다.");
+            alert("로그인이 필요한 서비스입니다.");
             clearToken();
-            // 라우터에서 잡아 처리할 수 있도록 이벤트 발행
-            // window.dispatchEvent(new Event("auth:unauthorized"));
-
-            // 라우터 연동이 아직 없다면 폴백으로 바로 이동
-            if (location.pathname !== "/login") {
-                // 필요 없으면 이 줄은 지워도 됨(이벤트만 사용)
-                location.assign("/login");
-            }
+            navigate("/login");
             return Promise.reject(err);
         }
     }
 );
+
 // ----------------------------------------------------
 
 // Login
@@ -103,6 +92,12 @@ export async function login(username, password, signal) {
     }
     setToken(auth);
     return true;
+}
+
+// 로그아웃
+export function logout() {
+    clearToken();
+    window.location.reload();
 }
 
 // 회원가입
@@ -136,6 +131,12 @@ export const getUserList = async (page = 0, size = 20, signal) => {
     return res.data;
 };
 
+// 토큰을 통한 내 정보 조회
+export async function fetchMyInfo(signal) {
+    const res = await api.get(`${USER_PREFIX}/me`, { signal });
+    return res.data;
+}
+
 
 // profilePage__MyArticle__내 글 리스트 요청
 export async function getMypostList(userNo, page = 1, size = 5, signal) {
@@ -144,7 +145,7 @@ export async function getMypostList(userNo, page = 1, size = 5, signal) {
         size: Number(size),
     };
     try {
-        const { data } = await axios.get(`${USER_PREFIX}/${encodeURIComponent(userNo)}/posts`,
+        const { data } = await api.get(`${USER_PREFIX}/${encodeURIComponent(userNo)}/posts`,
             { params, signal });
         return data;
     } catch (err) {
@@ -162,7 +163,7 @@ export async function getMycommentList(userNo, page = 1, size = 5, signal) {
         size: Number(size),
     };
     try {
-        const { data } = await axios.get(`${USER_PREFIX}/${encodeURIComponent(userNo)}/comments`,
+        const { data } = await api.get(`${USER_PREFIX}/${encodeURIComponent(userNo)}/comments`,
             { params, signal });
         return data;
     } catch (err) {
@@ -253,6 +254,19 @@ export async function getDetailPost(boardNo, signal) {
     }
 }
 
+// EditorPage__게시글 작성
+export async function createBoard({ boardTypeNo, title, boardContent }, signal) {
+    const post = {
+        boardTypeNo: Number(boardTypeNo),
+        title: String(title).trim(),
+        boardContent: String(boardContent).trim(),
+    };
+
+    const res = await api.post(`${BOARD_PREFIX}`, post, { signal });
+
+    return res.data;
+}
+
 
 
 
@@ -279,4 +293,15 @@ export async function getCommentList(page = 1, size = 9999, boardNo, signal) {
     }));
 
     return commentData;
+}
+
+// detailPage_댓글 생성
+export async function createComment(boardNo, content, signal) {
+    const body = {
+        boardNo,
+        commentContent: content.trim(),
+    };
+
+    const res = await api.post(`${COMMENT_PREFIX}`, body, { signal });
+    return res.data;
 }
