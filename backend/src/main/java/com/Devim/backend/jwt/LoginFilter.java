@@ -52,7 +52,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
                 .distinct()
                 .toList();
 
-        String token = jwtUtil.createJwt(userNo, roles, 60 * 60 * 30L);
+        String token = jwtUtil.createJwt(userNo, roles, 1000L * 60 * 30);
 
         response.setHeader("Authorization", "Bearer " + token);
     }
