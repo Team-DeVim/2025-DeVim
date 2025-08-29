@@ -1,8 +1,7 @@
 .banner_modify__table {
-	width: 100%;
-	border-collapse: collapse;
+  max-width: 100%;
+	overflow: visible;
 }
-
 
 .banner_image__addbox {
   width: 60px;
@@ -22,39 +21,47 @@
   background-color: var(--btn-login-hover);
 }
 
-.banner_modify__form{
-	padding: 50px;
-	flex-direction: column;
-	align-items: center;
-	gap: 20px;
-	width: 100%;
+.banner_modify__form {
+  padding: 50px;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  display: flex; 
+  box-sizing: border-box;
+  min-height: 0; 
+  height: calc(
+    100vh - 80px
+  ); 
+  overflow-y: auto !important; /* 이 컴포넌트만 스크롤 */
+  -webkit-overflow-scrolling: touch; 
+  overscroll-behavior: contain;
 }
 
-.banner_image__add{
-	display: flex;
-	justify-content: center;
-	margin-top: 30px;
+.banner_image__add {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
 }
-.banner_modify__saveform{
-	display: flex;
-	justify-content: center;
-	margin-top: 20px;
-}
-
-
-.banner_modify__save{
-	color: var(--color-bg);
-	font-size: 1.5rem;
-	background-color: var(--btn-login-select);
-	align-items: center;
-	justify-content: center;
-	width: 250px;
-	height: 50px;
+.banner_modify__saveform {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.banner_modify__save:hover{
-	color: var( --color-text);
-	font-size: 1.5rem;
-	width: 250px;
-	height: 50px;
+.banner_modify__save {
+  color: var(--color-bg);
+  font-size: 1.5rem;
+  background-color: var(--btn-login-select);
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  height: 50px;
+}
+
+.banner_modify__save:hover {
+  color: var(--color-text);
+  font-size: 1.5rem;
+  width: 250px;
+  height: 50px;
 }
