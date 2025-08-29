@@ -1,4 +1,3 @@
-// src/pages/adminPage/routes/components/ChartCard.jsx
 import {
   BarChart,
   Bar,
@@ -23,7 +22,7 @@ export default function ChartCard({ title, data = [], loading = false }) {
               <CartesianGrid vertical={false} strokeOpacity={0.25} />
               <XAxis
                 dataKey="month"
-                tickFormatter={(v) => `${v}월`}
+                tickFormatter={tick}
                 tickLine={false}
                 axisLine={false}
               />

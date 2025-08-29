@@ -1,8 +1,15 @@
+.detailpage {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px; 
+}
+
 .detailPage--main--layout {
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
-  padding: 24px;
+  padding: 24px 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 320px; 
   gap: 24px; 

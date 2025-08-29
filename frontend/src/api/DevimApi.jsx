@@ -116,8 +116,6 @@ export async function signUp({ username, password, name }, signal) {
 }
 
 
-
-
 //USER
 // 유저 정보 불러오기 (리스트)
 export const getUserList = async (page = 0, size = 20, signal) => {
