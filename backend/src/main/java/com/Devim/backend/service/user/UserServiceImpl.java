@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnails;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -111,31 +112,38 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public byte[] getThumbnail(long userNo, int width, int height) throws IOException {
-        // 사용자 정보 조회
         User user = userRepository.findById(userNo)
                 .orElseThrow(() -> new NoSuchElementException("User not found: " + userNo));
 
-        // 사용자의 프로필 이미지 경로 확인
         String profileImagePath = user.getProfileImagePath();
-        if (profileImagePath == null || profileImagePath.isEmpty()) {
-            // 프로필 이미지가 없는 경우, 기본 이미지를 반환하거나 예외를 발생시킬 수 있습니다.
-            throw new NoSuchElementException("Profile image not found for user: " + userNo);
-        }
+        File imageFile;
 
-        // 실제 파일 존재 여부 확인
-        File imageFile = new File(profileImagePath);
-        if (!imageFile.exists()) {
-            throw new IOException("Profile image file not found: " + profileImagePath);
+        if (profileImagePath == null || profileImagePath.isEmpty()) {
+            // 프로필 이미지가 없는 경우, 기본 이미지 사용
+            ClassPathResource defaultImageResource = new ClassPathResource("static/images/default_profile.png");
+            if (!defaultImageResource.exists()) {
+                throw new IOException("Default profile image not found.");
+            }
+            imageFile = defaultImageResource.getFile();
+        } else {
+            // 프로필 이미지가 있는 경우, URL 경로를 실제 파일 시스템 경로로 변환
+            String relativePath = profileImagePath.replace("/upload/", "");
+            Path fullPath = Paths.get(uploadPath, relativePath);
+            imageFile = fullPath.toFile();
+            
+            if (!imageFile.exists()) {
+                // 변환된 경로에도 파일이 없는 경우 예외 처리
+                throw new IOException("Profile image file not found at: " + fullPath.toString());
+            }
         }
 
         // Thumbnailator를 사용하여 썸네일 생성
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        Thumbnails.of(imageFile)                // 원본 이미지 파일
-                .size(width, height)                 // 150x150 크기로 리사이즈
-                .outputFormat("jpg")              // 출력 형식을 JPG로 지정
-                .toOutputStream(outputStream);      // OutputStream으로 출력
+        Thumbnails.of(imageFile)
+                .size(width, height)
+                .outputFormat("jpg") // 출력 형식을 JPG로 통일
+                .toOutputStream(outputStream);
 
-        // 생성된 썸네일의 byte 배열 반환
         return outputStream.toByteArray();
     }
 
