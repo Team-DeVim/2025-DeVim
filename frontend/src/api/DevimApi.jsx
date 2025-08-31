@@ -53,6 +53,7 @@ api.interceptors.request.use((cfg) => {
 });
 
 // 401 처리: 토큰 제거 + 전역 이벤트 + /login 이동(폴백)
+/*
 api.interceptors.response.use(
     (res) => res,
     (err) => {
@@ -71,7 +72,7 @@ api.interceptors.response.use(
         }
     }
 );
-
+*/
 // ----------------------------------------------------
 
 // Login

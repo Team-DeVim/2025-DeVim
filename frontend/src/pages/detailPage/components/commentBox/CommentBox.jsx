@@ -55,7 +55,7 @@ function CommentComposer({ isLogin = false, boardNo, accountInfo }) {
           <div className="commentComposer__loginGate">
             <span>
               작성하려면{" "}
-              <a className="commentComposer__loginLink" href="/SignUp">
+              <a className="commentComposer__loginLink" href="/login">
                 로그인
               </a>
               이 필요합니다.
