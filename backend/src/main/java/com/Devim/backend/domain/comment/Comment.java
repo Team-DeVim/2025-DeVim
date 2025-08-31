@@ -13,7 +13,7 @@ public class Comment {
 	private long commentNo;
 	private long boardNo;
 	private String commentContent;
-	private int writer;
+	private long writer;
 	private LocalDateTime createdDt;
 	private boolean deleteFlag;
 }
