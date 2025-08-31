@@ -1,6 +1,7 @@
 import React from "react";
 import { createSearchParams, Link, useSearchParams } from "react-router-dom";
 import "./ContentSection.css";
+import { DEFAULT_PROFILE, thumbnailUrl } from "../../../../api/DevimApi";
 
 export default function ContentSection({ data }) {
   const [params, setParams] = useSearchParams();
@@ -57,7 +58,12 @@ export default function ContentSection({ data }) {
               {/* 상단: 프로필/시간 + 우측 좋아요/댓글 */}
               <div className="contentSection__headerLine">
                 <div className="contentSection__profile">
-                  <div className="contentSection__avatar" />
+                  <img
+                    className="contentSection__avatar"
+                    src={thumbnailUrl(post.userNo, 30, 30)}
+                    alt="프로필이미지"
+                    onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
+                  />
                   <div className="contentSection__nameTime">
                     <div className="contentSection__name">
                       {post.writerName ?? "알 수 없음"}
