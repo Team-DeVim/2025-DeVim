@@ -10,6 +10,7 @@ function CommentComposer({ isLogin = false, boardNo, accountInfo }) {
   const [loading, setLoading] = useState(false);
   const userNo = accountInfo?.userNo ?? 0;
 
+
   const submit = async () => {
     if (disabled) return;
     if (!value.trim()) return alert("댓글 내용을 입력하세요.");
@@ -101,6 +102,8 @@ function CommentItem({ item, accountInfo }) {
   const userNo = item?.userNo ?? 0;
   const writerUserNo = item?.userNo ?? 0;
   const loginUserNo = accountInfo?.userNo ?? -1;
+  const [editing, setEditing] = useState(false);
+  const [editValue, setEditValue] = useState("");
 
   const handleDelete = async () => {
     if (!window.confirm("댓글을 삭제하시겠습니까?")) return;
@@ -158,27 +161,27 @@ function CommentItem({ item, accountInfo }) {
         </div>
 
         {writerUserNo == loginUserNo || accountInfo?.roleList?.some(r => r.role === "ROLE_ADMIN") ? (
-        <div className="commentBox__actions">
-          {!editing && (
-            <>
-              <button
-                type="button"
-                className="commentBox__action"
-                onClick={handleDelete}
-              >
-                삭제하기
-              </button>
-              <span className="commentBox__sep">|</span>
-              <button
-                type="button"
-                className="commentBox__action"
-                onClick={() => setEditing(true)}
-              >
-                수정하기
-              </button>
-            </>
-          )}
-        </div>
+          <div className="commentBox__actions">
+            {!editing && (
+              <>
+                <button
+                  type="button"
+                  className="commentBox__action"
+                  onClick={handleDelete}
+                >
+                  삭제하기
+                </button>
+                <span className="commentBox__sep">|</span>
+                <button
+                  type="button"
+                  className="commentBox__action"
+                  onClick={() => setEditing(true)}
+                >
+                  수정하기
+                </button>
+              </>
+            )}
+          </div>
         ) : (<></>)}
       </div>
 
@@ -224,7 +227,7 @@ function CommentItem({ item, accountInfo }) {
 
 
 
-export default function CommentBox({
+function CommentBox({
   data,
   isLogin = false,
   boardNo,
