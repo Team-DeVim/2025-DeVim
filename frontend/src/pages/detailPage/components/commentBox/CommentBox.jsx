@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import "./CommentBox.css";
-import { createComment, api, COMMENT_PREFIX } from "../../../../api/DevimApi";
+import { createComment, DEFAULT_PROFILE, thumbnailUrl, api, COMMENT_PREFIX } from "../../../../api/DevimApi";
 
-/** ===== 댓글 작성 컴포저 ===== */
-function CommentComposer({ isLogin = false, boardNo }) {
+/** ===== 댓글 작성 컴포저 (이미지 UI 99%) ===== */
+function CommentComposer({ isLogin = false, boardNo, accountInfo }) {
+
   const [value, setValue] = useState("");
   const disabled = !isLogin || value.trim().length === 0;
   const [loading, setLoading] = useState(false);
+  const userNo = accountInfo?.userNo ?? 0;
 
   const submit = async () => {
     if (disabled) return;
@@ -25,7 +27,15 @@ function CommentComposer({ isLogin = false, boardNo }) {
 
   return (
     <div className="commentComposer">
-      <div className="commentComposer__avatar" aria-hidden />
+      <img
+        className="commentComposer__avatar"
+        src={
+          isLogin ?
+            thumbnailUrl(userNo, 30, 30) :
+            DEFAULT_PROFILE}
+        alt="프로필이미지"
+        onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
+      />
       <div className="commentComposer__editor">
         {isLogin ? (
           <textarea
@@ -79,9 +89,18 @@ const formatTimeAgo = (iso) => {
   return `${day}일 전`;
 };
 
-function CommentItem({ item }) {
-  const [editing, setEditing] = useState(false);
-  const [editValue, setEditValue] = useState(item.commentContent ?? "");
+
+/** ===== 목록(Mock) =====*/
+const MOCK_COMMENTS = [
+  { id: 1, writer: { name: "사용자 닉네임" }, timeAgo: "방금 전", content: "댓글 내용", likeCount: 0 },
+  { id: 2, writer: { name: "사용자 닉네임" }, timeAgo: "2분 전", content: "댓글 내용", likeCount: 0 },
+  { id: 3, writer: { name: "사용자 닉네임" }, timeAgo: "5분 전", content: "댓글 내용", likeCount: 0 },
+];
+
+function CommentItem({ item, accountInfo }) {
+  const userNo = item?.userNo ?? 0;
+  const writerUserNo = item?.userNo ?? 0;
+  const loginUserNo = accountInfo?.userNo ?? -1;
 
   const handleDelete = async () => {
     if (!window.confirm("댓글을 삭제하시겠습니까?")) return;
@@ -116,11 +135,18 @@ function CommentItem({ item }) {
     }
   };
 
+
   return (
     <li className="commentBox__item">
       <div className="commentBox__head">
         <div className="commentBox__profile">
-          <div className="commentBox__avatar" />
+          <img
+            className="commentComposer__avatar"
+            src={
+              thumbnailUrl(userNo, 30, 30)}
+            alt="프로필이미지"
+            onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
+          />
           <div className="commentBox__nameTime">
             <div className="commentBox__name">
               {item.writerName ?? "알 수 없음"}
@@ -130,6 +156,8 @@ function CommentItem({ item }) {
             </div>
           </div>
         </div>
+
+        {writerUserNo == loginUserNo || accountInfo?.roleList?.some(r => r.role === "ROLE_ADMIN") ? (
         <div className="commentBox__actions">
           {!editing && (
             <>
@@ -151,6 +179,7 @@ function CommentItem({ item }) {
             </>
           )}
         </div>
+        ) : (<></>)}
       </div>
 
       <div className="commentBox__body">
@@ -192,13 +221,25 @@ function CommentItem({ item }) {
   );
 }
 
-function CommentBox({ data, isLogin = false, boardNo }) {
+
+
+
+export default function CommentBox({
+  data,
+  isLogin = false,
+  boardNo,
+  accountInfo
+}) {
+
   return (
     <section className="commentBox">
-      <CommentComposer isLogin={isLogin} boardNo={boardNo} />
+      {/* 상단: 댓글 작성 창 */}
+      <CommentComposer isLogin={isLogin} boardNo={boardNo} accountInfo={accountInfo} />
+
+      {/* 리스트 */}
       <ul className="commentBox__list">
         {Array.isArray(data) && data.length > 0 ? (
-          data.map((c) => <CommentItem key={c.commentNo} item={c} />)
+          data.map((c) => <CommentItem key={c.commentNo} item={c} accountInfo={accountInfo} />)
         ) : (
           <li className="commentBox__empty">댓글이 없습니다.</li>
         )}

@@ -1,19 +1,25 @@
 import React, { useState } from "react";
 import "./ContentBox.css";
 import DOMPurify from "dompurify";
-// 게시글 삭제와 수정을 위해 api 인스턴스와 보드 엔드포인트를 가져옵니다.
-import { api, BOARD_PREFIX } from "../../../../api/DevimApi";
+import { DEFAULT_PROFILE, thumbnailUrl,api, BOARD_PREFIX  } from "../../../../api/DevimApi";
 import { useNavigate } from "react-router-dom";
 
-export default function ContentBox({ data, isLogin }) {
+
+export default function ContentBox({ data, isLogin = false, accountInfo }) {
   // 받은 상세글 정보 변수화
   const boardNo = data.boardNo;
+  const writerUserNo = data?.userNo ?? 0;
+  const loginUserNo = accountInfo?.userNo ?? -1;
   const boardTypeNo = data.boardTypeNo;
   const title = data.title;
   const boardContent = data.boardContent;
   const writerName = data.writerName;
   const createdDt = data.createdDt;
   const likeCount = data.likeCount;
+  console.log(writerUserNo);
+  console.log(loginUserNo);
+  console.log(accountInfo);
+
 
   // 좋아요 상태
   const [liked, setLiked] = useState(false);
@@ -88,13 +94,20 @@ export default function ContentBox({ data, isLogin }) {
       {/* 상단 */}
       <div className="contentBox__top">
         <div className="contentBox__profile">
-          <div className="contentBox__avatar" />
+          <img
+            className="contentBox__avatar"
+            src={
+              thumbnailUrl(writerUserNo, 30, 30)}
+            alt="프로필이미지"
+            onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
+          />
           <div className="contentBox__nameTime">
             <div className="contentBox__name">{writerName ?? "알 수 없음"}</div>
             <div className="contentBox__time">{formatTimeAgo(createdDt)}</div>
           </div>
         </div>
 
+        {writerUserNo == loginUserNo || accountInfo?.roleList?.some(r => r.role === "ROLE_ADMIN") ? (
         <div className="contentBox__actions">
           <>
             <button
@@ -131,6 +144,7 @@ export default function ContentBox({ data, isLogin }) {
             </button>
           </>
         </div>
+        ) : (<></>)}
       </div>
 
       {/* 제목 및 본문 */}

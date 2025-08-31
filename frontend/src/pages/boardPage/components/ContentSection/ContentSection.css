@@ -10,6 +10,7 @@
 .contentSection__row {
   border-bottom: var(--border-w, 1px) solid var(--color-border, #e5e7eb);
 }
+
 .contentSection__rowLink {
   display: grid;
   grid-template-rows: auto auto auto;
@@ -20,13 +21,16 @@
   text-decoration: none;
   border-radius: var(--radius-sm, 8px);
 }
+
 .contentSection__rowLink:hover {
   background: var(--surface-1, #f5f6f7);
 }
+
 .contentSection__rowLink:focus-visible {
   outline: none;
   box-shadow: var(--glow-outline, 0 0 0 2px rgba(0, 0, 0, 0.2));
 }
+
 /* 상단 라인: 좌(프로필) / 우(통계) */
 .contentSection__headerLine {
   display: grid;
@@ -39,20 +43,25 @@
   align-items: center;
   gap: 10px;
 }
+
 .contentSection__avatar {
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background: var(--surface-muted, #e6e6e6);
+  object-fit: cover;
+  margin-left: 12px;
 }
+
 .contentSection__nameTime {
   font-size: 12px;
   opacity: 0.85;
 }
+
 .contentSection__name {
   font-weight: 700;
   font-size: 13px;
 }
+
 .contentSection__time {
   margin-top: 2px;
 }
@@ -65,6 +74,7 @@
   font-size: 14px;
   opacity: 0.9;
 }
+
 .contentSection__statLike,
 .contentSection__statComment {
   white-space: nowrap;
@@ -85,6 +95,7 @@
   gap: 8px;
   flex-wrap: wrap;
 }
+
 .contentSection__tag {
   font-size: 12px;
   opacity: 0.7;
