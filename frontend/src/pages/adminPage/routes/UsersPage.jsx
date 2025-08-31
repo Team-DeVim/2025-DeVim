@@ -1,135 +1,162 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { api } from "../../../api/DevimApi";
+import { api, USER_PREFIX } from "../../../api/DevimApi";
 import "./UsersPage.css";
 
-/** API base url*/
+
+// API base url (vite 환경변수 또는 axios 기본값에서 가져옴)
 const API_BASE =
   (api?.defaults?.baseURL ? api.defaults.baseURL.replace(/\/$/, "") : "") ||
   (import.meta?.env?.VITE_API_BASE
     ? String(import.meta.env.VITE_API_BASE).replace(/\/$/, "")
     : "");
-/** 업로드 placeholder 절대 경로 */
+
+// 기본 프로필 이미지 경로
 const PLACEHOLDER = `${API_BASE}/upload/profile/placeholder.png`;
 
-function clamp(n, min, max) {
-  return Math.min(Math.max(Number(n) || 0, min), max);
-}
+// 안전 숫자 변환. 숫자가 아니면 기본값 반환
+const N = (v, d = 0) => {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : d;
+};
 
-function buildPagination(current, total, windowSize = 8) {
-  const t = Math.max(1, Number(total) || 1);
-  const c = clamp(current || 1, 1, t);
+// 페이지 번호 블록 크기 (한 번에 보여줄 페이지 번호 개수)
+const BLOCK_SIZE = 10;
 
-  const half = Math.floor(windowSize / 2);
-  let start = Math.max(1, c - half);
-  let end = Math.min(t, start + windowSize - 1);
-  start = Math.max(1, end - windowSize + 1);
+function normalizeFromServer(data, { size }) {
+  const list = Array.isArray(data?.dtoList) ? data.dtoList : [];
 
-  const pages = [];
-  for (let i = start; i <= end; i++) pages.push(i);
+  // 현재 페이지(1-base)
+  const current =
+    N(data?.current) > 0
+      ? N(data.current)
+      : N(data?.pageRequestDTO?.page, 0) + 1 || 1;
+
+  // 총 페이지
+  const totalCount = N(data?.totalCount ?? data?.totalElements, 0);
+  let totalPages = N(data?.totalPage, 0);
+  if (totalPages <= 0) {
+    totalPages = size > 0 ? Math.max(1, Math.ceil(totalCount / size)) : 1;
+  }
+
+  // 페이지 목록
+  let pages = [];
+  if (Array.isArray(data?.pageNumList) && data.pageNumList.length) {
+    const nums = data.pageNumList.map(N);
+    const zeroBased = nums.some((n) => n === 0);
+    pages = nums
+      .map((n) => (zeroBased ? n + 1 : n))
+      .filter((p) => p >= 1 && p <= totalPages)
+      .filter((p, i, arr) => arr.indexOf(p) === i)
+      .sort((a, b) => a - b);
+  } else {
+    const start =
+      Math.floor((Math.max(1, current) - 1) / BLOCK_SIZE) * BLOCK_SIZE + 1;
+    const end = Math.min(totalPages, start + BLOCK_SIZE - 1);
+    for (let p = start; p <= end; p++) pages.push(p);
+  }
+  if (!pages.length) pages = [1];
+
+  const hasPrev = typeof data?.prev === "boolean" ? data.prev : current > 1;
+  const hasNext =
+    typeof data?.next === "boolean" ? data.next : current < totalPages;
+
+  const prevPage =
+    N(data?.prevPage) > 0
+      ? N(data.prevPage)
+      : Math.max(1, pages[0] - BLOCK_SIZE);
+
+  const nextPage =
+    N(data?.nextPage) > 0
+      ? N(data.nextPage)
+      : Math.min(totalPages, pages[pages.length - 1] + 1);
 
   return {
+    list,
+    page: Math.min(Math.max(1, current), totalPages),
+    totalPages,
     pages,
-    current: c,
-    total: t,
-    hasPrev: c > 1,
-    hasNext: c < t,
-    prevPage: Math.max(1, c - 1),
-    nextPage: Math.min(t, c + 1),
+    hasPrev,
+    hasNext,
+    prevPage,
+    nextPage,
   };
 }
 
-function normalizeUserPage(data) {
-  const list = Array.isArray(data?.dtoList) ? data.dtoList : [];
-  const size = Number(data?.pageRequestDTO?.size ?? 10);
+// 프로필 이미지 존재 여부
+const hasProfile = (u) => !!String(u?.profileImagePath ?? "").trim();
 
-  const page0 = Number(
-    data?.current ?? data?.pageRequestDTO?.page ?? data?.number ?? 0
-  );
-  const page = page0 + 1;
-
-  // totalPages는 0이면 최소 1로 보정
-  const totalPagesRaw = Number(
-    data?.totalPage ?? data?.totalPages ?? data?.pages ?? 0
-  );
-  const totalPages = Math.max(1, totalPagesRaw || 1);
-
-  const totalElements = Number(
-    data?.totalCount ?? data?.totalElements ?? list.length
-  );
-  return { list, page, size, totalPages, totalElements };
-}
-
-function hasProfile(user) {
-  return !!String(user?.profileImagePath ?? "").trim();
-}
-
-/** 썸네일 URL*/
-function thumbnailUrl(userNo) {
-  return `${API_BASE}/api/v1/users/${encodeURIComponent(
+// 썸네일 URL 생성기
+const thumb = (userNo, w = 30, h = 30) =>
+  `${API_BASE}/api/v1/users/${encodeURIComponent(
     userNo
-  )}/thumbnail?width=30&height=30&cb=${Date.now()}`;
-}
+  )}/thumbnail?width=${w}&height=${h}&cb=${Date.now()}`;
 
 export default function UsersPage() {
   const nav = useNavigate();
   const [sp, setSp] = useSearchParams();
 
-  const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState([]);
 
-  // 쿼리스트링 page(1-base) 반영
-  const [page, setPage] = useState(() =>
-    clamp(Number(sp.get("page")) || 1, 1, 9999)
-  );
+  // 주소창 page는 1-base로 관리
+  const [page, setPage] = useState(() => {
+    const p = N(sp.get("page"), 1);
+    return Math.max(1, p);
+  });
   const size = 10;
 
-  const [pager, setPager] = useState(() =>
-    buildPagination(page, 1 /* totalPages 초기값 */)
-  );
+  // 서버 계산을 그대로 보이는 페이저 상태
+  const [pager, setPager] = useState({
+    pages: [1],
+    page: 1,
+    totalPages: 1,
+    hasPrev: false,
+    hasNext: false,
+    prevPage: 1,
+    nextPage: 1,
+  });
+
 
   useEffect(() => {
     const ac = new AbortController();
-
     (async () => {
       try {
-        setLoading(true);
-
-        // 백엔드가 0-base라 -1 해서 전달
-        const { data } = await api.get("/api/v1/users", {
-          params: { page: page - 1, size },
+        const { data } = await api.get(`${USER_PREFIX}`, {
+          params: { page, size },
           signal: ac.signal,
         });
 
-        const std = normalizeUserPage(data);
+        const std = normalizeFromServer(data, { size });
         setRows(std.list);
-        // 프론트에서 신뢰 가능한 페이지네이션 계산
-        setPager(buildPagination(page, std.totalPages, 8));
+        setPager(std);
       } catch (e) {
         if (e?.name !== "CanceledError") {
           console.error(e);
           alert("유저 목록을 불러오지 못했습니다.");
+          setRows([]);
+          setPager({
+            pages: [1],
+            page: 1,
+            totalPages: 1,
+            hasPrev: false,
+            hasNext: false,
+            prevPage: 1,
+            nextPage: 1,
+          });
         }
-      } finally {
-        setLoading(false);
       }
     })();
 
-    // 주소창 동기화
+    // 주소창 page 동기화(뒤로가기 고려)
     setSp({ page: String(page) }, { replace: true });
     return () => ac.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, size]);
+  }, [page, size, setSp]);
 
   const goDetail = (userNo) => nav(`/adminPage/users/${userNo}`);
 
   return (
     <div className="admin-users">
       <div className="admin-users__panel">
-        <div className="admin-users__empty-icon">
-          {loading ? "로딩중…" : "≡"}
-        </div>
-
         <table className="admin-users__table">
           <thead>
             <tr>
@@ -142,39 +169,31 @@ export default function UsersPage() {
             </tr>
           </thead>
           <tbody>
-            {rows.map((user) => {
-              const active = !user.deleteFlag;
+            {rows.map((u) => {
+              const active = !u.deleteFlag;
               const created =
-                typeof user.createdDt === "string"
-                  ? user.createdDt.slice(0, 10)
-                  : "";
-
+                typeof u.createdDt === "string" ? u.createdDt.slice(0, 10) : "";
               return (
                 <tr
-                  key={user.userNo}
-                  onClick={() => goDetail(user.userNo)}
+                  key={u.userNo}
                   className="admin-users__row"
+                  onClick={() => goDetail(u.userNo)}
                 >
-                  <td>{user.userNo}</td>
+                  <td>{u.userNo}</td>
                   <td>
                     <img
                       className="admin-users__avatar--sm"
-                      src={
-                        hasProfile(user)
-                          ? thumbnailUrl(user.userNo)
-                          : PLACEHOLDER
-                      }
+                      src={hasProfile(u) ? thumb(u.userNo) : PLACEHOLDER}
                       alt=""
                       onError={(e) => {
-                        // 네트워크/파일없음 대비: 무한루프 방지
                         if (e.currentTarget.src !== PLACEHOLDER) {
                           e.currentTarget.src = PLACEHOLDER;
                         }
                       }}
                     />
                   </td>
-                  <td>{user.id}</td>
-                  <td>{user.name}</td>
+                  <td>{u.id}</td>
+                  <td>{u.name}</td>
                   <td>{created}</td>
                   <td>{active ? "Y" : "N"}</td>
                 </tr>
@@ -185,27 +204,28 @@ export default function UsersPage() {
 
         <div className="admin-users__pagination">
           <button
-            disabled={!pager.hasPrev}
-            onClick={() => setPage(pager.prevPage)}
+            disabled={!pager.hasPrev || pager.page <= 1}
+            onClick={() => setPage(pager.prevPage)} 
           >
             이전
           </button>
 
-          {pager.pages.map((p) => (
+          {(pager.pages?.length ? pager.pages : [pager.page]).map((p) => (
             <button
               key={p}
               className={`admin-users__page ${
-                p === pager.current ? "admin-users__page--active" : ""
+                p === pager.page ? "admin-users__page--active" : ""
               }`}
-              onClick={() => setPage(p)}
+              onClick={() => setPage(p)} 
+              disabled={p === pager.page}
             >
               {p}
             </button>
           ))}
 
           <button
-            disabled={!pager.hasNext}
-            onClick={() => setPage(pager.nextPage)}
+            disabled={!pager.hasNext || pager.page >= pager.totalPages}
+            onClick={() => setPage(pager.nextPage)} // 블록 점프
           >
             다음
           </button>

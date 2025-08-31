@@ -18,6 +18,19 @@ function AdminSideBar() {
       <ul className="admin-sidebar__menu">
         <li>
           <NavLink
+            to="/adminPage/dashboard"
+            end
+            className={({ isActive }) =>
+              "admin-sidebar__item" +
+              (isActive ? " admin-sidebar__item--active" : "")
+            }
+            reloadDocument
+          >
+            대시보드
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
             to="/adminPage/users"
             end
             className={({ isActive }) =>
@@ -27,19 +40,6 @@ function AdminSideBar() {
             reloadDocument
           >
             유저관리
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/adminPage/dashboard"
-            end
-            className={({ isActive }) =>
-              "admin-sidebar__item" +
-              (isActive ? " admin-sidebar__item--active" : "")
-            }
-            reloadDocument
-          >
-            메인 대시보드
           </NavLink>
         </li>
         <li>

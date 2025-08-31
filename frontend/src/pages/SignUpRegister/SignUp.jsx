@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import "./SignUp.css";
 import { useEffect, useState } from "react";
 import { fetchMyInfo, login } from "../../api/DevimApi";
@@ -14,14 +14,14 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
 
-
-  const loginClick = async () => {
+  const loginClick = async (e) => {
+    if (e?.preventDefault) e.preventDefault();
     if (loading) return;
     setErr("");
     setLoading(true);
     try {
-      await login(id, password);    // 토큰 발급 및 저장
-      navigate("/main");      // ✅ 로그인 성공 후 /main 으로 이동
+      await login(id, password); // 토큰 발급 및 저장
+      navigate("/main"); // ✅ 로그인 성공 후 /main 으로 이동
     } catch (e) {
       setErr("로그인에 실패했습니다. 아이디/비밀번호를 확인해주세요.");
     } finally {
@@ -61,7 +61,7 @@ export default function SignUp() {
         console.error("카카오 로그인 실패", err);
       },
     });
-  }
+  };
   /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
   // 메인으로
@@ -95,7 +95,7 @@ export default function SignUp() {
           </div>
         </div>
         <div className="signup__background">
-          <div className="signup__form">
+          <form className="signup__form" onSubmit={loginClick}>
             <input
               className="signup__input signup__input--id"
               type="text"
@@ -104,6 +104,7 @@ export default function SignUp() {
               onFocus={() => setIsFocused({ ...isFocused, id: true })}
               onBlur={() => setIsFocused({ ...isFocused, id: false })}
               placeholder="아이디"
+              autoComplete="username"
             />
             <input
               className="signup__input signup__input--password"
@@ -113,12 +114,18 @@ export default function SignUp() {
               onFocus={() => setIsFocused({ ...isFocused, password: true })}
               onBlur={() => setIsFocused({ ...isFocused, password: false })}
               placeholder="비밀번호"
+               autoComplete="current-password"
             />
-          </div>
+          
 
-          <button className="signup__login-button" onClick={loginClick} disabled={loading}>
+          <button
+            className="signup__login-button"
+            type="submit"
+            disabled={loading}
+          >
             로그인
           </button>
+          </form>
           <button
             className="signup__kakaologin-button"
             type="submit"
