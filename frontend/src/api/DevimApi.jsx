@@ -57,26 +57,25 @@ api.interceptors.request.use((cfg) => {
 });
 
 // 401 처리: 토큰 제거 + 전역 이벤트 + /login 이동(폴백)
-/*
+
 api.interceptors.response.use(
     (res) => res,
     (err) => {
-        const navigate = useNavigate();
         if (err?.response?.status === 401) {
             clearToken();
             alert("로그인 오류!");
-            navigate("/login");
+            window.location.href = "/main";
             return Promise.reject(err);
         }
         if (err?.response?.status === 403) {
             alert("로그인이 필요한 서비스입니다.");
             clearToken();
-            navigate("/login");
+            window.location.href = "/main";
             return Promise.reject(err);
         }
     }
 );
-*/
+
 // ----------------------------------------------------
 
 // Login
@@ -210,6 +209,11 @@ export function thumbnailUrl(userNo, width = 30, height = 30) {
 
 // 디폴트 이미지
 export const DEFAULT_PROFILE = "/img/default_profile.png";
+
+export async function userSummary(userNo, signal) {
+    const res = await api.get(`${USER_PREFIX}/${userNo}/summary`, { signal });
+    return res.data
+}
 
 //BOARD
 

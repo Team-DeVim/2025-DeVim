@@ -1,21 +1,16 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import "./MyComment.css";
 import { createSearchParams, Link, useSearchParams } from "react-router-dom";
 
-const commentData = [
-  { id: 1, title: "안녕하세요." },
-  { id: 2, title: "좋은 글 감사합니다!" },
-  { id: 3, title: "많은 도움이 되었어요." },
-  { id: 4, title: "질문이 있습니다." },
-  { id: 5, title: "정말 유익하네요." },
-  { id: 6, title: "다음 글도 기대할게요!" },
-  { id: 7, title: "잘 읽었습니다." },
-
-];
-
 const MyComment = ({ commentPagingList }) => {
   const [params, setParams] = useSearchParams();
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
+
+  const currentPage = useMemo(() => {
+    const p = Number(params.get("Cpage"));
+    if (!Number.isFinite(p) || p <= 0) return 1;
+    return p;
+  }, [params]);
 
   /* 오늘 날짜 함수 출력 */
   // const today = new Date();
@@ -36,7 +31,6 @@ const MyComment = ({ commentPagingList }) => {
     const next = new URLSearchParams(params);
     next.set("Cpage", String(p));
     setParams(next);
-    setCurrentPage(Number(next.get("Cpage")));
   };
 
   return (
