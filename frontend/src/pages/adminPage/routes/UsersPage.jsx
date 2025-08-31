@@ -89,17 +89,17 @@ function normalizeFromServer(data, { size }) {
 }
 
 // 프로필 이미지 존재 여부
-const hasProfile = (u) => !!String(u?.profileImagePath ?? "").trim();
+// const hasProfile = (u) => !!String(u?.profileImagePath ?? "").trim();
 
-// 썸네일 URL 생성기
-const thumb = (userNo, w = 30, h = 30) =>
-  `${API_BASE}/api/v1/users/${encodeURIComponent(
-    userNo
-  )}/thumbnail?width=${w}&height=${h}&cb=${Date.now()}`;
+// // 썸네일 URL 생성기
+// const thumb = (userNo, w = 30, h = 30) =>
+//   `${API_BASE}/api/v1/users/${encodeURIComponent(
+//     userNo
+//   )}/thumbnail?width=${w}&height=${h}&cb=${Date.now()}`;
 
-function hasProfile(user) {
-  return !!String(user?.profileImagePath ?? "").trim();
-}
+// function hasProfile(user) {
+//   return !!String(user?.profileImagePath ?? "").trim();
+// }
 
 // /** 썸네일 URL*/
 // DevimApi로 통합처리
@@ -201,7 +201,7 @@ export default function UsersPage() {
                   <td>
                     <img
                       className="admin-users__avatar--sm"
-                      src={thumbnailUrl(user.userNo, 30, 30)}
+                      src={thumbnailUrl(u.userNo, 30, 30)}
                       alt="프로필이미지"
                       onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
                     />
