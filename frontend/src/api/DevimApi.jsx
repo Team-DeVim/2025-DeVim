@@ -173,6 +173,21 @@ export async function getMycommentList(userNo, page = 1, size = 5, signal) {
     }
 }
 
+// 유저 프로필 불러오기
+/** 썸네일 URL*/
+export function thumbnailUrl(userNo, width = 30, height = 30) {
+    const params = new URLSearchParams({
+        width: String(width),
+        height: String(height),
+        cb: Date.now().toString()
+    });
+
+    return `${USER_PREFIX}/${encodeURIComponent(userNo)}/thumbnail?${params.toString()}`;
+}
+
+// 디폴트 이미지
+export const DEFAULT_PROFILE = "/img/default_profile.png";
+
 //BOARD
 
 //mainPage__인기글,자유게시판,Q&A게시판 글 4개

@@ -113,6 +113,16 @@ const root = createBrowserRouter([
       { path: "/errorPage", element: <ServerErrorPage /> },
     ],
   },
+  {
+    path: "adminPage",
+    element: <AdminPage />,
+    children: [
+      { index: true, path: "users", element: <UsersPage /> },
+      { path: "users/:userNo", element: <UserDetailPage /> },
+      { path: "dashboard", element: <DashboardPage /> },
+      { path: "bannerModify", element: <BannerModify /> },
+    ],
+  },
 ]);
 
 export default root;

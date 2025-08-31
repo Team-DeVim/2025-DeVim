@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { api, USER_PREFIX } from "../../../api/DevimApi";
+
+import { api, USER_PREFIX, DEFAULT_PROFILE, thumbnailUrl } from "../../../api/DevimApi";
 import "./UsersPage.css";
 
 
@@ -12,7 +13,11 @@ const API_BASE =
     : "");
 
 // 기본 프로필 이미지 경로
-const PLACEHOLDER = `${API_BASE}/upload/profile/placeholder.png`;
+// const PLACEHOLDER = `${API_BASE}/upload/profile/placeholder.png`;
+
+/** 업로드 placeholder 절대 경로 */
+// Devimapi에 통합
+// const PLACEHOLDER = "/img/default_profile.png";
 
 // 안전 숫자 변환. 숫자가 아니면 기본값 반환
 const N = (v, d = 0) => {
@@ -91,6 +96,19 @@ const thumb = (userNo, w = 30, h = 30) =>
   `${API_BASE}/api/v1/users/${encodeURIComponent(
     userNo
   )}/thumbnail?width=${w}&height=${h}&cb=${Date.now()}`;
+
+function hasProfile(user) {
+  return !!String(user?.profileImagePath ?? "").trim();
+}
+
+// /** 썸네일 URL*/
+// DevimApi로 통합처리
+// function thumbnailUrl(userNo) {
+//   return `${API_BASE}/api/v1/users/${encodeURIComponent(
+//     userNo
+//   )}/thumbnail?width=30&height=30&cb=${Date.now()}`;
+// }
+
 
 export default function UsersPage() {
   const nav = useNavigate();
@@ -183,13 +201,9 @@ export default function UsersPage() {
                   <td>
                     <img
                       className="admin-users__avatar--sm"
-                      src={hasProfile(u) ? thumb(u.userNo) : PLACEHOLDER}
-                      alt=""
-                      onError={(e) => {
-                        if (e.currentTarget.src !== PLACEHOLDER) {
-                          e.currentTarget.src = PLACEHOLDER;
-                        }
-                      }}
+                      src={thumbnailUrl(user.userNo, 30, 30)}
+                      alt="프로필이미지"
+                      onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
                     />
                   </td>
                   <td>{u.id}</td>
@@ -218,6 +232,7 @@ export default function UsersPage() {
               }`}
               onClick={() => setPage(p)} 
               disabled={p === pager.page}
+
             >
               {p}
             </button>

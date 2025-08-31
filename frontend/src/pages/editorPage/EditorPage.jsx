@@ -91,7 +91,7 @@ export default function EditorPage() {
 
         <section className="editor-page__body">
           <Editor
-            value={content}            
+            value={content}
             onChange={setContent}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
