@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import "./ContentBox.css";
 import DOMPurify from "dompurify";
+import { DEFAULT_PROFILE, thumbnailUrl } from "../../../../api/DevimApi";
 
-export default function ContentBox({ data, isLogin }) {
+export default function ContentBox({ data, isLogin = false, accountInfo }) {
   // 받은 상세글 정보 변수화
   const boardNo = data.boardNo;
+  const writerUserNo = data?.userNo ?? 0;
+  const loginUserNo = accountInfo?.userNo ?? -1;
   const boardTypeNo = data.boardTypeNo;
   const title = data.title;
   const boardContent = data.boardContent;
@@ -12,6 +15,10 @@ export default function ContentBox({ data, isLogin }) {
   const createdDt = data.createdDt;
   const deleteFlag = data.deleteFlag;
   const likeCount = data.likeCount;
+  console.log(writerUserNo);
+  console.log(loginUserNo);
+  console.log(accountInfo);
+
 
 
   const [liked, setLiked] = useState(false);
@@ -43,7 +50,13 @@ export default function ContentBox({ data, isLogin }) {
       {/* 상단 */}
       <div className="contentBox__top">
         <div className="contentBox__profile">
-          <div className="contentBox__avatar" />
+          <img
+            className="contentBox__avatar"
+            src={
+              thumbnailUrl(writerUserNo, 30, 30)}
+            alt="프로필이미지"
+            onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
+          />
           <div className="contentBox__nameTime">
             <div className="contentBox__name">
               {writerName ?? "알 수 없음"}
@@ -52,16 +65,17 @@ export default function ContentBox({ data, isLogin }) {
           </div>
         </div>
 
-        <div className="contentBox__actions">
-          {/* (나중에 본인일 때만 노출) */}
-          <button type="button" className="contentBox__action">
-            삭제하기
-          </button>
-          <span className="contentBox__sep">|</span>
-          <button type="button" className="contentBox__action">
-            수정하기
-          </button>
-        </div>
+        {writerUserNo == loginUserNo || accountInfo?.roleList?.some(r => r.role === "ROLE_ADMIN") ? (
+          <div className="contentBox__actions">
+            <button type="button" className="contentBox__action">
+              삭제하기
+            </button>
+            <span className="contentBox__sep">|</span>
+            <button type="button" className="contentBox__action">
+              수정하기
+            </button>
+          </div>
+        ) : (<></>)}
       </div>
 
       {/* 제목 */}

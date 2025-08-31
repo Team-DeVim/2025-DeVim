@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { api } from "../../../api/DevimApi";
+import { api, DEFAULT_PROFILE, thumbnailUrl } from "../../../api/DevimApi";
 import "./UsersPage.css";
 
 /** API base url*/
@@ -10,7 +10,8 @@ const API_BASE =
     ? String(import.meta.env.VITE_API_BASE).replace(/\/$/, "")
     : "");
 /** 업로드 placeholder 절대 경로 */
-const PLACEHOLDER = `${API_BASE}/upload/profile/placeholder.png`;
+// Devimapi에 통합
+// const PLACEHOLDER = "/img/default_profile.png";
 
 function clamp(n, min, max) {
   return Math.min(Math.max(Number(n) || 0, min), max);
@@ -64,12 +65,13 @@ function hasProfile(user) {
   return !!String(user?.profileImagePath ?? "").trim();
 }
 
-/** 썸네일 URL*/
-function thumbnailUrl(userNo) {
-  return `${API_BASE}/api/v1/users/${encodeURIComponent(
-    userNo
-  )}/thumbnail?width=30&height=30&cb=${Date.now()}`;
-}
+// /** 썸네일 URL*/
+// DevimApi로 통합처리
+// function thumbnailUrl(userNo) {
+//   return `${API_BASE}/api/v1/users/${encodeURIComponent(
+//     userNo
+//   )}/thumbnail?width=30&height=30&cb=${Date.now()}`;
+// }
 
 export default function UsersPage() {
   const nav = useNavigate();
@@ -159,18 +161,9 @@ export default function UsersPage() {
                   <td>
                     <img
                       className="admin-users__avatar--sm"
-                      src={
-                        hasProfile(user)
-                          ? thumbnailUrl(user.userNo)
-                          : PLACEHOLDER
-                      }
-                      alt=""
-                      onError={(e) => {
-                        // 네트워크/파일없음 대비: 무한루프 방지
-                        if (e.currentTarget.src !== PLACEHOLDER) {
-                          e.currentTarget.src = PLACEHOLDER;
-                        }
-                      }}
+                      src={thumbnailUrl(user.userNo, 30, 30)}
+                      alt="프로필이미지"
+                      onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
                     />
                   </td>
                   <td>{user.id}</td>
@@ -194,9 +187,8 @@ export default function UsersPage() {
           {pager.pages.map((p) => (
             <button
               key={p}
-              className={`admin-users__page ${
-                p === pager.current ? "admin-users__page--active" : ""
-              }`}
+              className={`admin-users__page ${p === pager.current ? "admin-users__page--active" : ""
+                }`}
               onClick={() => setPage(p)}
             >
               {p}
