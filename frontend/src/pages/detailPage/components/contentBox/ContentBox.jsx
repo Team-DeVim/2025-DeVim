@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ContentBox.css";
 import DOMPurify from "dompurify";
-import { DEFAULT_PROFILE, thumbnailUrl, api, BOARD_PREFIX, postLike } from "../../../../api/DevimApi";
+import { DEFAULT_PROFILE, thumbnailUrl, api, BOARD_PREFIX, postLike, getLike } from "../../../../api/DevimApi";
 import { useNavigate } from "react-router-dom";
 
 
@@ -27,6 +27,17 @@ export default function ContentBox({ data, isLogin = false, accountInfo }) {
   const [editTitle, setEditTitle] = useState(title);
   const [editContent, setEditContent] = useState(boardContent);
   const navigate = useNavigate();
+
+  // 좋아요 히스토리
+  useEffect(() => {
+    if (!isLogin) { return; }
+    const controller = new AbortController();
+
+    getLike(boardNo, controller.signal)
+      .then((data) => { setLiked(data) })
+
+    return () => controller.abort();
+  }, [isLogin, boardNo]);
 
   // 좋아요 토글
   const handleToggleLike = async () => {

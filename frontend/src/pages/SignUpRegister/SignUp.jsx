@@ -114,25 +114,25 @@ export default function SignUp() {
               onFocus={() => setIsFocused({ ...isFocused, password: true })}
               onBlur={() => setIsFocused({ ...isFocused, password: false })}
               placeholder="비밀번호"
-               autoComplete="current-password"
+              autoComplete="current-password"
             />
-          
 
-          <button
-            className="signup__login-button"
-            type="submit"
-            disabled={loading}
-          >
-            로그인
-          </button>
+
+            <button
+              className="signup__login-button"
+              type="submit"
+              disabled={loading}
+            >
+              로그인
+            </button>
           </form>
-          <button
+          {/* <button
             className="signup__kakaologin-button"
             type="submit"
             onClick={kakaoLogin}
           >
             카카오 로그인
-          </button>
+          </button> */}
 
           <div className="signup__join">
             <button onClick={register}>회원가입</button>

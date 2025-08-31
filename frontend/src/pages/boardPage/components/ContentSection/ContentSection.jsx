@@ -107,7 +107,7 @@ export default function ContentSection({ data }) {
           <input
             className="contentSection__searchInput"
             placeholder=">검색어를 입력하세요"
-            // // onChange={(e) => onSearch?.(e.target.value)}
+            // onChange={(e) => onSearch?.(e.target.value)}
             // onKeyDown={(e) =>
             //   e.key === "Enter" && onSearch?.(e.currentTarget.value)
             // }

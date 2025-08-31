@@ -1,11 +1,15 @@
 import { createSearchParams, Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import "./MyArticle.css";
 
 const MyArticle = ({ postPagingList }) => {
   const [params, setParams] = useSearchParams();
-  const [currentPage, setCurrentPage] = useState(1);
 
+  const currentPage = useMemo(() => {
+    const p = Number(params.get("Apage"));
+    if (!Number.isFinite(p) || p <= 0) return 1;
+    return p;
+  }, [params]);
 
   /* 오늘 날짜 함수 출력 */
   // const today = new Date();
@@ -26,8 +30,8 @@ const MyArticle = ({ postPagingList }) => {
     const next = new URLSearchParams(params);
     next.set("Apage", String(p));
     setParams(next);
-    setCurrentPage(Number(next.get("Apage")));
   };
+
 
   return (
     <div className="myArticle">
@@ -58,6 +62,7 @@ const MyArticle = ({ postPagingList }) => {
         <div className="myArticle__pagination">
           {postPagingList.prev && (
             <button
+              type="button"
               onClick={() => {
                 setPage(postPagingList.prevPage);
               }}
@@ -67,6 +72,7 @@ const MyArticle = ({ postPagingList }) => {
           )}
           {pageNumbers.map((page) => (
             <button
+              type="button"
               key={page}
               className={currentPage === page ? "active" : ""}
               onClick={() => setPage(page)}
@@ -78,6 +84,7 @@ const MyArticle = ({ postPagingList }) => {
           {/* ✅ 다음 페이지 그룹 버튼 */}
           {postPagingList.next && (
             <button
+              type="button"
               onClick={
                 () => { setPage(postPagingList.nextPage); }
               }>▶</button>

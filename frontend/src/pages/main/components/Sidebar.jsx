@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 import axios from "axios";
-import { api, fetchMyInfo, getToken, logout, USER_PREFIX } from "../../../api/DevimApi.jsx";
+import { api, DEFAULT_PROFILE, fetchMyInfo, getToken, logout, thumbnailUrl, USER_PREFIX, userSummary } from "../../../api/DevimApi.jsx";
 import { useNavigate } from "react-router";
 
 
@@ -13,18 +13,14 @@ const mockProfile = {
 };
 
 function Sidebar() {
-  // 내부 로그인/비로그인 토글
-  // const [profile, setProfile] = useState(null);
-  // const isLoggedIn = !!profile;
   const isLogin = !!getToken();
-  const myStats = isLogin
-    ? { posts: 12, comments: 34 }
-    : { posts: 0, comments: 0 };
   const navigate = useNavigate();
   const handleLoginClick = () => navigate("/login");
   const handleLogoutClick = () => logout();
   const handleRegisterClick = () => navigate("/register");
   const [me, setMe] = useState(null);
+  const userNo = me?.userNo ?? -1;
+  const [myStats, setMyStats] = useState({ posts: 0, comments: 0 });
 
   // 내 정보 불러오기
   useEffect(() => {
@@ -42,6 +38,8 @@ function Sidebar() {
   const [boardRanks, setBoardRanks] = useState([]);
   const [commentRanks, setCommentRanks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [summaryloading, setSummaryLoading] = useState(true);
+  const [summary, setSummary] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -64,6 +62,33 @@ function Sidebar() {
 
     fetchData();
   }, []);
+
+  // 내 게시글 갯수, 댓글 수 불러오기
+  useEffect(() => {
+    if (!isLogin || !me?.userNo) return;
+
+    const controller = new AbortController();
+    setSummaryLoading(true);
+
+    (async () => {
+      try {
+        const data = await userSummary(me.userNo, controller.signal);
+        const posts = data?.postCount ?? 0;
+        const comments = data?.commentCount ?? 0;
+        setMyStats({ posts, comments });
+      } catch (e) {
+        if (e?.code === "ERR_CANCELED" || e?.name === "CanceledError") return;
+        console.error(e);
+        setError("사용자 집계를 불러오지 못했습니다.");
+      } finally {
+        setSummaryLoading(false);
+      }
+    })();
+
+    return () => controller.abort();
+  }, [isLogin, me?.userNo]);
+
+
 
   return (
     <aside className="Sidebar">
@@ -88,7 +113,12 @@ function Sidebar() {
                   />
                 ) : (
                   <div className="Sidebar__avatarFallback">
-                    {(me?.name ?? me?.id ?? "U").slice(0, 3)}
+                    <img
+                      src={
+                        thumbnailUrl(userNo, 360, 360)}
+                      alt="프로필이미지"
+                      onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
+                    />
                   </div>
                 )}
               </div>
@@ -103,18 +133,23 @@ function Sidebar() {
               </div>
 
               <div className="Sidebar__counts">
-                <div className="Sidebar__countRow">
-                  <span className="Sidebar__countLabel">내 글 :</span>
-                  <span className="Sidebar__countValue">
-                    {myStats.posts.toLocaleString()}개
-                  </span>
-                </div>
-                <div className="Sidebar__countRow">
-                  <span className="Sidebar__countLabel">내 댓글 :</span>
-                  <span className="Sidebar__countValue">
-                    {myStats.comments.toLocaleString()}개
-                  </span>
-                </div>
+                {summaryloading && <div>집계 데이터 로딩중...</div>}
+                {!summaryloading && (
+                  <>
+                    <div className="Sidebar__countRow">
+                      <span className="Sidebar__countLabel">내 글 :</span>
+                      <span className="Sidebar__countValue">
+                        {myStats.posts}개
+                      </span>
+                    </div>
+                    <div className="Sidebar__countRow">
+                      <span className="Sidebar__countLabel">내 댓글 :</span>
+                      <span className="Sidebar__countValue">
+                        {myStats.comments}개
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 

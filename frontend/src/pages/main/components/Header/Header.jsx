@@ -17,10 +17,6 @@ export default function Header() {
   const main = () => {
     navigate("/main");
   };
-  // 회원가입
-  const register = () => {
-    navigate("/Register");
-  };
   // 게시판 검색기능
   const handleSearch = () => {
     if (keyword.trim()) {
@@ -36,6 +32,21 @@ export default function Header() {
   // 로그인
   const signUp = () => {
     navigate("/login");
+  };
+
+  // 회원가입
+  const register = () => {
+    navigate("/Register");
+  };
+
+  // 글쓰기 페이지
+  const writePost = () => {
+    navigate("/editorPage");
+  };
+
+  // 마이페이지
+  const goProfilePage = () => {
+    navigate("/profilePage");
   };
 
   // 게시판 이동
@@ -89,12 +100,16 @@ export default function Header() {
           {isLogin ? (
             <div>
               <nav className="head__auth--login">
-                <Link to="/editorPage" reloadDocument>글쓰기</Link>
-                <Link to="/profilePage" reloadDocument>마이페이지</Link>
+                <button className="btn btn--sign" onClick={writePost}>
+                  글쓰기
+                </button>
+                <button className="btn btn--register" onClick={goProfilePage}>
+                  마이페이지
+                </button>
               </nav>
             </div>
           ) : (
-            <div>
+            <div className="head__auth--login">
               <button className="btn btn--sign" onClick={signUp}>
                 로그인
               </button>

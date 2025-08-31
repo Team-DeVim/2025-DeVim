@@ -57,26 +57,25 @@ api.interceptors.request.use((cfg) => {
 });
 
 // 401 처리: 토큰 제거 + 전역 이벤트 + /login 이동(폴백)
-/*
+
 api.interceptors.response.use(
     (res) => res,
     (err) => {
-        const navigate = useNavigate();
         if (err?.response?.status === 401) {
             clearToken();
             alert("로그인 오류!");
-            navigate("/login");
+            window.location.href = "/main";
             return Promise.reject(err);
         }
         if (err?.response?.status === 403) {
             alert("로그인이 필요한 서비스입니다.");
             clearToken();
-            navigate("/login");
+            window.location.href = "/main";
             return Promise.reject(err);
         }
     }
 );
-*/
+
 // ----------------------------------------------------
 
 // Login
@@ -133,6 +132,25 @@ export const getUserList = async (page = 0, size = 20, signal) => {
     });
     return res.data;
 };
+
+// 프로필 이미지 업로드
+export async function uploadProfileImage(userNo, file, signal) {
+    const form = new FormData();
+    form.append("file", file);
+
+    const res = await api.post(`${USER_PREFIX}/${userNo}/profile-image`, form, { signal });
+    return res.data;
+}
+
+// 사용자 이름 변경
+export async function updateUserName(userNo, name, signal) {
+    const payload = {
+        name: String(name).trim()
+    };
+
+    const res = await api.patch(`${USER_PREFIX}/${userNo}`, payload, { signal });
+    return res.status === 204;
+}
 
 // 토큰을 통한 내 정보 조회
 export async function fetchMyInfo(signal) {
@@ -191,6 +209,11 @@ export function thumbnailUrl(userNo, width = 30, height = 30) {
 
 // 디폴트 이미지
 export const DEFAULT_PROFILE = "/img/default_profile.png";
+
+export async function userSummary(userNo, signal) {
+    const res = await api.get(`${USER_PREFIX}/${userNo}/summary`, { signal });
+    return res.data
+}
 
 //BOARD
 
@@ -332,3 +355,11 @@ export async function postLike(targetId, signal) {
     const res = await api.post(`${LIKE_PREFIX}/board/${targetId}`, { signal });
     return res.data;
 }
+
+// detailPage__게시글 좋아요 확인
+export async function getLike(targetId, signal) {
+    const res = await api.get(`${LIKE_PREFIX}/board/${targetId}`, { signal });
+    return res.data;
+}
+
+
