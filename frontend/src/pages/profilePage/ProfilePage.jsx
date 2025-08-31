@@ -18,6 +18,7 @@ function ProfilePage() {
     const [loadingComment, setLoadingComment] = useState(true);
     const [me, setMe] = useState(null);
 
+
     // 기본 쿼리스트링 생성
     useEffect(() => {
         if (!sp.has("Apage") || !sp.has("size") || !sp.has("Cpage")) {
@@ -94,7 +95,7 @@ function ProfilePage() {
         <div className="profilePage">
             <Header />
             <div className="profilePage--content">
-                <ProfileCard />
+                <ProfileCard accountInfo={me} />
                 <MyArticle postPagingList={postPagingList} />
                 <MyComment commentPagingList={commentPagingList} />
             </div>

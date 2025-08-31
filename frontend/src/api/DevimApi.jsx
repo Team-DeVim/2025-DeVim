@@ -134,6 +134,25 @@ export const getUserList = async (page = 0, size = 20, signal) => {
     return res.data;
 };
 
+// 프로필 이미지 업로드
+export async function uploadProfileImage(userNo, file, signal) {
+    const form = new FormData();
+    form.append("file", file);
+
+    const res = await api.post(`${USER_PREFIX}/${userNo}/profile-image`, form, { signal });
+    return res.data;
+}
+
+// 사용자 이름 변경
+export async function updateUserName(userNo, name, signal) {
+    const payload = {
+        name: String(name).trim()
+    };
+
+    const res = await api.patch(`${USER_PREFIX}/${userNo}`, payload, { signal });
+    return res.status === 204;
+}
+
 // 토큰을 통한 내 정보 조회
 export async function fetchMyInfo(signal) {
     const res = await api.get(`${USER_PREFIX}/me`, { signal });
