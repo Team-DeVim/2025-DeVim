@@ -43,4 +43,23 @@ public class LikesController {
         likesService.toggleLike(userPrincipal.getUserNo(), targetId, targetType);
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "좋아요 상태 확인", description = "현재 사용자가 해당 게시글 또는 댓글에 좋아요를 눌렀는지 확인합니다.",
+            parameters = {
+                    @Parameter(name = "targetType", description = "좋아요 대상 타입 (board 또는 comment)", example = "board", required = true),
+                    @Parameter(name = "targetId", description = "좋아요 대상 ID (게시글 번호 또는 댓글 번호)", example = "101", required = true)
+            }
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공 (true: 좋아요 누름, false: 좋아요 안누름)")
+    })
+    @GetMapping("/{targetType}/{targetId}")
+    public ResponseEntity<Boolean> checkLikeStatus(
+            @PathVariable("targetType") String targetType,
+            @PathVariable("targetId") long targetId,
+            @AuthenticationPrincipal JWTUserPrincipal userPrincipal) {
+
+        boolean isLiked = likesService.checkLikeStatus(userPrincipal.getUserNo(), targetId, targetType);
+        return ResponseEntity.ok(isLiked);
+    }
 }

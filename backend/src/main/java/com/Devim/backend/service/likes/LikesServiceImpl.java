@@ -31,4 +31,9 @@ public class LikesServiceImpl implements LikesService {
             likesRepository.save(newLike);
         }
     }
+
+    @Override
+    public boolean checkLikeStatus(long userNo, long targetId, String targetType) {
+        return likesRepository.findByUserAndTarget(userNo, targetId, targetType).isPresent();
+    }
 }
