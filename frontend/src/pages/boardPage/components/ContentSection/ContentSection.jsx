@@ -60,7 +60,7 @@ export default function ContentSection({ data }) {
                 <div className="contentSection__profile">
                   <img
                     className="contentSection__avatar"
-                    src={thumbnailUrl(post.userNo, 30, 30)}
+                    src={thumbnailUrl(post.writerUserNo, 30, 30)}
                     alt="프로필이미지"
                     onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
                   />
