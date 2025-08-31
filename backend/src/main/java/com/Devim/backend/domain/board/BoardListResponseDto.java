@@ -9,6 +9,7 @@ public class BoardListResponseDto {
     private int boardTypeNo;
     private String title;
     private String writerName;
+    private long writerUserNo;
     private String profileImagePath;
     private LocalDateTime createdDt;
     private int likeCount;

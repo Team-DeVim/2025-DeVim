@@ -10,6 +10,7 @@ public class BoardDetailResponseDto {
     private String title;
     private String boardContent;
     private String writerName;
+    private long writerUserNo;
     private String profileImagePath;
     private LocalDateTime createdDt;
     private int likeCount;

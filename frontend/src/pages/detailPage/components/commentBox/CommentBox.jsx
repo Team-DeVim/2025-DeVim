@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import "./CommentBox.css";
-import { createComment, DEFAULT_PROFILE, thumbnailUrl } from "../../../../api/DevimApi";
+import { createComment, DEFAULT_PROFILE, thumbnailUrl, api, COMMENT_PREFIX } from "../../../../api/DevimApi";
 
 /** ===== 댓글 작성 컴포저 (이미지 UI 99%) ===== */
 function CommentComposer({ isLogin = false, boardNo, accountInfo }) {
+
   const [value, setValue] = useState("");
   const disabled = !isLogin || value.trim().length === 0;
   const [loading, setLoading] = useState(false);
@@ -52,12 +53,15 @@ function CommentComposer({ isLogin = false, boardNo, accountInfo }) {
         ) : (
           <div className="commentComposer__loginGate">
             <span>
-              작성하려면 <a className="commentComposer__loginLink" href="/SignUp">로그인</a>이 필요합니다.
+              작성하려면{" "}
+              <a className="commentComposer__loginLink" href="/SignUp">
+                로그인
+              </a>
+              이 필요합니다.
             </span>
           </div>
         )}
       </div>
-
       <button
         type="button"
         className="commentComposer__submit"
@@ -70,7 +74,6 @@ function CommentComposer({ isLogin = false, boardNo, accountInfo }) {
   );
 }
 
-// 시간 포메터
 const formatTimeAgo = (iso) => {
   if (!iso) return "알수없음";
   const created = new Date(iso);
@@ -86,6 +89,7 @@ const formatTimeAgo = (iso) => {
   return `${day}일 전`;
 };
 
+
 /** ===== 목록(Mock) =====*/
 const MOCK_COMMENTS = [
   { id: 1, writer: { name: "사용자 닉네임" }, timeAgo: "방금 전", content: "댓글 내용", likeCount: 0 },
@@ -97,6 +101,41 @@ function CommentItem({ item, accountInfo }) {
   const userNo = item?.userNo ?? 0;
   const writerUserNo = item?.userNo ?? 0;
   const loginUserNo = accountInfo?.userNo ?? -1;
+
+  const handleDelete = async () => {
+    if (!window.confirm("댓글을 삭제하시겠습니까?")) return;
+    try {
+      await api.delete(
+        `${COMMENT_PREFIX}/${encodeURIComponent(item.commentNo)}`
+      );
+      window.location.reload();
+    } catch (e) {
+      console.error(e);
+      alert("댓글 삭제에 실패했습니다.");
+    }
+  };
+
+  const handleUpdate = async () => {
+    if (!editValue.trim()) {
+      alert("댓글 내용을 입력하세요.");
+      return;
+    }
+    try {
+      await api.patch(
+        `${COMMENT_PREFIX}/${encodeURIComponent(item.commentNo)}`,
+        {
+          commentContent: editValue.trim(),
+        }
+      );
+      setEditing(false);
+      window.location.reload();
+    } catch (e) {
+      console.error(e);
+      alert("댓글 수정에 실패했습니다.");
+    }
+  };
+
+
   return (
     <li className="commentBox__item">
       <div className="commentBox__head">
@@ -109,20 +148,71 @@ function CommentItem({ item, accountInfo }) {
             onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
           />
           <div className="commentBox__nameTime">
-            <div className="commentBox__name">{item.writerName ?? "알 수 없음"}</div>
-            <div className="commentBox__time">{formatTimeAgo(item.createdDt) ?? ""}</div>
+            <div className="commentBox__name">
+              {item.writerName ?? "알 수 없음"}
+            </div>
+            <div className="commentBox__time">
+              {formatTimeAgo(item.createdDt) ?? ""}
+            </div>
           </div>
         </div>
+
         {writerUserNo == loginUserNo || accountInfo?.roleList?.some(r => r.role === "ROLE_ADMIN") ? (
-          <div className="commentBox__actions">
-            <button type="button" className="commentBox__action">삭제하기</button>
-            <span className="commentBox__sep">|</span>
-            <button type="button" className="commentBox__action">수정하기</button>
-          </div>
+        <div className="commentBox__actions">
+          {!editing && (
+            <>
+              <button
+                type="button"
+                className="commentBox__action"
+                onClick={handleDelete}
+              >
+                삭제하기
+              </button>
+              <span className="commentBox__sep">|</span>
+              <button
+                type="button"
+                className="commentBox__action"
+                onClick={() => setEditing(true)}
+              >
+                수정하기
+              </button>
+            </>
+          )}
+        </div>
         ) : (<></>)}
       </div>
 
-      <div className="commentBox__body">{item.commentContent}</div>
+      <div className="commentBox__body">
+        {editing ? (
+          <div className="commentBox__editArea">
+            <textarea
+              className="commentBox__textarea"
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              rows={3}
+            />
+            <div className="commentBox__editActions">
+              <button
+                type="button"
+                className="commentBox__action"
+                onClick={handleUpdate}
+              >
+                저장
+              </button>
+              <span className="commentBox__sep">|</span>
+              <button
+                type="button"
+                className="commentBox__action"
+                onClick={() => setEditing(false)}
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        ) : (
+          item.commentContent
+        )}
+      </div>
 
       <div className="commentBox__tail">
         <span className="commentBox__like">좋아요: {item.likeCount ?? 0}</span>
@@ -130,6 +220,7 @@ function CommentItem({ item, accountInfo }) {
     </li>
   );
 }
+
 
 
 
@@ -156,3 +247,5 @@ export default function CommentBox({
     </section>
   );
 }
+
+export default CommentBox;

@@ -1,79 +1,76 @@
-// src/pages/editorPage/components/Editor/Editor.jsx
-import { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ReactQuill from "react-quill-new";
-import "react-quill-new/dist/quill.snow.css";
-import "./Editor.css";
-
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ["bold", "italic", "underline", "strike"],
-    [
-      { list: "ordered" },
-      { list: "bullet" },
-      { indent: "-1" },
-      { indent: "+1" },
-    ],
-    ["link", "clean"],
-  ],
-};
-
-const formats = [
-  "header",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "list",
-  "bullet",
-  "indent",
-  "link",
-];
+import "react-quill-new/dist/quill.snow.css"; // Quill 기본 스킨
+import "./Editor.css"; // 🔥 상대 경로로 CSS 불러오기
 
 export default function Editor({
-  defaultValue = "",
+  value,
   onChange,
   onSubmit,
   onCancel,
   canSubmit = true,
+  initialValue,
 }) {
-  const [value, setValue] = useState(defaultValue);
+  const isControlled = typeof value !== "undefined";
+  const [localValue, setLocalValue] = useState(initialValue ?? "");
 
-  const handleChange = (html) => {
-    setValue(html);
-    onChange?.(html);
+  useEffect(() => {
+    if (!isControlled && typeof initialValue !== "undefined") {
+      setLocalValue(initialValue ?? "");
+    }
+  }, [isControlled, initialValue]);
+
+  const editorValue = isControlled ? value ?? "" : localValue;
+
+  const handleChange = (v) => {
+    if (!isControlled) setLocalValue(v);
+    onChange?.(v);
   };
+
+  const handleSubmit = () => {
+    const submitValue = isControlled ? value ?? "" : localValue;
+    if (onSubmit?.length > 0) {
+      onSubmit(submitValue);
+    } else {
+      onSubmit?.();
+    }
+  };
+
+  const modules = useMemo(
+    () => ({
+      toolbar: [
+        [{ header: [1, 2, 3, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["link"],
+        ["clean"],
+      ],
+    }),
+    []
+  );
 
   return (
     <div className="editor">
-      {/* 에디터 본문 */}
       <div className="editor__inner">
         <ReactQuill
           className="editor__quill"
-          theme="snow"
-          value={value}
+          value={editorValue}
           onChange={handleChange}
           modules={modules}
-          formats={formats}
-          placeholder=""
+          theme="snow"
         />
       </div>
-
       <div className="editor__actions-bar">
-        <button
-          type="button"
-          className="editor__btn editor__btn--cancel"
-          onClick={onCancel}
-        >
+        <button type="button" className="editor__btn" onClick={onCancel}>
           취소
         </button>
         <button
           type="button"
           className="editor__btn editor__btn--primary"
-          onClick={onSubmit}
+          onClick={handleSubmit}
           disabled={!canSubmit}
         >
-          등록
+          저장
         </button>
       </div>
     </div>
