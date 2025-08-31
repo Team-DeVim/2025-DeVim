@@ -332,3 +332,11 @@ export async function postLike(targetId, signal) {
     const res = await api.post(`${LIKE_PREFIX}/board/${targetId}`, { signal });
     return res.data;
 }
+
+// detailPage__게시글 좋아요 확인
+export async function getLike(targetId, signal) {
+    const res = await api.get(`${LIKE_PREFIX}/board/${targetId}`, { signal });
+    return res.data;
+}
+
+
