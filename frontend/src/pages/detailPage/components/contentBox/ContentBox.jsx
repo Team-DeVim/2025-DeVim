@@ -1,28 +1,26 @@
 import React, { useState } from "react";
 import "./ContentBox.css";
 import DOMPurify from "dompurify";
-import { DEFAULT_PROFILE, thumbnailUrl,api, BOARD_PREFIX  } from "../../../../api/DevimApi";
+import { DEFAULT_PROFILE, thumbnailUrl, api, BOARD_PREFIX, postLike } from "../../../../api/DevimApi";
 import { useNavigate } from "react-router-dom";
 
 
 export default function ContentBox({ data, isLogin = false, accountInfo }) {
   // 받은 상세글 정보 변수화
   const boardNo = data.boardNo;
-  const writerUserNo = data?.userNo ?? 0;
+  const writerUserNo = data?.writerUserNo ?? 0;
   const loginUserNo = accountInfo?.userNo ?? -1;
   const boardTypeNo = data.boardTypeNo;
   const title = data.title;
   const boardContent = data.boardContent;
   const writerName = data.writerName;
   const createdDt = data.createdDt;
-  const likeCount = data.likeCount;
-  console.log(writerUserNo);
-  console.log(loginUserNo);
-  console.log(accountInfo);
-
+  // let likeCount = data.likeCount;
 
   // 좋아요 상태
+  const [likeCount, setLikeCount] = useState(data.likeCount);
   const [liked, setLiked] = useState(false);
+  const [liking, setLiking] = useState(false);
 
   // 게시글 삭제/수정 기능 상태
   const [editing, setEditing] = useState(false);
@@ -31,8 +29,32 @@ export default function ContentBox({ data, isLogin = false, accountInfo }) {
   const navigate = useNavigate();
 
   // 좋아요 토글
-  const handleToggleLike = () => {
-    setLiked((v) => !v);
+  const handleToggleLike = async () => {
+    if (!isLogin) {
+      alert("로그인 후 이용해주세요.");
+      navigate("/login");
+      return;
+    }
+    if (liking) return;
+
+    const controller = new AbortController();
+    setLiking(true);
+
+    try {
+      await postLike(boardNo, controller.signal);
+      if (liked === true) {
+        setLikeCount(likeCount - 1);
+      } else {
+        setLikeCount(likeCount + 1);
+      }
+      setLiked(prev => !prev);
+    } catch (e) {
+      if (e.name !== "CanceledError" && e.code !== "ERR_CANCELED") {
+        alert("잠시 후 다시 눌러주세요.");
+      }
+    } finally {
+      setLiking(false);
+    }
   };
 
   // 시간 포메터
@@ -107,43 +129,43 @@ export default function ContentBox({ data, isLogin = false, accountInfo }) {
           </div>
         </div>
 
-        {writerUserNo == loginUserNo || accountInfo?.roleList?.some(r => r.role === "ROLE_ADMIN") ? (
-        <div className="contentBox__actions">
-          <>
-            <button
-              type="button"
-              className="contentBox__action"
-              onClick={async () => {
-                if (!window.confirm("게시글을 삭제하시겠습니까?")) return;
-                try {
-                  await api.delete(
-                    `${BOARD_PREFIX}/${encodeURIComponent(boardNo)}`
-                  );
-                  alert("게시글이 삭제되었습니다.");
-                  navigate(-1);
-                } catch (e) {
-                  console.error(e);
-                  alert("게시글 삭제에 실패했습니다.");
-                }
-              }}
-            >
-              삭제하기
-            </button>
-            <span className="contentBox__sep">|</span>
-            <button
-              type="button"
-              className="contentBox__action"
-              onClick={() => {
-                // EditorPage로 이동 + 현재 글 데이터 전달
-                navigate(`/editorPage?mode=edit&boardNo=${boardNo}`, {
-                  state: { board: data }, 
-                });
-              }}
-            >
-              수정하기
-            </button>
-          </>
-        </div>
+        {writerUserNo === loginUserNo || accountInfo?.roleList?.some(r => r.role === "ROLE_ADMIN") ? (
+          <div className="contentBox__actions">
+            <>
+              <button
+                type="button"
+                className="contentBox__action"
+                onClick={async () => {
+                  if (!window.confirm("게시글을 삭제하시겠습니까?")) return;
+                  try {
+                    await api.delete(
+                      `${BOARD_PREFIX}/${encodeURIComponent(boardNo)}`
+                    );
+                    alert("게시글이 삭제되었습니다.");
+                    navigate(-1);
+                  } catch (e) {
+                    console.error(e);
+                    alert("게시글 삭제에 실패했습니다.");
+                  }
+                }}
+              >
+                삭제하기
+              </button>
+              <span className="contentBox__sep">|</span>
+              <button
+                type="button"
+                className="contentBox__action"
+                onClick={() => {
+                  // EditorPage로 이동 + 현재 글 데이터 전달
+                  navigate(`/editorPage?mode=edit&boardNo=${boardNo}`, {
+                    state: { board: data },
+                  });
+                }}
+              >
+                수정하기
+              </button>
+            </>
+          </div>
         ) : (<></>)}
       </div>
 

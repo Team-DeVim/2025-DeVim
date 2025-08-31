@@ -90,17 +90,8 @@ const formatTimeAgo = (iso) => {
   return `${day}일 전`;
 };
 
-
-/** ===== 목록(Mock) =====*/
-const MOCK_COMMENTS = [
-  { id: 1, writer: { name: "사용자 닉네임" }, timeAgo: "방금 전", content: "댓글 내용", likeCount: 0 },
-  { id: 2, writer: { name: "사용자 닉네임" }, timeAgo: "2분 전", content: "댓글 내용", likeCount: 0 },
-  { id: 3, writer: { name: "사용자 닉네임" }, timeAgo: "5분 전", content: "댓글 내용", likeCount: 0 },
-];
-
 function CommentItem({ item, accountInfo }) {
-  const userNo = item?.userNo ?? 0;
-  const writerUserNo = item?.userNo ?? 0;
+  const writerUserNo = item?.writerUserNo ?? 0;
   const loginUserNo = accountInfo?.userNo ?? -1;
   const [editing, setEditing] = useState(false);
   const [editValue, setEditValue] = useState("");
@@ -138,7 +129,6 @@ function CommentItem({ item, accountInfo }) {
     }
   };
 
-
   return (
     <li className="commentBox__item">
       <div className="commentBox__head">
@@ -146,7 +136,7 @@ function CommentItem({ item, accountInfo }) {
           <img
             className="commentComposer__avatar"
             src={
-              thumbnailUrl(userNo, 30, 30)}
+              thumbnailUrl(writerUserNo, 30, 30)}
             alt="프로필이미지"
             onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
           />
@@ -160,7 +150,7 @@ function CommentItem({ item, accountInfo }) {
           </div>
         </div>
 
-        {writerUserNo == loginUserNo || accountInfo?.roleList?.some(r => r.role === "ROLE_ADMIN") ? (
+        {writerUserNo === loginUserNo || accountInfo?.roleList?.some(r => r.role === "ROLE_ADMIN") ? (
           <div className="commentBox__actions">
             {!editing && (
               <>
@@ -233,6 +223,7 @@ function CommentBox({
   boardNo,
   accountInfo
 }) {
+
 
   return (
     <section className="commentBox">

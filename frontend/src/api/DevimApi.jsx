@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 export const API_SERVER_HOST = 'http://localhost:8080';
 
@@ -8,6 +8,10 @@ export const USER_PREFIX = `${API_SERVER_HOST}/api/v1/users`;
 
 // Board Controller prefix
 export const BOARD_PREFIX = `${API_SERVER_HOST}/api/v1/boards`;
+
+// Lick Controller prefix
+export const LIKE_PREFIX = `${API_SERVER_HOST}/api/v1/likes`;
+
 
 // Comment Controller prefix
 export const COMMENT_PREFIX = `${API_SERVER_HOST}/api/v1/comments`;
@@ -299,6 +303,7 @@ export async function getCommentList(page = 1, size = 9999, boardNo, signal) {
     const commentData = list.map((c) => ({
         commentNo: c.commentNo,
         boardNo: c.boardNo,
+        writerUserNo: c.writerUserNo,
         commentContent: c.commentContent ?? "",
         writerName: c.writerName ?? "알 수 없음",
         createdDt: c.createdDt ?? null,
@@ -316,5 +321,13 @@ export async function createComment(boardNo, content, signal) {
     };
 
     const res = await api.post(`${COMMENT_PREFIX}`, body, { signal });
+    return res.data;
+}
+
+// LIKE
+
+// detailPage__게시글 좋아요 요청
+export async function postLike(targetId, signal) {
+    const res = await api.post(`${LIKE_PREFIX}/board/${targetId}`, { signal });
     return res.data;
 }
