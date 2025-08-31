@@ -80,6 +80,7 @@ const root = createBrowserRouter([
         path: "adminPage",
         element: <AdminPage />,
         children: [
+          { index: true, element: <DashboardPage /> },
           { path: "dashboard", index: true, element: <DashboardPage /> },
           { path: "users", element: <UsersPage /> },
           { path: "users/:userNo", element: <UserDetailPage /> },
