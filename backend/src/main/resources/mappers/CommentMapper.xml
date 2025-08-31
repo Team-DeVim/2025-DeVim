@@ -11,7 +11,7 @@
     </insert>
 
     <select id="findById" parameterType="long" resultType="com.Devim.backend.domain.comment.CommentListResponseDto">
-        SELECT "comment_no" AS commentNo, "board_no" AS boardNo, "comment_content" AS commentContent, u."name" AS writerName, u."profile_image_path" AS profileImagePath, c."created_dt" AS createdDt, c."delete_flag" AS deleteFlag
+        SELECT c."comment_no" AS commentNo, c."board_no" AS boardNo, c."comment_content" AS commentContent, c."writer" AS writerUserNo, u."name" AS writerName, u."profile_image_path" AS profileImagePath, c."created_dt" AS createdDt, c."delete_flag" AS deleteFlag
 		FROM "comment" c JOIN "user" u ON c."writer" = u."user_no"
 		WHERE c."comment_no" = #{commentNo} AND c."delete_flag" = 0
     </select>
@@ -21,6 +21,7 @@
             c."comment_no" AS commentNo,
             c."board_no" AS boardNo,
             c."comment_content" AS commentContent,
+            c."writer" AS writerUserNo,
             u."name" AS writerName,
             u."profile_image_path" AS profileImagePath,
             c."created_dt" AS createdDt,
@@ -43,6 +44,7 @@
             c."board_no" AS boardNo,
             b."board_type_no" AS boardTypeNo,
             c."comment_content" AS commentContent,
+            c."writer" AS writerUserNo,
             u."name" AS writerName,
             u."profile_image_path" AS profileImagePath,
             c."created_dt" AS createdDt,
@@ -67,6 +69,7 @@
             c."board_no" AS boardNo,
             b."board_type_no" AS boardTypeNo,
             c."comment_content" AS commentContent,
+            c."writer" AS writerUserNo,
             u."name" AS writerName,
             u."profile_image_path" AS profileImagePath,
             c."created_dt" AS createdDt,

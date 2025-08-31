@@ -10,6 +10,7 @@ public class CommentListResponseDto {
     private int boardTypeNo;
     private String commentContent;
     private String writerName;
+    private long writerUserNo; // Writer's userNo
     private String profileImagePath;
     private LocalDateTime createdDt;
 }

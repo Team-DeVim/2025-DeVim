@@ -14,7 +14,7 @@ public class Board {
 	private int boardTypeNo;
 	private String title;
 	private String boardContent;
-	private int writer;
+	private long writer;
 	private LocalDateTime createdDt;
 	private boolean deleteFlag;
 }
