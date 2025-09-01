@@ -68,12 +68,13 @@ api.interceptors.response.use(
             clearToken();
             if (s === 401) {
                 alert("로그인 오류!");
+                return;
             } else if (s === 403) {
                 alert("로그인이 필요한 서비스입니다.");
             } else {
                 alert("로그인이 필요한 서비스입니다.");
             }
-            window.location.replace("/login");
+            window.location.replace("/main");
             setTimeout(() => { redirecting = false; }, 2000);
         }
         return Promise.reject(err);
