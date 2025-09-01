@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { api, USER_PREFIX, DEFAULT_PROFILE, thumbnailUrl } from "../../../api/DevimApi";
+import {
+  api,
+  USER_PREFIX,
+  DEFAULT_PROFILE,
+  thumbnailUrl,
+} from "../../../api/DevimApi";
 import "./UsersPage.css";
-
 
 // API base url (vite 환경변수 또는 axios 기본값에서 가져옴)
 const API_BASE =
@@ -109,7 +113,6 @@ function normalizeFromServer(data, { size }) {
 //   )}/thumbnail?width=30&height=30&cb=${Date.now()}`;
 // }
 
-
 export default function UsersPage() {
   const nav = useNavigate();
   const [sp, setSp] = useSearchParams();
@@ -134,9 +137,9 @@ export default function UsersPage() {
     nextPage: 1,
   });
 
-
   useEffect(() => {
     const ac = new AbortController();
+
     (async () => {
       try {
         const { data } = await api.get(`${USER_PREFIX}`, {
@@ -144,13 +147,13 @@ export default function UsersPage() {
           signal: ac.signal,
         });
 
-        const std = normalizeFromServer(data, { size });
-        setRows(std.list);
-        setPager(std);
-      } catch (e) {
-        if (e?.name !== "CanceledError") {
-          console.error(e);
-          alert("유저 목록을 불러오지 못했습니다.");
+        // normalize 방어
+        let std;
+        try {
+          std = normalizeFromServer(data, { size });
+        } catch (normErr) {
+          console.error("normalizeFromServer 실패:", normErr);
+          // normalize 실패 시 경고만 찍고 빈 리스트로 처리(알림은 과도하니 생략)
           setRows([]);
           setPager({
             pages: [1],
@@ -161,7 +164,33 @@ export default function UsersPage() {
             prevPage: 1,
             nextPage: 1,
           });
+          return;
         }
+
+        setRows(std.list);
+        setPager(std);
+      } catch (e) {
+        if (
+          axios.isCancel(e) ||
+          e?.code === "ERR_CANCELED" ||
+          e?.message === "canceled"
+        ) {
+          return;
+        }
+
+        // 네트워크/서버 에러만 사용자에게 알림
+        console.error(e);
+        alert("유저 목록을 불러오지 못했습니다.");
+        setRows([]);
+        setPager({
+          pages: [1],
+          page: 1,
+          totalPages: 1,
+          hasPrev: false,
+          hasNext: false,
+          prevPage: 1,
+          nextPage: 1,
+        });
       }
     })();
 
@@ -203,7 +232,9 @@ export default function UsersPage() {
                       className="admin-users__avatar--sm"
                       src={thumbnailUrl(u.userNo, 30, 30)}
                       alt="프로필이미지"
-                      onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
+                      onError={(e) => {
+                        e.currentTarget.src = DEFAULT_PROFILE;
+                      }}
                     />
                   </td>
                   <td>{u.id}</td>
@@ -219,7 +250,7 @@ export default function UsersPage() {
         <div className="admin-users__pagination">
           <button
             disabled={!pager.hasPrev || pager.page <= 1}
-            onClick={() => setPage(pager.prevPage)} 
+            onClick={() => setPage(pager.prevPage)}
           >
             이전
           </button>
@@ -230,9 +261,8 @@ export default function UsersPage() {
               className={`admin-users__page ${
                 p === pager.page ? "admin-users__page--active" : ""
               }`}
-              onClick={() => setPage(p)} 
+              onClick={() => setPage(p)}
               disabled={p === pager.page}
-
             >
               {p}
             </button>
