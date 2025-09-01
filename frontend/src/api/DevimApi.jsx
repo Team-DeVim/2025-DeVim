@@ -58,23 +58,28 @@ api.interceptors.request.use((cfg) => {
 
 // 401 처리: 토큰 제거 + 전역 이벤트 + /login 이동(폴백)
 
+let redirecting = false;
 api.interceptors.response.use(
-    (res) => res,
-    (err) => {
-        if (err?.response?.status === 401) {
+    r => r,
+    err => {
+        const s = err?.response?.status;
+        if ((s === 401 || s === 403 || s === 500) && !redirecting) {
+            redirecting = true;
             clearToken();
-            alert("로그인 오류!");
-            window.location.href = "/main";
-            return Promise.reject(err);
+            if (s === 401) {
+                alert("로그인 오류!");
+            } else if (s === 403) {
+                alert("로그인이 필요한 서비스입니다.");
+            } else {
+                alert("로그인이 필요한 서비스입니다.");
+            }
+            window.location.replace("/login");
+            setTimeout(() => { redirecting = false; }, 2000);
         }
-        if (err?.response?.status === 403) {
-            alert("로그인이 필요한 서비스입니다.");
-            clearToken();
-            window.location.href = "/main";
-            return Promise.reject(err);
-        }
+        return Promise.reject(err);
     }
 );
+
 
 // ----------------------------------------------------
 

@@ -52,8 +52,9 @@ export default function EditorPage() {
       if (!isEdit) {
         // 작성 모드: POST
         await createBoard({ boardTypeNo, title, boardContent: content });
+
         alert("게시글이 등록되었습니다.");
-        navigate(`/main`);
+        navigate(`/boardPage/?boardTypeNo=${boardTypeNo}`);
       } else {
         // 수정 모드: PATCH /api/v1/boards/{boardNo}
         await api.patch(`${BOARD_PREFIX}/${encodeURIComponent(boardNoParam)}`, {

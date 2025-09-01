@@ -29,39 +29,39 @@ export default function SignUp() {
     }
   };
 
-  useEffect(() => {
-    if (window.Kakao && !window.Kakao.isInitialized()) {
-      window.Kakao.init("YOUR_APP_KEY"); // 카카오 개발자 콘솔에서 발급받은 앱 키
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.Kakao && !window.Kakao.isInitialized()) {
+  //     window.Kakao.init("YOUR_APP_KEY"); // 카카오 개발자 콘솔에서 발급받은 앱 키
+  //   }
+  // }, []);
 
   /*카카오 로그인 버튼*/
-  const handleLoginTypeChange = (type) => {
-    setActiveTab(type);
-  };
+  // const handleLoginTypeChange = (type) => {
+  //   setActiveTab(type);
+  // };
 
   /*카카오 로그인  08.12 미구현 / 8.15 */
 
-  const kakaoLogin = () => {
-    window.Kakao.Auth.login({
-      success: function (authObj) {
-        console.log("카카오 로그인 성공", authObj);
-        window.Kakao.API.request({
-          url: "/v2/user/me",
-          success: function (res) {
-            console.log("사용자 정보", res);
-            // 여기서 서버에 사용자 정보 전달해서 회원가입 or 로그인 처리
-          },
-          fail: function (error) {
-            console.error("사용자 정보 요청 실패", error);
-          },
-        });
-      },
-      fail: function (err) {
-        console.error("카카오 로그인 실패", err);
-      },
-    });
-  };
+  // const kakaoLogin = () => {
+  //   window.Kakao.Auth.login({
+  //     success: function (authObj) {
+  //       console.log("카카오 로그인 성공", authObj);
+  //       window.Kakao.API.request({
+  //         url: "/v2/user/me",
+  //         success: function (res) {
+  //           console.log("사용자 정보", res);
+  //           // 여기서 서버에 사용자 정보 전달해서 회원가입 or 로그인 처리
+  //         },
+  //         fail: function (error) {
+  //           console.error("사용자 정보 요청 실패", error);
+  //         },
+  //       });
+  //     },
+  //     fail: function (err) {
+  //       console.error("카카오 로그인 실패", err);
+  //     },
+  //   });
+  // };
   /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
   // 메인으로

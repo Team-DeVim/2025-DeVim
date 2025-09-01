@@ -7,7 +7,7 @@ import { DEFAULT_PROFILE, thumbnailUrl, updateUserName, uploadProfileImage } fro
 
 const ProfileCard = ({ accountInfo }) => {
   const navigate = useNavigate();
-  const [preview, setPreview] = useState(androidProfile);
+  const [preview, setPreview] = useState();
   const fileInputRef = useRef();
   const controllerRef = useRef(null);
   const [nameError, setNameError] = useState("");
@@ -149,7 +149,7 @@ const ProfileCard = ({ accountInfo }) => {
         <div className="profileCard__photo" onClick={handleProfileClick}>
           <img
             src={
-              thumbnailUrl(userNo, 360, 360)}
+              preview ?? thumbnailUrl(userNo, 360, 360)}
             alt="프로필이미지"
             onError={(e) => { e.currentTarget.src = DEFAULT_PROFILE; }}
           />

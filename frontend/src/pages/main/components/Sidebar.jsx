@@ -4,18 +4,11 @@ import axios from "axios";
 import { api, DEFAULT_PROFILE, fetchMyInfo, getToken, logout, thumbnailUrl, USER_PREFIX, userSummary } from "../../../api/DevimApi.jsx";
 import { useNavigate } from "react-router";
 
-
-// ---- 로그인 테스트용 프로필 ----
-const mockProfile = {
-  id: "hong123",
-  name: "홍길동",
-  profile_image_path: "/images/profile.jpg",
-};
-
 function Sidebar() {
   const isLogin = !!getToken();
   const navigate = useNavigate();
   const handleLoginClick = () => navigate("/login");
+  const goToAdminPage = () => navigate("/adminPage");
   const handleLogoutClick = () => logout();
   const handleRegisterClick = () => navigate("/register");
   const [me, setMe] = useState(null);
@@ -157,11 +150,22 @@ function Sidebar() {
               type="button"
               className="Sidebar__button Sidebar__button--danger Sidebar__logout"
               onClick={handleLogoutClick}
-              aria-label="로그아웃"
               title="로그아웃"
             >
               로그아웃
             </button>
+            {me?.roleList?.some(r => r.role === "ROLE_ADMIN") ? (
+              <button
+                type="button"
+                className="Sidebar__button Sidebar__button--primary Sidebar__logout"
+                onClick={goToAdminPage}
+                title="관지라 페이지"
+              >
+                관리자 페이지
+              </button>
+            ) : (
+              <></>
+            )}
           </div>
         ) : (
           <div className="Sidebar__profile Sidebar__profile--out">
