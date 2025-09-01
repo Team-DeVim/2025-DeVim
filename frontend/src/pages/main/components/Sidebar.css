@@ -1,7 +1,7 @@
 .Sidebar {
   display: flex;
   flex-direction: column;
-  gap: 12px; 
+  gap: 12px;
   border-radius: var(--radius-md);
   color: var(--color-text);
 }
@@ -9,7 +9,7 @@
 /* 카드 공통 */
 .Sidebar__card {
   border-radius: var(--radius-md);
-  padding: 12px; 
+  padding: 12px;
   background: var(--surface-2);
   border: var(--border-w) solid var(--color-border);
   box-shadow: var(--glow, none);
@@ -17,34 +17,37 @@
   transition: transform 0.18s ease, box-shadow 0.18s ease,
     border-color 0.18s ease;
 }
+
 .Sidebar__card:hover {
   transform: translateY(-1px);
   box-shadow: var(--glow-hover, none);
   border-color: var(--brand);
 }
+
 .Sidebar__card--profile {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 16px; 
+  padding: 16px;
   align-items: center;
 }
+
 .Sidebar__card--banner {
-  padding: 8px; 
+  padding: 8px;
 }
 
 .Sidebar__card-title {
   font-size: 1.2rem;
   font-weight: 600;
-  margin: 0 0 12px; 
+  margin: 0 0 12px;
   color: var(--brand);
 }
 
 /* 카드 내부 구분선 */
 .Sidebar__divider {
   height: 5px;
-  margin: 12px 0; 
+  margin: 12px 0;
   background: var(--color-border-muted);
   border-radius: 1px;
 }
@@ -53,10 +56,11 @@
 .Sidebar__profile {
   display: flex;
   flex-direction: column;
-  gap: 8px; 
+  gap: 8px;
 }
+
 .Sidebar__profile--in {
-  padding-bottom: 24px; 
+  padding-bottom: 24px;
 }
 
 .Sidebar__media {
@@ -72,9 +76,11 @@
   width: 120px;
   height: 120px;
 }
+
 .Sidebar__avatar--square {
   border-radius: 8px;
 }
+
 .Sidebar__avatar--lg {
   width: 150px;
   height: 150px;
@@ -85,6 +91,7 @@
   height: 100%;
   object-fit: cover;
 }
+
 .Sidebar__avatarFallback {
   width: 100%;
   height: 100%;
@@ -99,12 +106,14 @@
 /* 이름/아이디 */
 .Sidebar__info {
   text-align: center;
-  gap: 4px; 
+  gap: 4px;
 }
+
 .Sidebar__name {
   font-weight: 700;
   font-size: 1.05rem;
 }
+
 .Sidebar__id {
   font-size: 0.88rem;
   opacity: 0.7;
@@ -114,35 +123,38 @@
 .Sidebar__counts {
   flex-direction: row;
   justify-content: center;
-  gap: 16px; 
-  margin-top: 8px; 
+  gap: 16px;
+  margin-top: 8px;
 }
+
 .Sidebar__countRow {
   flex-direction: column;
   align-items: center;
   gap: 2px;
 }
+
 .Sidebar__countLabel {
   font-size: 0.8rem;
   opacity: 0.7;
 }
+
 .Sidebar__countValue {
   font-weight: 600;
 }
 
 /* 로그아웃 버튼: 오른쪽 아래 */
-.Sidebar__logout {
+/* .Sidebar__logout {
   position: absolute;
   right: 8px; 
   bottom: 8px; 
-}
+} */
 
 /* ===== 버튼 ===== */
 .Sidebar__actions {
   display: flex;
-  gap: 8px; 
+  gap: 8px;
   flex-wrap: wrap;
-  margin-top: 8px; 
+  margin-top: 8px;
 }
 
 .Sidebar__button {
@@ -156,17 +168,20 @@
   transition: box-shadow 0.18s ease, transform 0.12s ease,
     background-color 0.18s ease, border-color 0.18s ease;
 }
+
 .Sidebar__button:hover {
   box-shadow: var(--glow, none);
   transform: translateY(-1px);
   background: var(--link-hover-bg, var(--surface-1));
   border-color: var(--brand);
 }
+
 .Sidebar__button--primary {
   border-color: transparent;
   background: var(--btn-register-grad);
   color: var(--brand-contrast);
 }
+
 .Sidebar__button--danger {
   border-color: transparent;
   background: var(--danger);
@@ -175,8 +190,8 @@
 
 /* ===== 랭킹 카드 ===== */
 .Sidebar__rank {
-  margin-top: 12px; 
-  padding: 16px; 
+  margin-top: 12px;
+  padding: 16px;
   border-radius: var(--radius-md);
   background: var(--surface-1);
 }
@@ -204,12 +219,13 @@
   display: grid;
   grid-template-columns: 24px 1fr auto;
   align-items: center;
-  gap: 12px; 
+  gap: 12px;
   padding: 10px 12px;
   border-radius: var(--radius-sm);
   background: transparent;
   transition: background-color 0.18s ease, transform 0.16s ease;
 }
+
 .Sidebar__rankRow:hover {
   background: var(--surface-2);
   transform: translateY(-1px);
@@ -221,11 +237,13 @@
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
+
 .Sidebar__banner img {
   display: block;
   width: 100%;
   height: auto;
 }
+
 .Sidebar__bannerFallback {
   display: grid;
   place-items: center;
@@ -245,6 +263,7 @@
 
 /* 모션 최소화 */
 @media (prefers-reduced-motion: reduce) {
+
   .Sidebar__card,
   .Sidebar__button,
   .Sidebar__rankRow {
